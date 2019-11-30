@@ -9,7 +9,7 @@
 #ifndef Header_h
 #define Header_h
 
-#include <x86intrin.h>
+#include <immintrin.h>
 using namespace std;
 
 /* Definition Section - START */
@@ -186,6 +186,10 @@ public:
 template <typename scalar>
 class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
 { 
+	// QUESTION: Do I need to implemnt those counstructors and
+	// assignment operators if they exit at the
+	// super class (Memory_Block)?
+
 	// constructors
 	using Memory_Block<scalar, Matrix<scalar>>::Memory_Block;
 
@@ -193,20 +197,43 @@ class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
 	Matrix(Matrix& M);
 	Matrix(Matrix&& M);
 
-	// operators assignment
+	// assignment operators
 	inline Matrix& operator = (const Matrix& M);
 	inline Matrix& operator = (Matrix& M);
 	inline Matrix& operator = (std::vector<std::vector<scalar> >& vec_vecs);
 	inline Matrix& operator = (std::vector<std::vector<scalar> >&& vec_vecs);
 	inline Matrix& operator = (Matrix&& M);
 
-	// operators arithmetic
-	friend Matrix& operator += (Matrix& A, Matrix& B); //4 times
-	friend Matrix& operator -= (Matrix& A, Matrix& B); //4 times
-	friend Matrix& operator *= (Matrix& M, scalar c);  //2 times
-	friend Matrix& operator += (Matrix& M, scalar c);  //2 times
-	friend Matrix& operator -= (Matrix& M, scalar c);  //2 times
-	friend Matrix& operator /= (Matrix& M, scalar c);  //2 times
+	/* Arithmetic Operators - START */
+
+	// operator += with matrices
+	// QUESTION: Why this opearators get 2 arguments? Why not work with 'this'?
+	friend Matrix& operator += (Matrix& A, Matrix& B); 
+	friend Matrix& operator += (Matrix& A, Matrix&& B);
+	friend Matrix& operator += (Matrix&& A, Matrix& B);
+	friend Matrix& operator += (Matrix&& A, Matrix&& B);
+
+	// operator -= with matrices
+	friend Matrix& operator -= (Matrix& A, Matrix& B); 
+	friend Matrix& operator -= (Matrix& A, Matrix&& B);
+	friend Matrix& operator -= (Matrix&& A, Matrix& B);
+	friend Matrix& operator -= (Matrix&& A, Matrix&& B);
+
+	// operator *= with scalar
+	friend Matrix& operator *= (Matrix& M, scalar c);
+	friend Matrix& operator *= (Matrix&& M, scalar c);
+
+	// operator += with scalar
+	friend Matrix& operator += (Matrix& M, scalar c);
+	friend Matrix& operator += (Matrix&& M, scalar c);
+
+	// operator -= with scalar
+	friend Matrix& operator -= (Matrix& M, scalar c);
+	friend Matrix& operator -= (Matrix&& M, scalar c);
+
+	// operator /= with scalar
+	friend Matrix& operator /= (Matrix& M, scalar c);
+	friend Matrix& operator /= (Matrix&& M, scalar c);
 
 	friend Matrix operator + (Matrix& A, Matrix& B); //4 times
 	friend Matrix operator - (Matrix& A, Matrix& B); //4 times
@@ -216,8 +243,10 @@ class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
 	friend Matrix operator * (Matrix& A, scalar c); //4 times
 	friend Matrix operator / (Matrix& A, scalar c); //2 times
 
+	/* Arithmetic Operators - END */ 
+
 	// product with transpose
-	friend Matrix product(Matrix&& A, char mode_a, Matrix&& B, char mode_b); //4 times
+	friend Matrix product(Matrix&& A, char mode_a, Matrix&& B, char mode_b); // 4 times
 
 	// Element-wise product
 	friend Matrix dot_product(Matrix&& a, Matrix&& b); //4 times
@@ -232,18 +261,19 @@ class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
 
 /* class Vector - START */
 template <typename scalar>
-class Vector : public Matrix<scalar> {
-	//constructors
-	Vector(); //empty constructor
-	Vector(size_t len); //Vector of size len
-	Vector(size_t len, scalar val); //Vector filled by val
+class Vector : public Matrix<scalar> 
+{
+	// constructors
+	Vector(); // empty constructor
+	Vector(size_t len); // Vector of size len
+	Vector(size_t len, scalar val); // Vector filled by val
 	Vector(size_t row, size_t col, std::string type); //rand Vector ...
 	Vector(std::initializer_list<scalar> list);
 	Vector(std::vector<scalar>& vec);
 	Vector(std::vector<scalar>&& vec_vecs);
-	Vector(const Vector& V); //lvalue copy constructor
-	Vector(Vector& V); //lvalue copy constructor
-	Vector(Vector&& V); //rvalue copy constructor
+	Vector(const Vector& V); // lvalue copy constructor
+	Vector(Vector& V); // lvalue copy constructor
+	Vector(Vector&& V); // rvalue copy constructor
 
 	//...
 };
