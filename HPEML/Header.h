@@ -9,7 +9,17 @@
 #ifndef Header_h
 #define Header_h
 
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <cmath>
+#include <tuple>
 #include <x86intrin.h>
+#include <mkl.h>
+#include <thread>
+#include <mutex>
+#include "t_timer.h"
+#include <unistd.h>
 using namespace std;
 
 /* Definition Section - START */
@@ -69,7 +79,7 @@ public:
 	//...
 
 	class vec // Type of AVX vector
-	{ 
+	{
 		vectypefloat _v;
 
 	public:
@@ -124,7 +134,7 @@ public:
 /* class Memory_Block - START */
 template <typename scalar, typename T> // CRTP (Curiously Recurring Template Pattern)
 class Memory_Block // Base type of Matrix
-{ 
+{
 protected:
 	scalar* _mat;
 	size_t _row;
@@ -150,15 +160,21 @@ public:
 	// extractors
 	T operator () (size_t upperRow, size_t lowerRow, size_t leftCol, size_t rightCol);  // sub-matrix: (upperRow : lowerRow, leftCol : rightCol)
 	T sub(std::vector<size_t> row_list, std::vector<size_t> col_list);
-	
+
 	// sub-matrix: row_list - is a list of row nambers, col_list - is a list of column nambers
 	// if (row_list.size() == 0) then - all rows
 	// if (col_list.size() == 0) then - all columns
 
-	// geters and seters
-	inline scalar* data();
-	inline size_t rows();
-	inline size_t cols();
+	// geters 
+	inline scalar* get_data();
+	inline size_t get_rows();
+	inline size_t get_cols();
+
+	//seters
+	inline void set_data(scalar* data);
+	inline void set_rows(size_t rows);
+	inline void set_cols(size_t cols);
+
 
 	// assignment
 	inline Memory_Block& operator = (const Memory_Block& M);
@@ -185,7 +201,7 @@ public:
 /* class Matrix - START */
 template <typename scalar>
 class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
-{ 
+{
 	// constructors
 	using Memory_Block<scalar, Matrix<scalar>>::Memory_Block;
 

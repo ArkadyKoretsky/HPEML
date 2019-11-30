@@ -21,6 +21,10 @@
   <ItemGroup>
     <ClInclude Include="Header.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Header.cpp" />
+    <ClCompile Include="Memory_Block.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{1FD09E02-CAD8-4289-A6EA-260184528505}</ProjectGuid>
