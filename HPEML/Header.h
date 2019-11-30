@@ -20,6 +20,7 @@
 #include <mutex>
 #include "t_timer.h"
 #include <unistd.h>
+#include <vector>
 using namespace std;
 
 /* Definition Section - START */
@@ -184,8 +185,8 @@ public:
 	inline Memory_Block& operator = (Memory_Block&& M);
 
 	// input\output operators
-	friend std::ostream& operator << (std::ostream& out, Memory_Block& m);
-	friend std::ostream& operator << (std::ostream& out, Memory_Block&& m);
+	friend ostream& operator << (ostream& out, Memory_Block& M);
+	friend ostream& operator << (ostream& out, Memory_Block&& M);
 	friend Memory_Block& operator << (Memory_Block& M, T x);
 	friend Memory_Block& operator , (Memory_Block& M, T x);
 
