@@ -21,12 +21,12 @@ Matrix<scalar>& operator+=(Matrix<scalar>& A, Matrix<scalar>& B)
 				_mm256_storeu_ps(A._mat + i, _mm256_add_ps(_mm256_loadu_ps(A._mat + i), _mm256_loadu_ps(B._mat + i)));
 
 			for (; i < matrixSize; i++)
-				A._mat[i] = A._mat[i] + B._mat[i];
+				A._mat[i] += B._mat[i];
 		}
 		else
 		{
 			for (i = 0; i < matrixSize; i++)
-				A._mat[i] = A._mat[i] + B._mat[i];
+				A._mat[i] += B._mat[i];
 		}
 
 		return A;
