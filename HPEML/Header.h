@@ -28,6 +28,15 @@ using namespace std;
 #endif
 #endif
 #endif
+
+#define VECSIZE 8
+#define I_BLOCKSIZE 32
+#define J_BLOCKSIZE 32
+#define K_BLOCKSIZE 32
+#define UNROLL_1 4 // UNROLL_1 * VECSIZE <= min{I_BLOCKSIZE, J_BLOCKSIZE, K_BLOCKSIZE}
+#define UNROLL_2 2 //UNROLL_2 * VECSIZE <= min{I_BLOCKSIZE, J_BLOCKSIZE, K_BLOCKSIZE}
+#define ITER_NUM 1
+
 /* Definition Section - END */
 
 
@@ -218,6 +227,8 @@ class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
 	friend Matrix& operator -= (Matrix& A, Matrix&& B);
 	friend Matrix& operator -= (Matrix&& A, Matrix& B);
 	friend Matrix& operator -= (Matrix&& A, Matrix&& B);
+
+	// QUESTION: Need *= operator too?
 
 	// operator *= with scalar
 	friend Matrix& operator *= (Matrix& M, scalar c);
