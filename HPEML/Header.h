@@ -36,7 +36,6 @@ using namespace std;
 #define UNROLL_1 4 // UNROLL_1 * VECSIZE <= min{I_BLOCKSIZE, J_BLOCKSIZE, K_BLOCKSIZE}
 #define UNROLL_2 2 //UNROLL_2 * VECSIZE <= min{I_BLOCKSIZE, J_BLOCKSIZE, K_BLOCKSIZE}
 #define ITER_NUM 1
-
 /* Definition Section - END */
 
 
@@ -104,11 +103,34 @@ public:
 		inline vectypefloat data();
 		inline vectypefloat* adress();
 
-		// operators arithmetic
-		inline friend vec operator + (vec& A, vec& B); //_mm256_add_ps        //4 times
-		inline friend vec operator - (vec& A, vec& B); //_mm256_sub_ps        //4 times
-		inline friend vec operator * (vec& A, vec& B); //_mm256_mul_ps        //4 times
-		inline friend vec operator / (vec& A, vec& B); //_mm256_div_ps        //4 times
+		/* Arithmetic Operators - START */
+
+		// sum operator
+		inline friend vec operator + (vec& A, vec& B); //_mm256_add_ps
+		inline friend vec operator + (vec& A, vec&& B); //_mm256_add_ps
+		inline friend vec operator + (vec&& A, vec& B); //_mm256_add_ps
+		inline friend vec operator + (vec&& A, vec&& B); //_mm256_add_ps
+
+		// sub operator
+		inline friend vec operator - (vec& A, vec& B); //_mm256_sub_ps
+		inline friend vec operator - (vec& A, vec&& B); //_mm256_sub_ps
+		inline friend vec operator - (vec&& A, vec& B); //_mm256_sub_ps
+		inline friend vec operator - (vec&& A, vec&& B); //_mm256_sub_ps
+
+		// multiplication operator
+		inline friend vec operator * (vec& A, vec& B); //_mm256_mul_ps
+		inline friend vec operator * (vec& A, vec&& B); //_mm256_mul_ps
+		inline friend vec operator * (vec&& A, vec& B); //_mm256_mul_ps
+		inline friend vec operator * (vec&& A, vec&& B); //_mm256_mul_ps
+
+		// division operator
+		inline friend vec operator / (vec& A, vec& B); //_mm256_div_ps
+		inline friend vec operator / (vec& A, vec&& B); //_mm256_div_ps
+		inline friend vec operator / (vec&& A, vec& B); //_mm256_div_ps
+		inline friend vec operator / (vec&& A, vec&& B); //_mm256_div_ps
+
+		/* Arithmetic Operators - END */
+
 		inline friend vec mul_add(vec& A, vec& B, vec& C); //_mm256_fmadd_ps // return A * B + C
 		inline friend vec mul_sub(vec& A, vec& B, vec& C); //_mm256_fmadd_ps // return A * B - C
 

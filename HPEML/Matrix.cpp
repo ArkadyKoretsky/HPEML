@@ -13,6 +13,7 @@ Matrix<scalar>& operator+=(Matrix<scalar>& A, Matrix<scalar>& B)
 		throw "Matrices Have Different Dimensions!";
 	else
 	{
+
 		size_t vecsize = VECSIZE, matrixSize = A._row * A._col, i;
 
 		if (matrixSize >= vecsize)
