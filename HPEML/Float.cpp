@@ -26,7 +26,7 @@ inline Float& Float::operator=(Float&& F)
 	return *this;
 }
 
-// QUESTION: what's the purpose of operators like this? with float&
+// QUESTION: what's the purpose of operators like this? with float& (Primitive Data Types)
 inline Float& Float::operator=(float& num)
 {
 	if (&_num != &num)
@@ -44,7 +44,7 @@ inline Float& Float::operator=(float&& num)
 }
 
 // QUESTION: how to get into attributes of class vec inside Float?
-// QUESTION: How to use with storeu if there isn't float* attribute inside the Float class
+// QUESTION: How to use with storeu if there isn't float* attribute inside the Float class?
 inline Float& Float::operator=(vec& V)
 {
 	return *this;
@@ -74,7 +74,7 @@ inline Float::vec::vec(vec& V) : _v(V._v) {}
 inline Float::vec::vec(vec&& V) : _v(move(V._v)) {}
 
 // assignment operators
-inline Float::vec& Float::vec::operator = (vec& V) // QUESTION: What it'll return if I'll use *this
+inline Float::vec& Float::vec::operator = (vec& V)
 {
 	if (this != &V)
 		_v = V._v;
