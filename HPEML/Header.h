@@ -10,6 +10,7 @@
 #define Header_h
 
 #include <immintrin.h>
+#include <iostream>>
 using namespace std;
 
 /* Definition Section - START */
@@ -81,7 +82,6 @@ public:
 		vectypefloat _v;
 
 	public:
-
 		// constructors
 		inline vec();
 		inline vec(vectypefloat& v);
@@ -216,11 +216,7 @@ public:
 /* class Matrix - START */
 template <typename scalar>
 class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
-{ 
-	// QUESTION: Do I need to implemnt those counstructors and
-	// assignment operators if they exit at the
-	// super class (Memory_Block)?
-
+{
 	// constructors
 	using Memory_Block<scalar, Matrix<scalar>>::Memory_Block;
 
@@ -238,7 +234,6 @@ class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
 	/* Arithmetic Operators - START */
 
 	// operator += with matrices
-	// QUESTION: Why this opearators get 2 arguments? Why not work with 'this'?
 	friend Matrix& operator += (Matrix& A, Matrix& B); 
 	friend Matrix& operator += (Matrix& A, Matrix&& B);
 	friend Matrix& operator += (Matrix&& A, Matrix& B);

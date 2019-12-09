@@ -1,11 +1,5 @@
 #include "Header.h"
 
-
-// QUESTION: How to make this operator more generic for all the vec types and not only for
-// float like it's now?
-
-// QUESTION: Need more explanation about the scalar type and generic work with it. 
-
 template <typename scalar>
 Matrix<scalar>& operator+=(Matrix<scalar>& A, Matrix<scalar>& B)
 {
