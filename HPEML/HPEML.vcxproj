@@ -22,7 +22,8 @@
     <ClInclude Include="Header.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Int.cpp" />
+    <ClCompile Include="Header.cpp" />
+    <ClCompile Include="Int32.cpp" />
     <ClCompile Include="Memory_Block.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

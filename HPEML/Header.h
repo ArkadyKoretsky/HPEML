@@ -12,18 +12,17 @@
 
 #include <immintrin.h>
 #include <iostream>
-#include <sstream>
-#include <fstream>
-#include <cmath>
-#include <tuple>
-#include <x86intrin.h>
-#include <mkl.h>
-#include <thread>
-#include <mutex>
-#include "t_timer.h"
-#include <unistd.h>
-#include <vector>
-using namespace std;
+//#include <sstream>
+//#include <fstream>
+//#include <cmath>
+//#include <tuple>
+//#include <x86intrin.h>
+//#include <mkl.h>
+//#include <thread>
+//#include <mutex>
+//#include "t_timer.h"
+//#include <unistd.h>
+//#include <vector>
 
 /* Definition Section - START */
 #define architecture_256
@@ -122,8 +121,8 @@ public:
 };
 /* class Float - END */
 
-/* class Int - START */
-class Int // Type of scalar field
+/* class Int32 - START */
+class Int32 // Type of scalar field
 {
 	int _num;
 
@@ -131,23 +130,23 @@ public:
 	class vec;
 
 	// constructors
-	inline Int();
-	inline Int(int& num);
-	inline Int(int&& num);
-	inline Int(Int& F);
-	inline Int(Int&& F);
+	inline Int32();
+	inline Int32(int& num);
+	inline Int32(int&& num);
+	inline Int32(Int32& F);
+	inline Int32(Int32&& F);
 
 	// assignment
-	inline Int& operator = (Int& F);
-	inline Int& operator = (Int&& F);
-	inline Int& operator = (int& num);
-	inline Int& operator = (int&& num);
-	inline Int& operator = (vec& V);  //_mm256_storeu_ps
-	inline Int& operator = (vec&& V); //_mm256_storeu_ps
+	inline Int32& operator = (Int32& F);
+	inline Int32& operator = (Int32&& F);
+	inline Int32& operator = (int& num);
+	inline Int32& operator = (int&& num);
+	//inline Int32& operator = (vec& V);  //_mm256_storeu_ps
+	//inline Int32& operator = (vec&& V); //_mm256_storeu_ps
 
 	// accessors
-	inline int data();
-	inline int* adress();
+	inline int get_data();
+	inline int* get_adress();
 
 	//...
 
@@ -162,17 +161,17 @@ public:
 		inline vec(vectypeint& v);
 		inline vec(vectypeint&& v);
 		inline vec(int* p); // or inline void load(int *p); //_mm256_loadu_ps
-		inline vec(Int* p); // or inline void load(Int *p); //_mm256_loadu_ps
-		inline vec(vec& V);
-		inline vec(vec&& V);
+		inline vec(Int32* p); // or inline void load(Int32 *p); //_mm256_loadu_ps
+	/*	inline vec(vec& V);
+		inline vec(vec&& V);*/
 
 		// assignment
 		inline vec& operator = (vec& V);
 		inline vec& operator = (vec&& V);
 		inline vec& operator = (int* p); //_mm256_loadu_ps
-		inline vec& operator = (Int* p); //_mm256_loadu_ps
-		inline vec& operator = (Int& F); // or inline void set(Int& x); //_mm256_broadcast_ss
-		inline vec& operator = (Int&& F);//or inline void set(Int&& x); //_mm256_broadcast_ss
+		inline vec& operator = (Int32* p); //_mm256_loadu_ps
+		inline vec& operator = (Int32& F); // or inline void set(Int32& x); //_mm256_broadcast_ss
+		inline vec& operator = (Int32&& F);//or inline void set(Int32&& x); //_mm256_broadcast_ss
 
 		// geters and seters
 		inline vectypeint get_data();
@@ -196,19 +195,13 @@ public:
 		inline friend vec operator * (vec&& A, vec& B);
 		inline friend vec operator * (vec&& A, vec&& B);
 
-
-		inline friend vec operator / (vec& A, vec& B); //_mm256_div_ps        //4 times
-		inline friend vec operator / (vec& A, vec&& B);
-		inline friend vec operator / (vec&& A, vec& B);
-		inline friend vec operator / (vec&& A, vec&& B);
-
 		inline friend vec mul_add(vec& A, vec& B, vec& C); //_mm256_fmadd_ps // return A * B + C
-		inline friend vec mul_sub(vec& A, vec& B, vec& C); //_mm256_fmadd_ps // return A * B - C
+		inline friend vec mul_sub(vec& A, vec& B, vec& C); //_mm256_fmsub_ps // return A * B - C
 
 		//...
 	};
 };
-/* class Int - END */
+/* class Int32 - END */
 
 
 

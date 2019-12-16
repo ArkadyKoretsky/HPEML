@@ -98,7 +98,14 @@ inline Memory_Block& Memory_Block<scalar, T>::operator=(const Memory_Block& M)
 template<typename scalar, typename T>
 inline Memory_Block& Memory_Block<scalar, T>::operator=(Memory_Block&& M)
 {
-	// TODO: insert return statement here
+	if (this != &M)
+	{
+		delete[] _mat;
+		_mat = M._mat;
+		_row = M._row;
+		_col = M._col;
+	}
+	return *this;
 }
 
 ostream& operator<<(ostream& out, Memory_Block& M)
