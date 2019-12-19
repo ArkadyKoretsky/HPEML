@@ -41,14 +41,10 @@ T Memory_Block<scalar, T>::operator()(size_t upperRow, size_t lowerRow, size_t l
 		for (i = upperRow, k = 0; i < lowerRow; i++)
 		{
 			for (j = leftCol; j < rightCol - vecsize; j += vecsize, k += vecsize)
-			{
 				_mm256_storeu_ps(T + k, _mm256_loadu_ps(_mat + i * _col + j));
-			}
 
 			for (; j < rightCol; j++, k++)
-			{
 				T[k] = _mat[i * _col + j];
-			}
 		}
 	}
 	else
@@ -56,9 +52,7 @@ T Memory_Block<scalar, T>::operator()(size_t upperRow, size_t lowerRow, size_t l
 		for (i = upperRow, k = 0; i < lowerRow; i++)
 		{
 			for (j = leftCol; j < rightCol; j++, k++)
-			{
 				T[k] = _mat[i * _col + j];
-			}
 		}
 	}
 	return T();
@@ -95,6 +89,7 @@ inline Memory_Block& Memory_Block<scalar, T>::operator=(const Memory_Block& M)
 	return *this;
 }
 
+
 template<typename scalar, typename T>
 inline Memory_Block& Memory_Block<scalar, T>::operator=(Memory_Block&& M)
 {
@@ -107,6 +102,9 @@ inline Memory_Block& Memory_Block<scalar, T>::operator=(Memory_Block&& M)
 	}
 	return *this;
 }
+
+template<typename scalar, typename T>
+Memory_Block<scalar, T>::~Memory_Block() { delete[] _mat; }
 
 ostream& operator<<(ostream& out, Memory_Block& M)
 {

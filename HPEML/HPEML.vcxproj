@@ -22,9 +22,13 @@
     <ClInclude Include="Header.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Double.cpp" />
     <ClCompile Include="Header.cpp" />
     <ClCompile Include="Int32.cpp" />
+    <ClCompile Include="Int64.cpp" />
     <ClCompile Include="Memory_Block.cpp" />
+    <ClCompile Include="paddSingleRowAndColumn.cpp" />
+    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

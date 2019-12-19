@@ -40,6 +40,8 @@ inline int* Int32::get_adress() { return &_num; }
 inline Int32::vec::vec() :_v(_mm256_setzero_si256()) {}
 inline Int32::vec::vec(vectypeint& v) : _v(v) {}
 inline Int32::vec::vec(vectypeint&& v) : _v(std::move(v)) {}
+inline Int32::vec::vec(vec& V) : _v(V._v) {}
+inline Int32::vec::vec(vec&& V) : _v(std::move(V._v)) {}
 
 //how to know the legnth of p
 inline Int32::vec::vec(int* p)
@@ -48,17 +50,26 @@ inline Int32::vec::vec(int* p)
 
 inline Int32::vec& Int32::vec::operator=(Int32::vec& V)
 {
-	if (this->get_adress != V.get_adress)
+	if (_v != V._v)
 		_v = _mm256_load_si256(V.get_adress);
 	return *this;
 }
 
 inline Int32::vec& Int32::vec::operator=(Int32::vec&& V)
 {
-	if (this->get_adress != V.get_adress)
+	if (_v != V._v)
 		_v = _mm256_load_si256(V.get_adress);
 	return *this;
 }
+
+inline  bool operator==(vectypeint& a, vectypeint& b)
+{
+	vectypeint pcmp = _mm256_cmpeq_epi32(a, b);  // epi8 is fine too
+	unsigned bitmask = _mm256_movemask_epi8(pcmp);
+	return (bitmask == 0xffffffffU);
+}
+
+inline  bool operator!= (vectypeint& a, vectypeint& b) { return !(a == b); }
 
 
 inline vectypeint Int32::vec::get_data() { return _v; }

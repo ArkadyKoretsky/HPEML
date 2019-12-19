@@ -12,6 +12,7 @@
 
 #include <immintrin.h>
 #include <iostream>
+#include <stdbool.h>
 //#include <sstream>
 //#include <fstream>
 //#include <cmath>
@@ -33,6 +34,7 @@
 #ifdef architecture_256
 #define vectypefloat __m256
 #define vectypeint __m256i
+#define vectypedouble __m256d
 #else
 #ifdef architecture_512
 #define vectypefloat __m512
@@ -162,8 +164,8 @@ public:
 		inline vec(vectypeint&& v);
 		inline vec(int* p); // or inline void load(int *p); //_mm256_loadu_ps
 		inline vec(Int32* p); // or inline void load(Int32 *p); //_mm256_loadu_ps
-	/*	inline vec(vec& V);
-		inline vec(vec&& V);*/
+		inline vec(vec& V);
+		inline vec(vec&& V);
 
 		// assignment
 		inline vec& operator = (vec& V);
@@ -172,6 +174,9 @@ public:
 		inline vec& operator = (Int32* p); //_mm256_loadu_ps
 		inline vec& operator = (Int32& F); // or inline void set(Int32& x); //_mm256_broadcast_ss
 		inline vec& operator = (Int32&& F);//or inline void set(Int32&& x); //_mm256_broadcast_ss
+
+		inline friend bool operator == (vectypeint& a, vectypeint& b);
+		inline friend bool operator != (vectypeint& a, vectypeint& b);
 
 		// geters and seters
 		inline vectypeint get_data();
@@ -203,15 +208,188 @@ public:
 };
 /* class Int32 - END */
 
+/* class Int64 - START */
+class Int64 // Type of scalar field
+{
+	int _num;
+
+public:
+	class vec;
+
+	// constructors
+	inline Int64();
+	inline Int64(int& num);
+	inline Int64(int&& num);
+	inline Int64(Int64& F);
+	inline Int64(Int64&& F);
+
+	// assignment
+	inline Int64& operator = (Int64& F);
+	inline Int64& operator = (Int64&& F);
+	inline Int64& operator = (int& num);
+	inline Int64& operator = (int&& num);
+	//inline Int64& operator = (vec& V);  //_mm256_storeu_ps
+	//inline Int64& operator = (vec&& V); //_mm256_storeu_ps
+
+	// accessors
+	inline int get_data();
+	inline int* get_adress();
+
+	//...
+
+	class vec // Type of AVX vector
+	{
+		vectypeint _v;
+
+	public:
+
+		// constructors
+		inline vec();
+		inline vec(vectypeint& v);
+		inline vec(vectypeint&& v);
+		inline vec(int* p); // or inline void load(int *p); //_mm256_loadu_ps
+		inline vec(Int64* p); // or inline void load(Int64 *p); //_mm256_loadu_ps
+		inline vec(vec& V);
+		inline vec(vec&& V);
+
+		// assignment
+		inline vec& operator = (vec& V);
+		inline vec& operator = (vec&& V);
+		inline vec& operator = (int* p); //_mm256_loadu_ps
+		inline vec& operator = (Int64* p); //_mm256_loadu_ps
+		inline vec& operator = (Int64& F); // or inline void set(Int64& x); //_mm256_broadcast_ss
+		inline vec& operator = (Int64&& F);//or inline void set(Int64&& x); //_mm256_broadcast_ss
+
+		inline friend bool operator == (vectypeint& a, vectypeint& b);
+		inline friend bool operator != (vectypeint& a, vectypeint& b);
+
+		// geters and seters
+		inline vectypeint get_data();
+		inline vectypeint* get_adress();
+		inline void set_data(vectypeint v);
+		inline void set_adress(vectypeint* v);
+
+		// operators arithmetic
+		inline friend vec operator + (vec& A, vec& B); //_mm256_add_epi32        //4 times
+		inline friend vec operator + (vec& A, vec&& B);
+		inline friend vec operator + (vec&& A, vec& B);
+		inline friend vec operator + (vec&& A, vec&& B);
+
+		inline friend vec operator - (vec& A, vec& B); //_mm256_sub_ps        //4 times
+		inline friend vec operator - (vec& A, vec&& B);
+		inline friend vec operator - (vec&& A, vec& B);
+		inline friend vec operator - (vec&& A, vec&& B);
+
+		inline friend vec operator * (vec& A, vec& B); //_mm256_mul_ps        //4 times
+		inline friend vec operator * (vec& A, vec&& B);
+		inline friend vec operator * (vec&& A, vec& B);
+		inline friend vec operator * (vec&& A, vec&& B);
+
+		inline friend vec mul_add(vec& A, vec& B, vec& C); //_mm256_fmadd_ps // return A * B + C
+		inline friend vec mul_sub(vec& A, vec& B, vec& C); //_mm256_fmsub_ps // return A * B - C
+
+		//...
+	};
+};
+/* class Int64 - END */
+
+/* class Double - START */
+class Double // Type of scalar field
+{
+	double _num;
+
+public:
+	class vec;
+
+	// constructors
+	inline Double();
+	inline Double(double& num);
+	inline Double(double&& num);
+	inline Double(Double& F);
+	inline Double(Double&& F);
+
+	// assignment
+	inline Double& operator = (Double& F);
+	inline Double& operator = (Double&& F);
+	inline Double& operator = (double& num);
+	inline Double& operator = (double&& num);
+	//inline Double& operator = (vec& V);  //_mm256_storeu_pd
+	//inline Double& operator = (vec&& V); //_mm256_storeu_pd
+
+	// accessors
+	inline double get_data();
+	inline double* get_adress();
+
+	//...
+
+	class vec // Type of AVX vector
+	{
+		vectypedouble _v;
+
+	public:
+
+		// constructors
+		inline vec();
+		inline vec(vectypedouble& v);
+		inline vec(vectypedouble&& v);
+		inline vec(double* p); // or inline void load(double *p); //_mm256_loadu_pd
+		inline vec(Double* p); // or inline void load(Double *p); //_mm256_loadu_pd
+		inline vec(vec& V);
+		inline vec(vec&& V);
+
+		// assignment
+		inline vec& operator = (vec& V);
+		inline vec& operator = (vec&& V);
+		inline vec& operator = (double* p); //_mm256_loadu_pd
+		inline vec& operator = (Double* p); //_mm256_loadu_pd
+		inline vec& operator = (Double& F); // or inline void set(Double& x); //_mm256_broadcast_ss
+		inline vec& operator = (Double&& F);//or inline void set(Double&& x); //_mm256_broadcast_ss
+
+		inline friend bool operator == (vectypedouble& a, vectypedouble& b);
+		inline friend bool operator != (vectypedouble& a, vectypedouble& b);
+
+		// geters and seters
+		inline vectypedouble get_data();
+		inline vectypedouble* get_adress();
+		inline void set_data(vectypedouble v);
+		inline void set_adress(vectypedouble* v);
+
+		// operators arithmetic
+		inline friend vec operator + (vec& A, vec& B); //_mm256_add_pd        //4 times
+		inline friend vec operator + (vec& A, vec&& B);
+		inline friend vec operator + (vec&& A, vec& B);
+		inline friend vec operator + (vec&& A, vec&& B);
+
+		inline friend vec operator - (vec& A, vec& B); //_mm256_sub_pd        //4 times
+		inline friend vec operator - (vec& A, vec&& B);
+		inline friend vec operator - (vec&& A, vec& B);
+		inline friend vec operator - (vec&& A, vec&& B);
+
+		inline friend vec operator * (vec& A, vec& B); //_mm256_mul_pd        //4 times
+		inline friend vec operator * (vec& A, vec&& B);
+		inline friend vec operator * (vec&& A, vec& B);
+		inline friend vec operator * (vec&& A, vec&& B);
+
+		inline friend vec operator / (vec& A, vec& B); //_mm256_mul_pd        //4 times
+		inline friend vec operator / (vec& A, vec&& B);
+		inline friend vec operator / (vec&& A, vec& B);
+		inline friend vec operator / (vec&& A, vec&& B);
+
+		inline friend vec mul_add(vec& A, vec& B, vec& C); //_mm256_fmadd_pd // return A * B + C
+		inline friend vec mul_sub(vec& A, vec& B, vec& C); //_mm256_fmsub_pd // return A * B - C
+
+		//...
+	};
+};
+/* class Double - END */
+
 
 
 /*
-//class Int
 //class Long
 //template <size_t base> class GF; GF<base>
 //class Bool
-//class Double
-//class Float
+
 //class Complex_Double
 //class Complex_Float
 */
@@ -353,3 +531,4 @@ class Vector : public Matrix<scalar> {
 
 
 #endif /* Header_h */
+
