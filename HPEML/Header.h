@@ -10,7 +10,9 @@
 #define Header_h
 
 #include <immintrin.h>
-#include <iostream>>
+#include <iostream>
+#include <vector>
+#include <utility>
 using namespace std;
 
 /* Definition Section - START */
@@ -61,15 +63,15 @@ public:
 	inline Float(float& num);
 	inline Float(float&& num);
 	inline Float(Float& F);
-	inline Float(Float&& F);
+	inline Float(Float&& F) noexcept;
 
 	// assignment
 	inline Float& operator = (Float& F);
-	inline Float& operator = (Float&& F);
+	inline Float& operator = (Float&& F) noexcept;
 	inline Float& operator = (float& num);
 	inline Float& operator = (float&& num);
-	inline Float& operator = (vec& V);  //_mm256_storeu_ps
-	inline Float& operator = (vec&& V); //_mm256_storeu_ps
+	//inline Float& operator = (vec& V);  //_mm256_storeu_ps
+	//inline Float& operator = (vec&& V); //_mm256_storeu_ps
 
 	// accessors
 	inline float data();
@@ -78,7 +80,7 @@ public:
 	//...
 
 	class vec // Type of AVX vector
-	{ 
+	{
 		vectypefloat _v;
 
 	public:
@@ -87,13 +89,13 @@ public:
 		inline vec(vectypefloat& v);
 		inline vec(vectypefloat&& v);
 		inline vec(float* p); // or inline void load(float *p); //_mm256_loadu_ps
-		inline vec(Float* p); // or inline void load(Float *p); //_mm256_loadu_ps
+		//inline vec(Float* p); // or inline void load(Float *p); //_mm256_loadu_ps
 		inline vec(vec& V);
 		inline vec(vec&& V);
 
 		// assignment
 		inline vec& operator = (vec& V);
-		inline vec& operator = (vec&& V);
+		inline vec& operator = (vec&& V) noexcept;
 		inline vec& operator = (float* p); //_mm256_loadu_ps
 		inline vec& operator = (Float* p); //_mm256_loadu_ps
 		inline vec& operator = (Float& F); // or inline void set(Float& x); //_mm256_broadcast_ss
@@ -155,7 +157,7 @@ public:
 /* class Memory_Block - START */
 template <typename scalar, typename T> // CRTP (Curiously Recurring Template Pattern)
 class Memory_Block // Base type of Matrix
-{ 
+{
 protected:
 	scalar* _mat;
 	size_t _row;
@@ -181,7 +183,7 @@ public:
 	// extractors
 	T operator () (size_t upperRow, size_t lowerRow, size_t leftCol, size_t rightCol);  // sub-matrix: (upperRow : lowerRow, leftCol : rightCol)
 	T sub(std::vector<size_t> row_list, std::vector<size_t> col_list);
-	
+
 	// sub-matrix: row_list - is a list of row nambers, col_list - is a list of column nambers
 	// if (row_list.size() == 0) then - all rows
 	// if (col_list.size() == 0) then - all columns
@@ -227,25 +229,24 @@ class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
 	// assignment operators
 	inline Matrix& operator = (const Matrix& M);
 	inline Matrix& operator = (Matrix& M);
-	inline Matrix& operator = (std::vector<std::vector<scalar> >& vec_vecs);
-	inline Matrix& operator = (std::vector<std::vector<scalar> >&& vec_vecs);
+	inline Matrix& operator = (vector<vector<scalar>>& vec_vecs);
+	inline Matrix& operator = (vector<vector<scalar>>&& vec_vecs);
 	inline Matrix& operator = (Matrix&& M);
 
 	/* Arithmetic Operators - START */
 
 	// operator += with matrices
-	friend Matrix& operator += (Matrix& A, Matrix& B); 
+	friend Matrix& operator += (Matrix& A, Matrix& B);
 	friend Matrix& operator += (Matrix& A, Matrix&& B);
 	friend Matrix& operator += (Matrix&& A, Matrix& B);
 	friend Matrix& operator += (Matrix&& A, Matrix&& B);
 
 	// operator -= with matrices
-	friend Matrix& operator -= (Matrix& A, Matrix& B); 
+	friend Matrix& operator -= (Matrix& A, Matrix& B);
 	friend Matrix& operator -= (Matrix& A, Matrix&& B);
 	friend Matrix& operator -= (Matrix&& A, Matrix& B);
 	friend Matrix& operator -= (Matrix&& A, Matrix&& B);
 
-	// QUESTION: Need *= operator too?
 
 	// operator *= with scalar
 	friend Matrix& operator *= (Matrix& M, scalar c);
@@ -263,15 +264,30 @@ class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
 	friend Matrix& operator /= (Matrix& M, scalar c);
 	friend Matrix& operator /= (Matrix&& M, scalar c);
 
-	friend Matrix operator + (Matrix& A, Matrix& B); //4 times
-	friend Matrix operator - (Matrix& A, Matrix& B); //4 times
-	friend Matrix operator * (Matrix& A, Matrix& B); //4 times
+	// operator + with matrices
+	friend Matrix operator + (Matrix& A, Matrix& B);
+	friend Matrix operator + (Matrix& A, Matrix&& B);
+	friend Matrix operator + (Matrix&& A, Matrix& B);
+	friend Matrix operator + (Matrix&& A, Matrix&& B);
+
+	// operator - with matrices
+	friend Matrix operator - (Matrix& A, Matrix& B);
+	friend Matrix operator - (Matrix& A, Matrix&& B);
+	friend Matrix operator - (Matrix&& A, Matrix& B);
+	friend Matrix operator - (Matrix&& A, Matrix&& B);
+
+	// operator * with matrices
+	friend Matrix operator * (Matrix& A, Matrix& B);
+	friend Matrix operator * (Matrix& A, Matrix&& B);
+	friend Matrix operator * (Matrix&& A, Matrix& B);
+	friend Matrix operator * (Matrix&& A, Matrix&& B);
+
 	friend Matrix operator + (Matrix& A, scalar c); //4 times
 	friend Matrix operator - (Matrix& A, scalar c); //4 times
 	friend Matrix operator * (Matrix& A, scalar c); //4 times
 	friend Matrix operator / (Matrix& A, scalar c); //2 times
 
-	/* Arithmetic Operators - END */ 
+	/* Arithmetic Operators - END */
 
 	// product with transpose
 	friend Matrix product(Matrix&& A, char mode_a, Matrix&& B, char mode_b); // 4 times
@@ -289,7 +305,7 @@ class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
 
 /* class Vector - START */
 template <typename scalar>
-class Vector : public Matrix<scalar> 
+class Vector : public Matrix<scalar>
 {
 	// constructors
 	Vector(); // empty constructor
