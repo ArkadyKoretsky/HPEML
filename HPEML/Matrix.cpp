@@ -16,7 +16,7 @@ inline Matrix<scalar>& Matrix<scalar>::operator=(const Matrix& M)
 			_mat[i] = M._mat[i];
 	}
 
-	return *this
+	return *this;
 }
 
 template<typename scalar>
@@ -31,7 +31,7 @@ inline Matrix<scalar>& Matrix<scalar>::operator=(Matrix& M)
 			_mat[i] = M._mat[i];
 	}
 
-	return *this
+	return *this;
 }
 
 template<typename scalar>
@@ -46,7 +46,7 @@ inline Matrix<scalar>& Matrix<scalar>::operator=(Matrix&& M)
 			_mat[i] = M._mat[i];
 	}
 
-	return *this
+	return *this;
 }
 
 /* Arithmetic Operators - START */
@@ -60,24 +60,105 @@ inline Matrix<scalar> operator+(Matrix<scalar>& A, Matrix<scalar>& B)
 
 	Matrix<scalar> matrix(A._row, A._col);
 	size_t i, sizeOfMatrix = A._row * A._col, vecsize = VECSIZE;
-	scalar::vec result, vecA, vecB;
 	
 	if (sizeOfMatrix >= vecsize)
 	{
 		for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-		{
-			vecA = A._mat[i];
-			vecB = B._mat[i];
-			result = vecA + vecB;
-
-		}
-
+			matrix[i] = scalar::vec(A._mat + i) + scalar::vec(B._mat + i);
 
 		for (; i < sizeOfMatrix; ++i)
-			C[i] = A._mat[i].data() + B[i]._mat[i].dat5a();
+			matrix[i] = A._mat[i] + B._mat[i];
+	}
+
+	else
+	{
+		for (i = 0; i < sizeOfMatrix; ++i)
+			matrix[i] = A._mat[i] + B._mat[i];
 	}
 
 	return matrix;
 }
+
+template <typename scalar>
+inline Matrix<scalar> operator+(Matrix<scalar>& A, Matrix<scalar>&& B)
+{
+	if (A._row != B._row || A._col != B._col)
+		throw "Can't Sum! Wrong Dimensions!";
+
+	Matrix<scalar> matrix(A._row, A._col);
+	size_t i, sizeOfMatrix = A._row * A._col, vecsize = VECSIZE;
+
+	if (sizeOfMatrix >= vecsize)
+	{
+		for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
+			matrix[i] = scalar::vec(A._mat + i) + scalar::vec(B._mat + i);
+
+		for (; i < sizeOfMatrix; ++i)
+			matrix[i] = A._mat[i] + B._mat[i];
+	}
+
+	else
+	{
+		for (i = 0; i < sizeOfMatrix; ++i)
+			matrix[i] = A._mat[i] + B._mat[i];
+	}
+
+	return matrix;
+}
+
+template <typename scalar>
+inline Matrix<scalar> operator+(Matrix<scalar>&& A, Matrix<scalar>& B)
+{
+	if (A._row != B._row || A._col != B._col)
+		throw "Can't Sum! Wrong Dimensions!";
+
+	Matrix<scalar> matrix(A._row, A._col);
+	size_t i, sizeOfMatrix = A._row * A._col, vecsize = VECSIZE;
+
+	if (sizeOfMatrix >= vecsize)
+	{
+		for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
+			matrix[i] = scalar::vec(A._mat + i) + scalar::vec(B._mat + i);
+
+		for (; i < sizeOfMatrix; ++i)
+			matrix[i] = A._mat[i] + B._mat[i];
+	}
+
+	else
+	{
+		for (i = 0; i < sizeOfMatrix; ++i)
+			matrix[i] = A._mat[i] + B._mat[i];
+	}
+
+	return matrix;
+}
+
+template <typename scalar>
+inline Matrix<scalar> operator+(Matrix<scalar>&& A, Matrix<scalar>&& B)
+{
+	if (A._row != B._row || A._col != B._col)
+		throw "Can't Sum! Wrong Dimensions!";
+
+	Matrix<scalar> matrix(A._row, A._col);
+	size_t i, sizeOfMatrix = A._row * A._col, vecsize = VECSIZE;
+
+	if (sizeOfMatrix >= vecsize)
+	{
+		for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
+			matrix[i] = scalar::vec(A._mat + i) + scalar::vec(B._mat + i);
+
+		for (; i < sizeOfMatrix; ++i)
+			matrix[i] = A._mat[i] + B._mat[i];
+	}
+
+	else
+	{
+		for (i = 0; i < sizeOfMatrix; ++i)
+			matrix[i] = A._mat[i] + B._mat[i];
+	}
+
+	return matrix;
+}
+/* Sum Operator - END */
 
 /* Arithmetic Operators - END */

@@ -43,9 +43,33 @@ inline Float& Float::operator=(float&& num)
 	return *this;
 }
 
-inline Float& Float::operator = (Float::vec& V)
-{
-}
+inline Float& Float::operator = (Float::vec& V) { _mm256_storeu_ps(&_num, V.data()); return *this; }
+inline Float& Float::operator = (Float::vec&& V) { _mm256_storeu_ps(&_num, V.data()); return *this; }
+/* Assignment Operators - END */
+
+// Naive Sum
+inline Float operator + (Float& A, Float& B) { return Float(A.data() + B.data()); }
+inline Float operator + (Float& A, Float&& B) { return Float(A.data() + B.data()); }
+inline Float operator + (Float&& A, Float& B) { return Float(A.data() + B.data()); }
+inline Float operator + (Float& A, Float&& B) { return Float(A.data() + B.data()); }
+
+// Naive Sub
+inline Float operator - (Float& A, Float& B) { return Float(A.data() - B.data()); }
+inline Float operator - (Float& A, Float&& B) { return Float(A.data() - B.data()); }
+inline Float operator - (Float&& A, Float& B) { return Float(A.data() - B.data()); }
+inline Float operator - (Float& A, Float&& B) { return Float(A.data() - B.data()); }
+
+// Naive Multiplication
+inline Float operator * (Float& A, Float& B) { return Float(A.data() * B.data()); }
+inline Float operator * (Float& A, Float&& B) { return Float(A.data() * B.data()); }
+inline Float operator * (Float&& A, Float& B) { return Float(A.data() * B.data()); }
+inline Float operator * (Float& A, Float&& B) { return Float(A.data() * B.data()); }
+
+// Naive Division
+inline Float operator / (Float& A, Float& B) { return Float(A.data() / B.data()); }
+inline Float operator / (Float& A, Float&& B) { return Float(A.data() / B.data()); }
+inline Float operator / (Float&& A, Float& B) { return Float(A.data() / B.data()); }
+inline Float operator / (Float& A, Float&& B) { return Float(A.data() / B.data()); }
 
 // accessors
 inline float Float::data() { return _num; }
@@ -58,9 +82,9 @@ inline float* Float::adress() { return &_num; }
 
 // constructors
 inline Float::vec::vec() : _v(_mm256_setzero_ps()) {}
-inline Float::vec::vec(vectypefloat& v) : _v(v){}
+inline Float::vec::vec(vectypefloat& v) : _v(v) {}
 inline Float::vec::vec(vectypefloat&& v) : _v(move(v)) {}
-inline Float::vec::vec(float* p) : _v(_mm256_loadu_ps(p)){}
+inline Float::vec::vec(float* p) : _v(_mm256_loadu_ps(p)) {}
 inline Float::vec::vec(Float* p) : _v(_mm256_loadu_ps(reinterpret_cast<float*>(p))) {}
 
 /* Assignment Operators - START */
@@ -80,14 +104,13 @@ inline Float::vec& Float::vec::operator = (vec&& V) noexcept
 	return *this;
 }
 
-inline Float::vec& Float::vec::operator=(float* p) { _v = _mm256_loadu_ps(p); }
-inline Float::vec& Float::vec::operator=(Float* p) { _v = _mm256_loadu_ps(reinterpret_cast<float*>(p)); }
-
+inline Float::vec& Float::vec::operator=(float* p) { _v = _mm256_loadu_ps(p); return *this; }
+inline Float::vec& Float::vec::operator=(Float* p) { _v = _mm256_loadu_ps(reinterpret_cast<float*>(p)); return *this; }
 /* Assignment Operators - END */
 
 /* Sum Operators  - START */
-inline Float::vec operator + (Float::vec& A, Float::vec& B) 
-{ 
+inline Float::vec operator + (Float::vec& A, Float::vec& B)
+{
 	vectypefloat result = _mm256_add_ps(A._v, B._v);
 	return Float::vec(result);
 }
@@ -112,8 +135,8 @@ inline Float::vec operator + (Float::vec&& A, Float::vec&& B)
 /* Sum Operators  - END */
 
 /* Sub Operators  - START */
-inline Float::vec operator - (Float::vec& A, Float::vec& B) 
-{ 
+inline Float::vec operator - (Float::vec& A, Float::vec& B)
+{
 	vectypefloat result = _mm256_sub_ps(A._v, B._v);
 	return Float::vec(result);
 }
@@ -138,7 +161,7 @@ inline Float::vec operator - (Float::vec&& A, Float::vec&& B)
 /* Sub Operators  - END */
 
 /* Multiplication Operator - START */
-inline Float::vec operator * (Float::vec& A, Float::vec& B) 
+inline Float::vec operator * (Float::vec& A, Float::vec& B)
 {
 	vectypefloat result = _mm256_mul_ps(A._v, B._v);
 	return Float::vec(result);
@@ -164,7 +187,7 @@ inline Float::vec operator * (Float::vec&& A, Float::vec&& B)
 /* Multiplication Operator - END */
 
 /* Division Operator - START */
-inline Float::vec operator / (Float::vec& A, Float::vec& B) 
+inline Float::vec operator / (Float::vec& A, Float::vec& B)
 {
 	vectypefloat result = _mm256_div_ps(A._v, B._v);
 	return  Float::vec(result);

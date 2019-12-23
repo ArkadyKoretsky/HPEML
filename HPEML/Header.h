@@ -73,6 +73,30 @@ public:
 	inline Float& operator = (vec& V);  //_mm256_storeu_ps
 	inline Float& operator = (vec&& V); //_mm256_storeu_ps
 
+	// naive sum operator
+	inline friend Float operator + (Float& A, Float& B);
+	inline friend Float operator + (Float& A, Float&& B);
+	inline friend Float operator + (Float&& A, Float& B);
+	inline friend Float operator + (Float&& A, Float&& B);
+
+	// naive sub operator
+	inline friend Float operator - (Float& A, Float& B);
+	inline friend Float operator - (Float& A, Float&& B);
+	inline friend Float operator - (Float&& A, Float& B);
+	inline friend Float operator - (Float&& A, Float&& B);
+
+	// naive multiplication operator
+	inline friend Float operator * (Float& A, Float& B);
+	inline friend Float operator * (Float& A, Float&& B);
+	inline friend Float operator * (Float&& A, Float& B);
+	inline friend Float operator * (Float&& A, Float&& B);
+
+	// naive division operator
+	inline friend Float operator / (Float& A, Float& B);
+	inline friend Float operator / (Float& A, Float&& B);
+	inline friend Float operator / (Float&& A, Float& B);
+	inline friend Float operator / (Float&& A, Float&& B);
+
 	// accessors
 	inline float data();
 	inline float* adress();
