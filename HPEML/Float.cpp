@@ -51,25 +51,25 @@ inline Float& Float::operator = (Float::vec&& V) { _mm256_storeu_ps(&_num, V.dat
 inline Float operator + (Float& A, Float& B) { return Float(A.data() + B.data()); }
 inline Float operator + (Float& A, Float&& B) { return Float(A.data() + B.data()); }
 inline Float operator + (Float&& A, Float& B) { return Float(A.data() + B.data()); }
-inline Float operator + (Float& A, Float&& B) { return Float(A.data() + B.data()); }
+inline Float operator + (Float&& A, Float&& B) { return Float(A.data() + B.data()); }
 
 // Naive Sub
 inline Float operator - (Float& A, Float& B) { return Float(A.data() - B.data()); }
 inline Float operator - (Float& A, Float&& B) { return Float(A.data() - B.data()); }
 inline Float operator - (Float&& A, Float& B) { return Float(A.data() - B.data()); }
-inline Float operator - (Float& A, Float&& B) { return Float(A.data() - B.data()); }
+inline Float operator - (Float&& A, Float&& B) { return Float(A.data() - B.data()); }
 
 // Naive Multiplication
 inline Float operator * (Float& A, Float& B) { return Float(A.data() * B.data()); }
 inline Float operator * (Float& A, Float&& B) { return Float(A.data() * B.data()); }
 inline Float operator * (Float&& A, Float& B) { return Float(A.data() * B.data()); }
-inline Float operator * (Float& A, Float&& B) { return Float(A.data() * B.data()); }
+inline Float operator * (Float&& A, Float&& B) { return Float(A.data() * B.data()); }
 
 // Naive Division
 inline Float operator / (Float& A, Float& B) { return Float(A.data() / B.data()); }
 inline Float operator / (Float& A, Float&& B) { return Float(A.data() / B.data()); }
 inline Float operator / (Float&& A, Float& B) { return Float(A.data() / B.data()); }
-inline Float operator / (Float& A, Float&& B) { return Float(A.data() / B.data()); }
+inline Float operator / (Float&& A, Float&& B) { return Float(A.data() / B.data()); }
 
 // accessors
 inline float Float::data() { return _num; }
