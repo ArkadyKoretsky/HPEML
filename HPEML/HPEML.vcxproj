@@ -22,10 +22,11 @@
     <ClInclude Include="Header.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Projects\OML\OML\main_for_linux.cpp" />
     <ClCompile Include="Float.cpp" />
+    <ClCompile Include="main_for_linux.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Memory_Block.cpp" />
+    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

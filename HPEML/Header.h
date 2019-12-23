@@ -70,8 +70,8 @@ public:
 	inline Float& operator = (Float&& F) noexcept;
 	inline Float& operator = (float& num);
 	inline Float& operator = (float&& num);
-	//inline Float& operator = (vec& V);  //_mm256_storeu_ps
-	//inline Float& operator = (vec&& V); //_mm256_storeu_ps
+	inline Float& operator = (vec& V);  //_mm256_storeu_ps
+	inline Float& operator = (vec&& V); //_mm256_storeu_ps
 
 	// accessors
 	inline float data();
@@ -89,7 +89,7 @@ public:
 		inline vec(vectypefloat& v);
 		inline vec(vectypefloat&& v);
 		inline vec(float* p); // or inline void load(float *p); //_mm256_loadu_ps
-		//inline vec(Float* p); // or inline void load(Float *p); //_mm256_loadu_ps
+		inline vec(Float* p); // or inline void load(Float *p); //_mm256_loadu_ps
 		inline vec(vec& V);
 		inline vec(vec&& V);
 
@@ -170,7 +170,7 @@ public:
 	Memory_Block(size_t row, size_t col, scalar val); // matrix filled by val
 	Memory_Block(size_t row, size_t col, std::string type); // rand or one matrix ...
 	Memory_Block(std::initializer_list<std::initializer_list<scalar>> list_lists);
-	Memory_Block(std::vector<std::vector<scalar>>& vec_vecs);
+	Memory_Block(vector<vector<scalar>>& vec_vecs);
 	Memory_Block(std::vector<std::vector<scalar>>&& vec_vecs);
 	Memory_Block(const Memory_Block& M); // lvalue copy constructor
 	Memory_Block(Memory_Block& M); // lvalue copy constructor
@@ -196,13 +196,13 @@ public:
 	// assignment
 	inline Memory_Block& operator = (const Memory_Block& M);
 	inline Memory_Block& operator = (Memory_Block& M);
-	inline Memory_Block& operator = (std::vector< std::vector<scalar> >& vec_vecs);
-	inline Memory_Block& operator = (std::vector< std::vector<scalar> >&& vec_vecs);
+	inline Memory_Block& operator = (vector<vector<scalar>>& vec_vecs);
+	inline Memory_Block& operator = (vector<vector<scalar>>&& vec_vecs);
 	inline Memory_Block& operator = (Memory_Block&& M);
 
 	// input\output operators
-	friend std::ostream& operator << (std::ostream& out, Memory_Block& m);
-	friend std::ostream& operator << (std::ostream& out, Memory_Block&& m);
+	friend ostream& operator << (ostream& out, Memory_Block& m);
+	friend ostream& operator << (ostream& out, Memory_Block&& m);
 	friend Memory_Block& operator << (Memory_Block& M, T x);
 	friend Memory_Block& operator , (Memory_Block& M, T x);
 

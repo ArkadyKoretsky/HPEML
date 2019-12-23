@@ -10,7 +10,7 @@ inline Float::Float(Float& F) : _num(F.data()) {}
 inline Float::Float(Float&& F) noexcept : _num(move(F.data())) {}
 
 
-// assignment 
+/* Assignment Operators - START */
 inline Float& Float::operator=(Float& F)
 {
 	if (this != &F)
@@ -43,6 +43,10 @@ inline Float& Float::operator=(float&& num)
 	return *this;
 }
 
+inline Float& Float::operator = (Float::vec& V)
+{
+}
+
 // accessors
 inline float Float::data() { return _num; }
 inline float* Float::adress() { return &_num; }
@@ -57,6 +61,7 @@ inline Float::vec::vec() : _v(_mm256_setzero_ps()) {}
 inline Float::vec::vec(vectypefloat& v) : _v(v){}
 inline Float::vec::vec(vectypefloat&& v) : _v(move(v)) {}
 inline Float::vec::vec(float* p) : _v(_mm256_loadu_ps(p)){}
+inline Float::vec::vec(Float* p) : _v(_mm256_loadu_ps(reinterpret_cast<float*>(p))) {}
 
 /* Assignment Operators - START */
 inline Float::vec& Float::vec::operator = (vec& V)
@@ -76,10 +81,11 @@ inline Float::vec& Float::vec::operator = (vec&& V) noexcept
 }
 
 inline Float::vec& Float::vec::operator=(float* p) { _v = _mm256_loadu_ps(p); }
+inline Float::vec& Float::vec::operator=(Float* p) { _v = _mm256_loadu_ps(reinterpret_cast<float*>(p)); }
 
 /* Assignment Operators - END */
 
-// sum operators
+/* Sum Operators  - START */
 inline Float::vec operator + (Float::vec& A, Float::vec& B) 
 { 
 	vectypefloat result = _mm256_add_ps(A._v, B._v);
@@ -103,24 +109,85 @@ inline Float::vec operator + (Float::vec&& A, Float::vec&& B)
 	vectypefloat result = _mm256_add_ps(A._v, B._v);
 	return Float::vec(result);
 }
+/* Sum Operators  - END */
 
-// sub operators
-inline Float::vec operator - (Float::vec& A, Float::vec& B) { return _mm256_sub_ps(A._v, B._v); }
-inline Float::vec operator - (Float::vec& A, Float::vec&& B) { return _mm256_sub_ps(A._v, B._v); }
-inline Float::vec operator - (Float::vec&& A, Float::vec& B) { return _mm256_sub_ps(A._v, B._v); }
-inline Float::vec operator - (Float::vec&& A, Float::vec&& B) { return _mm256_sub_ps(A._v, B._v); }
+/* Sub Operators  - START */
+inline Float::vec operator - (Float::vec& A, Float::vec& B) 
+{ 
+	vectypefloat result = _mm256_sub_ps(A._v, B._v);
+	return Float::vec(result);
+}
 
-// multiplication operator
-inline Float::vec operator * (Float::vec& A, Float::vec& B) { return _mm256_mul_ps(A._v, B._v); }
-inline Float::vec operator * (Float::vec& A, Float::vec&& B) { return _mm256_mul_ps(A._v, B._v); }
-inline Float::vec operator * (Float::vec&& A, Float::vec& B) { return _mm256_mul_ps(A._v, B._v); }
-inline Float::vec operator * (Float::vec&& A, Float::vec&& B) { return _mm256_mul_ps(A._v, B._v); }
+inline Float::vec operator - (Float::vec& A, Float::vec&& B)
+{
+	vectypefloat result = _mm256_sub_ps(A._v, B._v);
+	return Float::vec(result);
+}
 
-// division operator
-inline Float::vec operator / (Float::vec& A, Float::vec& B) { return _mm256_div_ps(A._v, B._v); }
-inline Float::vec operator / (Float::vec& A, Float::vec&& B) { return _mm256_div_ps(A._v, B._v); }
-inline Float::vec operator / (Float::vec&& A, Float::vec& B) { return _mm256_div_ps(A._v, B._v); }
-inline Float::vec operator / (Float::vec&& A, Float::vec&& B) { return _mm256_div_ps(A._v, B._v); }
+inline Float::vec operator - (Float::vec&& A, Float::vec& B)
+{
+	vectypefloat result = _mm256_sub_ps(A._v, B._v);
+	return Float::vec(result);
+}
+
+inline Float::vec operator - (Float::vec&& A, Float::vec&& B)
+{
+	vectypefloat result = _mm256_sub_ps(A._v, B._v);
+	return Float::vec(result);
+}
+/* Sub Operators  - END */
+
+/* Multiplication Operator - START */
+inline Float::vec operator * (Float::vec& A, Float::vec& B) 
+{
+	vectypefloat result = _mm256_mul_ps(A._v, B._v);
+	return Float::vec(result);
+}
+
+inline Float::vec operator * (Float::vec& A, Float::vec&& B)
+{
+	vectypefloat result = _mm256_mul_ps(A._v, B._v);
+	return Float::vec(result);
+}
+
+inline Float::vec operator * (Float::vec&& A, Float::vec& B)
+{
+	vectypefloat result = _mm256_mul_ps(A._v, B._v);
+	return Float::vec(result);
+}
+
+inline Float::vec operator * (Float::vec&& A, Float::vec&& B)
+{
+	vectypefloat result = _mm256_mul_ps(A._v, B._v);
+	return Float::vec(result);
+}
+/* Multiplication Operator - END */
+
+/* Division Operator - START */
+inline Float::vec operator / (Float::vec& A, Float::vec& B) 
+{
+	vectypefloat result = _mm256_div_ps(A._v, B._v);
+	return  Float::vec(result);
+}
+
+inline Float::vec operator / (Float::vec& A, Float::vec&& B)
+{
+	vectypefloat result = _mm256_div_ps(A._v, B._v);
+	return  Float::vec(result);
+}
+
+inline Float::vec operator / (Float::vec&& A, Float::vec& B)
+{
+	vectypefloat result = _mm256_div_ps(A._v, B._v);
+	return  Float::vec(result);
+}
+
+inline Float::vec operator / (Float::vec&& A, Float::vec&& B)
+{
+	vectypefloat result = _mm256_div_ps(A._v, B._v);
+	return  Float::vec(result);
+}
+/* Division Operator - END */
 
 inline vectypefloat Float::vec::data() { return _v; }
 inline vectypefloat* Float::vec::adress() { return &_v; }
