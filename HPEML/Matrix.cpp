@@ -49,6 +49,9 @@ inline Matrix<scalar>& Matrix<scalar>::operator = (Matrix&& M)
 	return *this;
 }
 
+template<typename scalar>
+inline scalar* Matrix<scalar>::operator[](size_t index) { return _mat + index; }
+
 /* Arithmetic Operators - START */
 
 /* Sum Operator - START */
@@ -165,25 +168,26 @@ inline Matrix<scalar> operator + (Matrix<scalar>&& A, Matrix<scalar>&& B)
 template <typename scalar>
 inline Matrix<scalar> operator - (Matrix<scalar>& A, Matrix<scalar>& B)
 {
-	if (A._row != B._row || A._col != B._col)
+	size_t row = A.rows(), col = A.cols();
+	if (row != B.rows() || col != B.cols())
 		throw "Can't Sub! Wrong Dimensions!";
 
-	Matrix<scalar> matrix(A._row, A._col);
-	size_t i, sizeOfMatrix = A._row * A._col, vecsize = VECSIZE;
+	Matrix<scalar> matrix(row, col);
+	size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
 
 	if (sizeOfMatrix >= vecsize)
 	{
 		for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-			matrix[i] = scalar::vec(A._mat + i) - scalar::vec(B._mat + i);
+			matrix.data()[i] = scalar::vec(A.data() + i) - scalar::vec(B.data() + i);
 
 		for (; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] - B._mat[i];
+			matrix.data()[i] = A.data()[i] - B.data()[i];
 	}
 
 	else
 	{
 		for (i = 0; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] - B._mat[i];
+			matrix.data()[i] = A.data()[i] - B.data()[i];
 	}
 
 	return matrix;

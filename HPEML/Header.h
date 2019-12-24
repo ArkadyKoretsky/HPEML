@@ -243,6 +243,7 @@ public:
 template <typename scalar>
 class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
 {
+public:
 	// constructors
 	using Memory_Block<scalar, Matrix<scalar>>::Memory_Block;
 
@@ -312,6 +313,8 @@ class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
 	friend Matrix operator / (Matrix& A, scalar c); //2 times
 
 	/* Arithmetic Operators - END */
+
+	inline scalar* operator [] (size_t index); // access to mat[i] - the value as row major. for easy implementation of the matrix operators with AVX.
 
 	// product with transpose
 	friend Matrix product(Matrix&& A, char mode_a, Matrix&& B, char mode_b); // 4 times
