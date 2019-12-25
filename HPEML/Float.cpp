@@ -93,7 +93,7 @@ inline Float::vec::vec() : _v(_mm256_setzero_ps()) {}
 inline Float::vec::vec(vectypefloat& v) : _v(v) {}
 inline Float::vec::vec(vectypefloat&& v) : _v(move(v)) {}
 inline Float::vec::vec(float* p) : _v(_mm256_loadu_ps(p)) {}
-inline Float::vec::vec(Float* p) : _v(_mm256_loadu_ps(reinterpret_cast<float*>(p))) {}
+inline Float::vec::vec(Float* p) : _v(_mm256_loadu_ps(p->adress())) {}
 
 /* Assignment Operators - START */
 inline Float::vec& Float::vec::operator = (vec& V)
@@ -120,7 +120,7 @@ inline Float::vec& Float::vec::operator = (float* p)
 
 inline Float::vec& Float::vec::operator = (Float* p)
 {
-	_v = _mm256_loadu_ps(reinterpret_cast<float*>(p));
+	_v = _mm256_loadu_ps(p->adress());
 	return *this;
 }
 /* Assignment Operators - END */

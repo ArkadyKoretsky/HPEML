@@ -3,17 +3,18 @@
 // constructors
 
 
-// assignment operators
+/* Assignment Operators - START */
 template<typename scalar>
 inline Matrix<scalar>& Matrix<scalar>::operator = (const Matrix& M)
 {
 	if (this != &M)
 	{
-		_row = M._row;
-		_col = M._col;
+		_row = M.rows();
+		_col = M.cols();
 		size_t sizeOfMatrix = _row * _col;
+		scalar* matrix = M.data();
 		for (size_t i = 0; i < sizeOfMatrix; ++i)
-			_mat[i] = M._mat[i];
+			_mat[i] = matrix[i];
 	}
 
 	return *this;
@@ -24,11 +25,12 @@ inline Matrix<scalar>& Matrix<scalar>::operator = (Matrix& M)
 {
 	if (this != &M)
 	{
-		_row = M._row;
-		_col = M._col;
+		_row = M.rows();
+		_col = M.cols();
 		size_t sizeOfMatrix = _row * _col;
+		scalar* matrix = M.data();
 		for (size_t i = 0; i < sizeOfMatrix; ++i)
-			_mat[i] = M._mat[i];
+			_mat[i] = matrix[i];
 	}
 
 	return *this;
@@ -39,44 +41,43 @@ inline Matrix<scalar>& Matrix<scalar>::operator = (Matrix&& M)
 {
 	if (this != &M)
 	{
-		_row = M._row;
-		_col = M._col;
+		_row = M.rows();
+		_col = M.cols();
 		size_t sizeOfMatrix = _row * _col;
+		scalar* matrix = M.data();
 		for (size_t i = 0; i < sizeOfMatrix; ++i)
-			_mat[i] = M._mat[i];
+			_mat[i] = matrix[i];
 	}
 
 	return *this;
 }
-
-template<typename scalar>
-inline scalar* Matrix<scalar>::operator[](size_t index) { return _mat + index; }
-
-/* Arithmetic Operators - START */
+/* Assignment Operators - END */
 
 /* Sum Operator - START */
 template <typename scalar>
 inline Matrix<scalar> operator + (Matrix<scalar>& A, Matrix<scalar>& B)
 {
-	if (A._row != B._row || A._col != B._col)
+	size_t row = A.rows(), col = A.cols();
+	if (row != B.rows() || col != B.cols())
 		throw "Can't Sum! Wrong Dimensions!";
 
-	Matrix<scalar> matrix(A._row, A._col);
-	size_t i, sizeOfMatrix = A._row * A._col, vecsize = VECSIZE;
+	Matrix<scalar> matrix(row, col);
+	size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+	scalar *dataOfA = A.data(), *dataOfB = B.data(), *result = matrix.data();
 	
 	if (sizeOfMatrix >= vecsize)
 	{
 		for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-			matrix[i] = scalar::vec(A._mat + i) + scalar::vec(B._mat + i);
+			result[i] = scalar::vec(dataOfA + i) + scalar::vec(dataOfB + i);
 
 		for (; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] + B._mat[i];
+			result[i] = dataOfA[i] + dataOfB[i];
 	}
 
 	else
 	{
 		for (i = 0; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] + B._mat[i];
+			result[i] = dataOfA[i] + dataOfB[i];
 	}
 
 	return matrix;
@@ -85,25 +86,27 @@ inline Matrix<scalar> operator + (Matrix<scalar>& A, Matrix<scalar>& B)
 template <typename scalar>
 inline Matrix<scalar> operator + (Matrix<scalar>& A, Matrix<scalar>&& B)
 {
-	if (A._row != B._row || A._col != B._col)
+	size_t row = A.rows(), col = A.cols();
+	if (row != B.rows() || col != B.cols())
 		throw "Can't Sum! Wrong Dimensions!";
 
-	Matrix<scalar> matrix(A._row, A._col);
-	size_t i, sizeOfMatrix = A._row * A._col, vecsize = VECSIZE;
+	Matrix<scalar> matrix(row, col);
+	size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+	scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = matrix.data();
 
 	if (sizeOfMatrix >= vecsize)
 	{
 		for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-			matrix[i] = scalar::vec(A._mat + i) + scalar::vec(B._mat + i);
+			result[i] = scalar::vec(dataOfA + i) + scalar::vec(dataOfB + i);
 
 		for (; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] + B._mat[i];
+			result[i] = dataOfA[i] + dataOfB[i];
 	}
 
 	else
 	{
 		for (i = 0; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] + B._mat[i];
+			result[i] = dataOfA[i] + dataOfB[i];
 	}
 
 	return matrix;
@@ -112,25 +115,27 @@ inline Matrix<scalar> operator + (Matrix<scalar>& A, Matrix<scalar>&& B)
 template <typename scalar>
 inline Matrix<scalar> operator + (Matrix<scalar>&& A, Matrix<scalar>& B)
 {
-	if (A._row != B._row || A._col != B._col)
+	size_t row = A.rows(), col = A.cols();
+	if (row != B.rows() || col != B.cols())
 		throw "Can't Sum! Wrong Dimensions!";
 
-	Matrix<scalar> matrix(A._row, A._col);
-	size_t i, sizeOfMatrix = A._row * A._col, vecsize = VECSIZE;
+	Matrix<scalar> matrix(row, col);
+	size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+	scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = matrix.data();
 
 	if (sizeOfMatrix >= vecsize)
 	{
 		for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-			matrix[i] = scalar::vec(A._mat + i) + scalar::vec(B._mat + i);
+			result[i] = scalar::vec(dataOfA + i) + scalar::vec(dataOfB + i);
 
 		for (; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] + B._mat[i];
+			result[i] = dataOfA[i] + dataOfB[i];
 	}
 
 	else
 	{
 		for (i = 0; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] + B._mat[i];
+			result[i] = dataOfA[i] + dataOfB[i];
 	}
 
 	return matrix;
@@ -139,25 +144,27 @@ inline Matrix<scalar> operator + (Matrix<scalar>&& A, Matrix<scalar>& B)
 template <typename scalar>
 inline Matrix<scalar> operator + (Matrix<scalar>&& A, Matrix<scalar>&& B)
 {
-	if (A._row != B._row || A._col != B._col)
+	size_t row = A.rows(), col = A.cols();
+	if (row != B.rows() || col != B.cols())
 		throw "Can't Sum! Wrong Dimensions!";
 
-	Matrix<scalar> matrix(A._row, A._col);
-	size_t i, sizeOfMatrix = A._row * A._col, vecsize = VECSIZE;
+	Matrix<scalar> matrix(row, col);
+	size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+	scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = matrix.data();
 
 	if (sizeOfMatrix >= vecsize)
 	{
 		for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-			matrix[i] = scalar::vec(A._mat + i) + scalar::vec(B._mat + i);
+			result[i] = scalar::vec(dataOfA + i) + scalar::vec(dataOfB + i);
 
 		for (; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] + B._mat[i];
+			result[i] = dataOfA[i] + dataOfB[i];
 	}
 
 	else
 	{
 		for (i = 0; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] + B._mat[i];
+			result[i] = dataOfA[i] + dataOfB[i];
 	}
 
 	return matrix;
@@ -174,20 +181,21 @@ inline Matrix<scalar> operator - (Matrix<scalar>& A, Matrix<scalar>& B)
 
 	Matrix<scalar> matrix(row, col);
 	size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+	scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = matrix.data();
 
 	if (sizeOfMatrix >= vecsize)
 	{
 		for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-			matrix.data()[i] = scalar::vec(A.data() + i) - scalar::vec(B.data() + i);
+			result[i] = scalar::vec(dataOfA + i) - scalar::vec(dataOfB + i);
 
 		for (; i < sizeOfMatrix; ++i)
-			matrix.data()[i] = A.data()[i] - B.data()[i];
+			result[i] = dataOfA[i] - dataOfB[i];
 	}
 
 	else
 	{
 		for (i = 0; i < sizeOfMatrix; ++i)
-			matrix.data()[i] = A.data()[i] - B.data()[i];
+			result[i] = dataOfA[i] - dataOfB[i];
 	}
 
 	return matrix;
@@ -196,25 +204,27 @@ inline Matrix<scalar> operator - (Matrix<scalar>& A, Matrix<scalar>& B)
 template <typename scalar>
 inline Matrix<scalar> operator - (Matrix<scalar>& A, Matrix<scalar>&& B)
 {
-	if (A._row != B._row || A._col != B._col)
+	size_t row = A.rows(), col = A.cols();
+	if (row != B.rows() || col != B.cols())
 		throw "Can't Sub! Wrong Dimensions!";
 
-	Matrix<scalar> matrix(A._row, A._col);
-	size_t i, sizeOfMatrix = A._row * A._col, vecsize = VECSIZE;
+	Matrix<scalar> matrix(row, col);
+	size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+	scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = matrix.data();
 
 	if (sizeOfMatrix >= vecsize)
 	{
 		for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-			matrix[i] = scalar::vec(A._mat + i) - scalar::vec(B._mat + i);
+			result[i] = scalar::vec(dataOfA + i) - scalar::vec(dataOfB + i);
 
 		for (; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] - B._mat[i];
+			result[i] = dataOfA[i] - dataOfB[i];
 	}
 
 	else
 	{
 		for (i = 0; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] - B._mat[i];
+			result[i] = dataOfA[i] - dataOfB[i];
 	}
 
 	return matrix;
@@ -223,25 +233,27 @@ inline Matrix<scalar> operator - (Matrix<scalar>& A, Matrix<scalar>&& B)
 template <typename scalar>
 inline Matrix<scalar> operator - (Matrix<scalar>&& A, Matrix<scalar>& B)
 {
-	if (A._row != B._row || A._col != B._col)
+	size_t row = A.rows(), col = A.cols();
+	if (row != B.rows() || col != B.cols())
 		throw "Can't Sub! Wrong Dimensions!";
 
-	Matrix<scalar> matrix(A._row, A._col);
-	size_t i, sizeOfMatrix = A._row * A._col, vecsize = VECSIZE;
+	Matrix<scalar> matrix(row, col);
+	size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+	scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = matrix.data();
 
 	if (sizeOfMatrix >= vecsize)
 	{
 		for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-			matrix[i] = scalar::vec(A._mat + i) - scalar::vec(B._mat + i);
+			result[i] = scalar::vec(dataOfA + i) - scalar::vec(dataOfB + i);
 
 		for (; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] - B._mat[i];
+			result[i] = dataOfA[i] - dataOfB[i];
 	}
 
 	else
 	{
 		for (i = 0; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] - B._mat[i];
+			result[i] = dataOfA[i] - dataOfB[i];
 	}
 
 	return matrix;
@@ -250,25 +262,27 @@ inline Matrix<scalar> operator - (Matrix<scalar>&& A, Matrix<scalar>& B)
 template <typename scalar>
 inline Matrix<scalar> operator - (Matrix<scalar>&& A, Matrix<scalar>&& B)
 {
-	if (A._row != B._row || A._col != B._col)
+	size_t row = A.rows(), col = A.cols();
+	if (row != B.rows() || col != B.cols())
 		throw "Can't Sub! Wrong Dimensions!";
 
-	Matrix<scalar> matrix(A._row, A._col);
-	size_t i, sizeOfMatrix = A._row * A._col, vecsize = VECSIZE;
+	Matrix<scalar> matrix(row, col);
+	size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+	scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = matrix.data();
 
 	if (sizeOfMatrix >= vecsize)
 	{
 		for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-			matrix[i] = scalar::vec(A._mat + i) - scalar::vec(B._mat + i);
+			result[i] = scalar::vec(dataOfA + i) - scalar::vec(dataOfB + i);
 
 		for (; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] - B._mat[i];
+			result[i] = dataOfA[i] - dataOfB[i];
 	}
 
 	else
 	{
 		for (i = 0; i < sizeOfMatrix; ++i)
-			matrix[i] = A._mat[i] - B._mat[i];
+			result[i] = dataOfA[i] - dataOfB[i];
 	}
 
 	return matrix;

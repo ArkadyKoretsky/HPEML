@@ -206,7 +206,7 @@ public:
 
 	// extractors
 	T operator () (size_t upperRow, size_t lowerRow, size_t leftCol, size_t rightCol);  // sub-matrix: (upperRow : lowerRow, leftCol : rightCol)
-	T sub(std::vector<size_t> row_list, std::vector<size_t> col_list);
+	T sub(vector<size_t> row_list, vector<size_t> col_list);
 
 	// sub-matrix: row_list - is a list of row nambers, col_list - is a list of column nambers
 	// if (row_list.size() == 0) then - all rows
@@ -313,8 +313,6 @@ public:
 	friend Matrix operator / (Matrix& A, scalar c); //2 times
 
 	/* Arithmetic Operators - END */
-
-	inline scalar* operator [] (size_t index); // access to mat[i] - the value as row major. for easy implementation of the matrix operators with AVX.
 
 	// product with transpose
 	friend Matrix product(Matrix&& A, char mode_a, Matrix&& B, char mode_b); // 4 times
