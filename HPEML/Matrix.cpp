@@ -9,12 +9,12 @@ inline Matrix<scalar>& Matrix<scalar>::operator = (const Matrix& M)
 {
 	if (this != &M)
 	{
-		_row = M.rows();
-		_col = M.cols();
-		size_t sizeOfMatrix = _row * _col;
+		this->_row = M.rows();
+		this->_col = M.cols();
+		size_t sizeOfMatrix = this->_row * this->_col;
 		scalar* matrix = M.data();
 		for (size_t i = 0; i < sizeOfMatrix; ++i)
-			_mat[i] = matrix[i];
+			this->_mat[i] = matrix[i];
 	}
 
 	return *this;
@@ -25,12 +25,12 @@ inline Matrix<scalar>& Matrix<scalar>::operator = (Matrix& M)
 {
 	if (this != &M)
 	{
-		_row = M.rows();
-		_col = M.cols();
-		size_t sizeOfMatrix = _row * _col;
+		this->_row = M.rows();
+		this->_col = M.cols();
+		size_t sizeOfMatrix = this->_row * this->_col;
 		scalar* matrix = M.data();
 		for (size_t i = 0; i < sizeOfMatrix; ++i)
-			_mat[i] = matrix[i];
+			this->_mat[i] = matrix[i];
 	}
 
 	return *this;
@@ -41,12 +41,12 @@ inline Matrix<scalar>& Matrix<scalar>::operator = (Matrix&& M)
 {
 	if (this != &M)
 	{
-		_row = M.rows();
-		_col = M.cols();
-		size_t sizeOfMatrix = _row * _col;
+		this->_row = M.rows();
+		this->_col = M.cols();
+		size_t sizeOfMatrix = this->_row * this->_col;
 		scalar* matrix = M.data();
 		for (size_t i = 0; i < sizeOfMatrix; ++i)
-			_mat[i] = matrix[i];
+			this->_mat[i] = matrix[i];
 	}
 
 	return *this;

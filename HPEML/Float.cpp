@@ -14,7 +14,6 @@ inline Float& Float::operator = (Float& F)
 {
 	if (this != &F)
 		_num = F.data();
-
 	return *this;
 }
 
@@ -22,7 +21,6 @@ inline Float& Float::operator = (Float&& F) noexcept
 {
 	if (this != &F)
 		_num = move(F.data());
-
 	return *this;
 }
 
@@ -30,7 +28,6 @@ inline Float& Float::operator = (float& num)
 {
 	if (&_num != &num)
 		_num = num;
-
 	return *this;
 }
 
@@ -38,7 +35,6 @@ inline Float& Float::operator = (float&& num)
 {
 	if (&_num != &num)
 		_num = num;
-
 	return *this;
 }
 
@@ -80,7 +76,7 @@ inline Float operator / (Float&& A, Float& B) { return Float(A.data() / B.data()
 inline Float operator / (Float&& A, Float&& B) { return Float(A.data() / B.data()); }
 
 // Getters
-inline float Float::data() { return _num; }
+//inline float Float::data() { return _num; }
 inline float* Float::adress() { return &_num; }
 
 /* Float class - END */
@@ -94,13 +90,14 @@ inline Float::vec::vec(vectypefloat& v) : _v(v) {}
 inline Float::vec::vec(vectypefloat&& v) : _v(move(v)) {}
 inline Float::vec::vec(float* p) : _v(_mm256_loadu_ps(p)) {}
 inline Float::vec::vec(Float* p) : _v(_mm256_loadu_ps(p->adress())) {}
+inline Float::vec::vec(Float& F) : _v(_mm256_broadcast_ss(F.adress())) {}
+inline Float::vec::vec(Float&& F) : _v(_mm256_broadcast_ss(F.adress())) {}
 
 /* Assignment Operators - START */
 inline Float::vec& Float::vec::operator = (vec& V)
 {
 	if (this != &V)
 		_v = V.data();
-
 	return *this;
 }
 
@@ -108,7 +105,6 @@ inline Float::vec& Float::vec::operator = (vec&& V) noexcept
 {
 	if (this != &V)
 		_v = V.data();
-
 	return *this;
 }
 
@@ -121,6 +117,18 @@ inline Float::vec& Float::vec::operator = (float* p)
 inline Float::vec& Float::vec::operator = (Float* p)
 {
 	_v = _mm256_loadu_ps(p->adress());
+	return *this;
+}
+
+inline Float::vec& Float::vec::operator = (Float& F)
+{
+	_v = _mm256_broadcast_ss(F.adress());
+	return *this;
+}
+
+inline Float::vec& Float::vec::operator = (Float&& F)
+{
+	_v = _mm256_broadcast_ss(F.adress());
 	return *this;
 }
 /* Assignment Operators - END */

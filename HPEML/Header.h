@@ -114,6 +114,8 @@ public:
 		inline vec(vectypefloat&& v);
 		inline vec(float* p); // or inline void load(float *p); //_mm256_loadu_ps
 		inline vec(Float* p); // or inline void load(Float *p); //_mm256_loadu_ps
+		inline vec(Float& F); // _mm256_broadcast_ss
+		inline vec(Float&& F); // _mm256_broadcast_ss
 		inline vec(vec& V);
 		inline vec(vec&& V);
 

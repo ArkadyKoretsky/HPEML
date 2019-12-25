@@ -1,5 +1,6 @@
-#include <iostream>
-#include <immintrin.h>
+//#include <iostream>
+//#include <immintrin.h>
+#include "Header.h"
 
 using namespace std;
 
@@ -24,19 +25,14 @@ public:
 
 int main()
 {
-	test *A = new test[8], *B = new test[8];
-	float numbers[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+	size_t row = 31, col = 35;
+	Float F;
+	cout << F.data();
+	//Matrix<Float> A(row, col, Float(1)), B(row, col, Float()), C(row, col);
 
-	for (size_t i = 0; i < 8; ++i)
-		A[i].num = numbers[i];
+	//C = A + B;
 
-	__m256  _register = _mm256_loadu_ps(A->address());
-
-	B[0] = _register;
-
-	for (size_t i = 0; i < 8; ++i)
-		cout << B[i].num << " ";
-	cout << endl;
+	//cout << C;
 
 	return 0;
 
