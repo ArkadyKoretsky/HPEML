@@ -1,61 +1,10 @@
-#include "Header.h"
+#include "HPEML.h"
 
 // constructors
 
-
-/* Assignment Operators - START */
-template<typename scalar>
-inline Matrix<scalar>& Matrix<scalar>::operator = (const Matrix& M)
-{
-	if (this != &M)
-	{
-		this->_row = M.rows();
-		this->_col = M.cols();
-		size_t sizeOfMatrix = this->_row * this->_col;
-		scalar* matrix = M.data();
-		for (size_t i = 0; i < sizeOfMatrix; ++i)
-			this->_mat[i] = matrix[i];
-	}
-
-	return *this;
-}
-
-template<typename scalar>
-inline Matrix<scalar>& Matrix<scalar>::operator = (Matrix& M)
-{
-	if (this != &M)
-	{
-		this->_row = M.rows();
-		this->_col = M.cols();
-		size_t sizeOfMatrix = this->_row * this->_col;
-		scalar* matrix = M.data();
-		for (size_t i = 0; i < sizeOfMatrix; ++i)
-			this->_mat[i] = matrix[i];
-	}
-
-	return *this;
-}
-
-template<typename scalar>
-inline Matrix<scalar>& Matrix<scalar>::operator = (Matrix&& M)
-{
-	if (this != &M)
-	{
-		this->_row = M.rows();
-		this->_col = M.cols();
-		size_t sizeOfMatrix = this->_row * this->_col;
-		scalar* matrix = M.data();
-		for (size_t i = 0; i < sizeOfMatrix; ++i)
-			this->_mat[i] = matrix[i];
-	}
-
-	return *this;
-}
-/* Assignment Operators - END */
-
 /* Sum Operator - START */
 template <typename scalar>
-inline Matrix<scalar> operator + (Matrix<scalar>& A, Matrix<scalar>& B)
+Matrix<scalar> operator + (Matrix<scalar>& A, Matrix<scalar>& B)
 {
 	size_t row = A.rows(), col = A.cols();
 	if (row != B.rows() || col != B.cols())
@@ -84,7 +33,7 @@ inline Matrix<scalar> operator + (Matrix<scalar>& A, Matrix<scalar>& B)
 }
 
 template <typename scalar>
-inline Matrix<scalar> operator + (Matrix<scalar>& A, Matrix<scalar>&& B)
+Matrix<scalar> operator + (Matrix<scalar>& A, Matrix<scalar>&& B)
 {
 	size_t row = A.rows(), col = A.cols();
 	if (row != B.rows() || col != B.cols())
@@ -113,7 +62,7 @@ inline Matrix<scalar> operator + (Matrix<scalar>& A, Matrix<scalar>&& B)
 }
 
 template <typename scalar>
-inline Matrix<scalar> operator + (Matrix<scalar>&& A, Matrix<scalar>& B)
+Matrix<scalar> operator + (Matrix<scalar>&& A, Matrix<scalar>& B)
 {
 	size_t row = A.rows(), col = A.cols();
 	if (row != B.rows() || col != B.cols())
@@ -142,7 +91,7 @@ inline Matrix<scalar> operator + (Matrix<scalar>&& A, Matrix<scalar>& B)
 }
 
 template <typename scalar>
-inline Matrix<scalar> operator + (Matrix<scalar>&& A, Matrix<scalar>&& B)
+Matrix<scalar> operator + (Matrix<scalar>&& A, Matrix<scalar>&& B)
 {
 	size_t row = A.rows(), col = A.cols();
 	if (row != B.rows() || col != B.cols())
@@ -173,7 +122,7 @@ inline Matrix<scalar> operator + (Matrix<scalar>&& A, Matrix<scalar>&& B)
 
 /* Sub Operator - START */
 template <typename scalar>
-inline Matrix<scalar> operator - (Matrix<scalar>& A, Matrix<scalar>& B)
+Matrix<scalar> operator - (Matrix<scalar>& A, Matrix<scalar>& B)
 {
 	size_t row = A.rows(), col = A.cols();
 	if (row != B.rows() || col != B.cols())
@@ -202,7 +151,7 @@ inline Matrix<scalar> operator - (Matrix<scalar>& A, Matrix<scalar>& B)
 }
 
 template <typename scalar>
-inline Matrix<scalar> operator - (Matrix<scalar>& A, Matrix<scalar>&& B)
+Matrix<scalar> operator - (Matrix<scalar>& A, Matrix<scalar>&& B)
 {
 	size_t row = A.rows(), col = A.cols();
 	if (row != B.rows() || col != B.cols())
@@ -231,7 +180,7 @@ inline Matrix<scalar> operator - (Matrix<scalar>& A, Matrix<scalar>&& B)
 }
 
 template <typename scalar>
-inline Matrix<scalar> operator - (Matrix<scalar>&& A, Matrix<scalar>& B)
+Matrix<scalar> operator - (Matrix<scalar>&& A, Matrix<scalar>& B)
 {
 	size_t row = A.rows(), col = A.cols();
 	if (row != B.rows() || col != B.cols())
@@ -260,7 +209,7 @@ inline Matrix<scalar> operator - (Matrix<scalar>&& A, Matrix<scalar>& B)
 }
 
 template <typename scalar>
-inline Matrix<scalar> operator - (Matrix<scalar>&& A, Matrix<scalar>&& B)
+Matrix<scalar> operator - (Matrix<scalar>&& A, Matrix<scalar>&& B)
 {
 	size_t row = A.rows(), col = A.cols();
 	if (row != B.rows() || col != B.cols())

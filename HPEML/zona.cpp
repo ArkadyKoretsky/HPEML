@@ -1,6 +1,6 @@
 //#include <iostream>
 //#include <immintrin.h>
-#include "Float.h"
+#include "HPEML.h"
 
 using namespace std;
 
@@ -25,16 +25,11 @@ public:
 
 int main()
 {
+	size_t row = 16, col = 16;
 	Float F1(5), F2(10);
-	Float::vec V1(F1), V2(F2);
-	Float::vec V3 = V1 + V2;
-	cout << F1 + F2;
-	//Matrix<Float> A(row, col, Float(1)), B(row, col, Float()), C(row, col);
+	Matrix<Float> A(row, col, F1), B(row, col, F2);
 
-	//C = A + B;
-
-	//cout << C;
+	cout << A - B;
 
 	return 0;
-
 }

@@ -91,13 +91,13 @@ public:
 	// output operator (most for debug purpose)
 	inline friend ostream& operator << (ostream& out, Float& F) 
 	{
-		out << F._num;
+		out << F.data();
 		return out;
 	}
 
 	inline friend ostream& operator << (ostream& out, Float&& F)
 	{
-		out << F._num;
+		out << F.data();
 		return out;
 	}
 
