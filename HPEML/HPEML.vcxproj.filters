@@ -24,6 +24,15 @@
     <ClInclude Include="HPEML.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Memory_Block.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Matrix.cpp">

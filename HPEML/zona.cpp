@@ -1,5 +1,3 @@
-//#include <iostream>
-//#include <immintrin.h>
 #include "HPEML.h"
 
 using namespace std;
