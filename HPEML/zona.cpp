@@ -1,6 +1,6 @@
 //#include <iostream>
 //#include <immintrin.h>
-#include "Header.h"
+#include "Float.h"
 
 using namespace std;
 
@@ -25,9 +25,10 @@ public:
 
 int main()
 {
-	size_t row = 31, col = 35;
-	Float F;
-	cout << F.data();
+	Float F1(5), F2(10);
+	Float::vec V1(F1), V2(F2);
+	Float::vec V3 = V1 + V2;
+	cout << F1 + F2;
 	//Matrix<Float> A(row, col, Float(1)), B(row, col, Float()), C(row, col);
 
 	//C = A + B;
