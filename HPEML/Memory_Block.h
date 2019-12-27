@@ -50,7 +50,7 @@ public:
 		if (sizeOfMatrix >= vecsize)
 		{
 			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-				_mat[i] = scalar::vec(mat[i]);
+				_mat[i] = scalar::vec(mat + i);
 
 			for (; i < sizeOfMatrix; ++i)
 				_mat[i] = mat[i];
@@ -87,7 +87,7 @@ public:
 			for (i = upperRow, k = 0; i <= lowerRow; ++i)
 			{
 				for (j = leftCol; j < rightCol - vecsize; j += vecsize, k += vecsize)
-					matrix[k] = scalar::vec(this->operator()(i, j)); // the operator () implemented above
+					matrix[k] = scalar::vec(this->operator[](i) + j); // the operator () implemented above
 
 				for (; j <= rightCol; ++j, ++k)
 					matrix[k] = this->operator()(i, j);
@@ -107,6 +107,61 @@ public:
 	}
 
 	T sub(vector<size_t> row_list, vector<size_t> col_list);
+
+	/* 
+	* collect 4 sub matrices into one big matrix
+	* subMatrices[0] - upper left
+	* subMatrices[1] - upper right
+	* subMatrices[2] - lower left
+	* subMatrices[3] - lower right 
+	*/
+	T collect(Memory_Block subBlocks[], size_t row, size_t col)
+	{
+		size_t vecsize = VECSIZE, i, j;
+		scalar* matrix = new scalar[row * col], * subMatrices[4];
+
+		for (i = 0; i < 4; ++i)
+			subMatrices[i] = subBlocks[i].data();
+
+		if (col / 2 >= vecsize)
+		{
+			for (i = 0; i < row / 2; ++i)
+			{
+				for (j = 0; j < col / 2 - vecsize; j += vecsize)
+				{
+					matrix[i * col + j] = scalar::vec(subMatrices[0] + i * col / 2 + j);
+					matrix[(i + 0.5) * col + j] = scalar::vec(subMatrices[1] + i * col / 2 + j);
+					matrix[(i + row / 2) * col + j] = scalar::vec(subMatrices[2] + i * col / 2 + j);
+					matrix[(i + row / 2 + 0.5) * col + j] = scalar::vec(subMatrices[3] + i * col / 2 + j);
+				}
+
+				for (; j < col / 2; ++j)
+				{
+					matrix[i * col + j] = subMatrices[0][i * col / 2 + j];
+					matrix[(i + 0.5) * col + j] = subMatrices[1][i * col / 2 + j];
+					matrix[(i + row / 2) * col + j] = subMatrices[2][i * col / 2 + j];
+					matrix[(i + row / 2 + 0.5) * col + j] = subMatrices[3][i * col / 2 + j];
+				}
+			}
+		}
+		else
+		{
+			for (i = 0; i < row / 2; ++i)
+			{
+				for (j=0; j < col / 2; ++j)
+				{
+					matrix[i * col + j] = subMatrices[0][i * col / 2 + j];
+					matrix[(i + 0.5) * col + j] = subMatrices[1][i * col / 2 + j];
+					matrix[(i + row / 2) * col + j] = subMatrices[2][i * col / 2 + j];
+					matrix[(i + row / 2 + 0.5) * col + j] = subMatrices[3][i * col / 2 + j];
+				}
+			}
+		}
+
+		T collectedMemoryBlock(row, col, matrix);
+		delete[] matrix;
+		return collectedMemoryBlock;
+	}
 
 	// sub-matrix: row_list - is a list of row nambers, col_list - is a list of column nambers
 	// if (row_list.size() == 0) then - all rows

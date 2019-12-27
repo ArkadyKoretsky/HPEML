@@ -27,7 +27,7 @@ int main()
 	Float F1(5), F2(10);
 	Matrix<Float> A(row, col, F1), B(row, col, F2);
 
-	cout << A - B;
+	cout << A-B;
 
 	return 0;
 }

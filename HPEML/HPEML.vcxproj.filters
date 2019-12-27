@@ -47,7 +47,7 @@
     <ClCompile Include="main_for_linux.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="zona.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

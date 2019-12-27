@@ -8,12 +8,14 @@ template <typename scalar>
 class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
 {
 public:
-	// constructors
+	/* Constructors - START */
 	using Memory_Block<scalar, Matrix<scalar>>::Memory_Block;
 
 	Matrix(const Matrix& M);
 	Matrix(Matrix& M);
 	Matrix(Matrix&& M);
+	/* Constructors - END */
+
 
 	/* Assignment Operators - START */
 	inline Matrix& operator = (const Matrix& M)
@@ -63,8 +65,8 @@ public:
 
 	inline Matrix& operator = (vector<vector<scalar>>& vec_vecs);
 	inline Matrix& operator = (vector<vector<scalar>>&& vec_vecs);
-
 	/* Assignment Operators - END */
+
 
 	// operator += with matrices
 	friend Matrix& operator += (Matrix& A, Matrix& B);
@@ -93,6 +95,7 @@ public:
 	// operator /= with scalar
 	friend Matrix& operator /= (Matrix& M, scalar c);
 	friend Matrix& operator /= (Matrix&& M, scalar c);
+
 
 	/* Sum Operator with Matrices - START */
 	friend Matrix operator + (Matrix& A, Matrix& B)
@@ -212,6 +215,7 @@ public:
 	}
 	/* Sum Operator with Matrices - END */
 
+
 	/* Sub Operator with Matrices - START */
 	friend Matrix operator - (Matrix& A, Matrix& B)
 	{
@@ -329,6 +333,7 @@ public:
 		return matrix;
 	}
 	/* Sub Operator with Matrices - END */
+
 
 	// operator * with matrices
 	friend Matrix operator * (Matrix& A, Matrix& B);
