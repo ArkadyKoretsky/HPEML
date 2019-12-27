@@ -24,10 +24,23 @@ public:
 		{
 			this->_row = M.rows();
 			this->_col = M.cols();
-			size_t sizeOfMatrix = this->_row * this->_col;
+			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = VECSIZE;
 			scalar* matrix = M.data();
-			for (size_t i = 0; i < sizeOfMatrix; ++i)
-				this->_mat[i] = matrix[i];
+
+			if (sizeOfMatrix >= vecsize)
+			{
+				for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
+					this->_mat[i] = scalar::vec(matrix + i);
+
+				for (; i < sizeOfMatrix; ++i)
+					this->_mat[i] = matrix[i];
+			}
+
+			else
+			{
+				for (i = 0; i < sizeOfMatrix; ++i)
+					this->_mat[i] = matrix[i];
+			}
 		}
 
 		return *this;
@@ -39,25 +52,51 @@ public:
 		{
 			this->_row = M.rows();
 			this->_col = M.cols();
-			size_t sizeOfMatrix = this->_row * this->_col;
+			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = VECSIZE;
 			scalar* matrix = M.data();
-			for (size_t i = 0; i < sizeOfMatrix; ++i)
-				this->_mat[i] = matrix[i];
+
+			if (sizeOfMatrix >= vecsize)
+			{
+				for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
+					this->_mat[i] = scalar::vec(matrix + i);
+
+				for (; i < sizeOfMatrix; ++i)
+					this->_mat[i] = matrix[i];
+			}
+
+			else
+			{
+				for (i = 0; i < sizeOfMatrix; ++i)
+					this->_mat[i] = matrix[i];
+			}
 		}
 
 		return *this;
 	}
 
-	inline Matrix& operator = (Matrix&& M)
+	inline Matrix& operator = (Matrix&& M) noexcept
 	{
 		if (this != &M)
 		{
 			this->_row = M.rows();
 			this->_col = M.cols();
-			size_t sizeOfMatrix = this->_row * this->_col;
+			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = VECSIZE;
 			scalar* matrix = M.data();
-			for (size_t i = 0; i < sizeOfMatrix; ++i)
-				this->_mat[i] = matrix[i];
+
+			if (sizeOfMatrix >= vecsize)
+			{
+				for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
+					this->_mat[i] = scalar::vec(matrix + i);
+
+				for (; i < sizeOfMatrix; ++i)
+					this->_mat[i] = matrix[i];
+			}
+
+			else
+			{
+				for (i = 0; i < sizeOfMatrix; ++i)
+					this->_mat[i] = matrix[i];
+			}
 		}
 
 		return *this;

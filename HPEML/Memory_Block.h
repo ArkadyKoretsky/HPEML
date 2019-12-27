@@ -108,12 +108,12 @@ public:
 
 	T sub(vector<size_t> row_list, vector<size_t> col_list);
 
-	/* 
+	/*
 	* collect 4 sub matrices into one big matrix
 	* subMatrices[0] - upper left
 	* subMatrices[1] - upper right
 	* subMatrices[2] - lower left
-	* subMatrices[3] - lower right 
+	* subMatrices[3] - lower right
 	*/
 	T collect(Memory_Block subBlocks[], size_t row, size_t col)
 	{
@@ -130,17 +130,17 @@ public:
 				for (j = 0; j < col / 2 - vecsize; j += vecsize)
 				{
 					matrix[i * col + j] = scalar::vec(subMatrices[0] + i * col / 2 + j);
-					matrix[(i + 0.5) * col + j] = scalar::vec(subMatrices[1] + i * col / 2 + j);
+					matrix[i * col + col / 2 + j] = scalar::vec(subMatrices[1] + i * col / 2 + j);
 					matrix[(i + row / 2) * col + j] = scalar::vec(subMatrices[2] + i * col / 2 + j);
-					matrix[(i + row / 2 + 0.5) * col + j] = scalar::vec(subMatrices[3] + i * col / 2 + j);
+					matrix[(i + row / 2) * col + col / 2 + j] = scalar::vec(subMatrices[3] + i * col / 2 + j);
 				}
 
 				for (; j < col / 2; ++j)
 				{
 					matrix[i * col + j] = subMatrices[0][i * col / 2 + j];
-					matrix[(i + 0.5) * col + j] = subMatrices[1][i * col / 2 + j];
+					matrix[i * col + col / 2 + j] = subMatrices[1][i * col / 2 + j];
 					matrix[(i + row / 2) * col + j] = subMatrices[2][i * col / 2 + j];
-					matrix[(i + row / 2 + 0.5) * col + j] = subMatrices[3][i * col / 2 + j];
+					matrix[(i + row / 2) * col + col / 2 + j] = subMatrices[3][i * col / 2 + j];
 				}
 			}
 		}
@@ -148,12 +148,12 @@ public:
 		{
 			for (i = 0; i < row / 2; ++i)
 			{
-				for (j=0; j < col / 2; ++j)
+				for (j = 0; j < col / 2; ++j)
 				{
 					matrix[i * col + j] = subMatrices[0][i * col / 2 + j];
-					matrix[(i + 0.5) * col + j] = subMatrices[1][i * col / 2 + j];
+					matrix[i * col + col / 2 + j] = subMatrices[1][i * col / 2 + j];
 					matrix[(i + row / 2) * col + j] = subMatrices[2][i * col / 2 + j];
-					matrix[(i + row / 2 + 0.5) * col + j] = subMatrices[3][i * col / 2 + j];
+					matrix[(i + row / 2) * col + col / 2 + j] = subMatrices[3][i * col / 2 + j];
 				}
 			}
 		}

@@ -25,9 +25,9 @@ int main()
 {
 	size_t row = 16, col = 16;
 	Float F1(5), F2(10);
-	Matrix<Float> A(row, col, F1), B(row, col, F2);
-
-	cout << A-B;
+	Matrix<Float> A(row, col, F1), B(row, col, F2), C(row, col, F1), D(row, col, F2);
+	//Matrix<Float> arr[4] = { A, B, C, D };
+	//cout << A.collect(arr, 16 * 4, 16 * 4);
 
 	return 0;
 }
