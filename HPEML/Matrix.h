@@ -8,100 +8,20 @@ template <typename scalar>
 class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix
 {
 public:
-	/* Constructors - START */
+
 	using Memory_Block<scalar, Matrix<scalar>>::Memory_Block;
 
-	Matrix(const Matrix& M);
-	Matrix(Matrix& M);
-	Matrix(Matrix&& M);
-	/* Constructors - END */
+	// constructors
+	Matrix(const Matrix& M) : Memory_Block<scalar, Matrix<scalar>>::Memory_Block(M) {}
+	Matrix(Matrix& M) : Memory_Block<scalar, Matrix<scalar>>::Memory_Block(M) {}
+	Matrix(Matrix&& M) : Memory_Block<scalar, Matrix<scalar>>::Memory_Block(M) {}
+	Matrix(Matrix M[4]) : Memory_Block<scalar, Matrix<scalar>>::Memory_Block(M) {} // collect 4 blocks into 1 big matrix
 
 
 	/* Assignment Operators - START */
-	inline Matrix& operator = (const Matrix& M)
-	{
-		if (this != &M)
-		{
-			this->_row = M.rows();
-			this->_col = M.cols();
-			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = VECSIZE;
-			scalar* matrix = M.data();
-
-			if (sizeOfMatrix >= vecsize)
-			{
-				for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-					this->_mat[i] = scalar::vec(matrix + i);
-
-				for (; i < sizeOfMatrix; ++i)
-					this->_mat[i] = matrix[i];
-			}
-
-			else
-			{
-				for (i = 0; i < sizeOfMatrix; ++i)
-					this->_mat[i] = matrix[i];
-			}
-		}
-
-		return *this;
-	}
-
-	inline Matrix& operator = (Matrix& M)
-	{
-		if (this != &M)
-		{
-			this->_row = M.rows();
-			this->_col = M.cols();
-			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = VECSIZE;
-			scalar* matrix = M.data();
-
-			if (sizeOfMatrix >= vecsize)
-			{
-				for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-					this->_mat[i] = scalar::vec(matrix + i);
-
-				for (; i < sizeOfMatrix; ++i)
-					this->_mat[i] = matrix[i];
-			}
-
-			else
-			{
-				for (i = 0; i < sizeOfMatrix; ++i)
-					this->_mat[i] = matrix[i];
-			}
-		}
-
-		return *this;
-	}
-
-	inline Matrix& operator = (Matrix&& M) noexcept
-	{
-		if (this != &M)
-		{
-			this->_row = M.rows();
-			this->_col = M.cols();
-			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = VECSIZE;
-			scalar* matrix = M.data();
-
-			if (sizeOfMatrix >= vecsize)
-			{
-				for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-					this->_mat[i] = scalar::vec(matrix + i);
-
-				for (; i < sizeOfMatrix; ++i)
-					this->_mat[i] = matrix[i];
-			}
-
-			else
-			{
-				for (i = 0; i < sizeOfMatrix; ++i)
-					this->_mat[i] = matrix[i];
-			}
-		}
-
-		return *this;
-	}
-
+	inline Matrix& operator = (const Matrix& M) { return Memory_Block<scalar, Matrix<scalar>>::operator = (M); }
+	inline Matrix& operator = (Matrix& M) { return Memory_Block<scalar, Matrix<scalar>>::operator = (M); }
+	inline Matrix& operator = (Matrix&& M) { return Memory_Block<scalar, Matrix<scalar>>::operator = (M); }
 	inline Matrix& operator = (vector<vector<scalar>>& vec_vecs);
 	inline Matrix& operator = (vector<vector<scalar>>&& vec_vecs);
 	/* Assignment Operators - END */

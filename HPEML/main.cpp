@@ -23,11 +23,14 @@ public:
 
 int main()
 {
-	size_t row = 16, col = 16;
-	Float F1(5), F2(10);
-	Matrix<Float> A(row, col, F1), B(row, col, F2), C(row, col, F1), D(row, col, F2);
+	size_t row = 8, col = 8;
+	Float F1(5), F2(6);
+	Matrix<Float> A(row, col, F1), B(row, col, F2), C(row, col, F2), D(row, col, F1);
 	//Matrix<Float> arr[4] = { A, B, C, D };
-	//cout << A.collect(arr, 16 * 4, 16 * 4);
+	//for (size_t i = 0; i < 4; ++i)
+	//	cout << arr[i] << endl;
+	Matrix<Float> mat=A;
+	cout << mat;
 
 	return 0;
 }
