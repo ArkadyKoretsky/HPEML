@@ -397,7 +397,7 @@ public:
 		this->_mat = matrix;
 	}
 
-	void removePadding(size_t row, size_t col) // resize the matrix into rowXcol
+	void removePadding(size_t row, size_t col) // resize the matrix into row X col
 	{
 		if (row == this->_row && col == this->_col) // no need to unpadd
 			return;
@@ -408,11 +408,14 @@ public:
 		if (col >= vecsize)
 		{
 			for (i = 0; i < row; ++i)
+			{
 				for (j = 0; j < col - vecsize; j += vecsize)
 					matrix[i * col + j] = scalar::vec(originalMatrix + i * originalCol + j);
 
-			for (; j < col; ++j)
-				matrix[i * col + j] = originalMatrix[i * originalCol + j];
+				for (; j < col; ++j)
+					matrix[i * col + j] = originalMatrix[i * originalCol + j];
+			}
+
 		}
 		else
 		{
@@ -469,7 +472,7 @@ public:
 							if (kk == 0)
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec();
+										sum[y][x] = scalar::vec();
 							else
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
@@ -484,13 +487,13 @@ public:
 								{
 									vecA[x] = originalA[(i + x) * colA_rowB + k];
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec::mul_add(vecA[x], vecB[y], sum[y][x]);
+										sum[y][x] = vecA[x] * vecB[y] + sum[y][x]; // ask Dan about mul_add
 								}
 								index += unroll_2 * vecsize;
 							}
 
-							for (size_t x = 0; x < unroll_1; x++)
-								for (size_t y = 0; y < unroll_2; y++)
+							for (size_t x = 0; x < unroll_1; ++x)
+								for (size_t y = 0; y < unroll_2; ++y)
 									result[(i + x) * colB + j + y * vecsize] = sum[y][x];
 						}
 
@@ -537,7 +540,7 @@ public:
 							if (kk == 0)
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec();
+										sum[y][x] = scalar::vec();
 							else
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
@@ -552,13 +555,13 @@ public:
 								{
 									vecA[x] = originalA[(i + x) * colA_rowB + k];
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec::mul_add(vecA[x], vecB[y], sum[y][x]);
+										sum[y][x] = vecA[x] * vecB[y] + sum[y][x]; // ask Dan about mul_add
 								}
 								index += unroll_2 * vecsize;
 							}
 
-							for (size_t x = 0; x < unroll_1; x++)
-								for (size_t y = 0; y < unroll_2; y++)
+							for (size_t x = 0; x < unroll_1; ++x)
+								for (size_t y = 0; y < unroll_2; ++y)
 									result[(i + x) * colB + j + y * vecsize] = sum[y][x];
 						}
 
@@ -605,7 +608,7 @@ public:
 							if (kk == 0)
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec();
+										sum[y][x] = scalar::vec();
 							else
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
@@ -620,13 +623,13 @@ public:
 								{
 									vecA[x] = originalA[(i + x) * colA_rowB + k];
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec::mul_add(vecA[x], vecB[y], sum[y][x]);
+										sum[y][x] = vecA[x] * vecB[y] + sum[y][x]; // ask Dan about mul_add
 								}
 								index += unroll_2 * vecsize;
 							}
 
-							for (size_t x = 0; x < unroll_1; x++)
-								for (size_t y = 0; y < unroll_2; y++)
+							for (size_t x = 0; x < unroll_1; ++x)
+								for (size_t y = 0; y < unroll_2; ++y)
 									result[(i + x) * colB + j + y * vecsize] = sum[y][x];
 						}
 
@@ -673,7 +676,7 @@ public:
 							if (kk == 0)
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec();
+										sum[y][x] = scalar::vec();
 							else
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
@@ -688,13 +691,13 @@ public:
 								{
 									vecA[x] = originalA[(i + x) * colA_rowB + k];
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec::mul_add(vecA[x], vecB[y], sum[y][x]);
+										sum[y][x] = vecA[x] * vecB[y] + sum[y][x]; // ask Dan about mul_add
 								}
 								index += unroll_2 * vecsize;
 							}
 
-							for (size_t x = 0; x < unroll_1; x++)
-								for (size_t y = 0; y < unroll_2; y++)
+							for (size_t x = 0; x < unroll_1; ++x)
+								for (size_t y = 0; y < unroll_2; ++y)
 									result[(i + x) * colB + j + y * vecsize] = sum[y][x];
 						}
 
