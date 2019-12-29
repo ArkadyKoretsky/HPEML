@@ -183,8 +183,25 @@ public:
 		inline friend vec operator / (vec&& A, vec& B) { return vec(_mm256_div_ps(A.data(), B.data())); }
 		inline friend vec operator / (vec&& A, vec&& B) { return vec(_mm256_div_ps(A.data(), B.data())); }
 
+		// A * B + C
 		inline friend vec mul_add(vec& A, vec& B, vec& C) { return vec(_mm256_fmadd_ps(A.data(), B.data(), C.data())); }
+		inline friend vec mul_add(vec&& A, vec& B, vec& C) { return vec(_mm256_fmadd_ps(A.data(), B.data(), C.data())); }
+		inline friend vec mul_add(vec& A, vec&& B, vec& C) { return vec(_mm256_fmadd_ps(A.data(), B.data(), C.data())); }
+		inline friend vec mul_add(vec& A, vec& B, vec&& C) { return vec(_mm256_fmadd_ps(A.data(), B.data(), C.data())); }
+		inline friend vec mul_add(vec&& A, vec&& B, vec& C) { return vec(_mm256_fmadd_ps(A.data(), B.data(), C.data())); }
+		inline friend vec mul_add(vec&& A, vec& B, vec&& C) { return vec(_mm256_fmadd_ps(A.data(), B.data(), C.data())); }
+		inline friend vec mul_add(vec& A, vec&& B, vec&& C) { return vec(_mm256_fmadd_ps(A.data(), B.data(), C.data())); }
+		inline friend vec mul_add(vec&& A, vec&& B, vec&& C) { return vec(_mm256_fmadd_ps(A.data(), B.data(), C.data())); }
+
+		// A * B - C
 		inline friend vec mul_sub(vec& A, vec& B, vec& C) { return vec(_mm256_fmsub_ps(A.data(), B.data(), C.data())); }
+		inline friend vec mul_sub(vec&& A, vec& B, vec& C) { return vec(_mm256_fmsub_ps(A.data(), B.data(), C.data())); }
+		inline friend vec mul_sub(vec& A, vec&& B, vec& C) { return vec(_mm256_fmsub_ps(A.data(), B.data(), C.data())); }
+		inline friend vec mul_sub(vec& A, vec& B, vec&& C) { return vec(_mm256_fmsub_ps(A.data(), B.data(), C.data())); }
+		inline friend vec mul_sub(vec&& A, vec&& B, vec& C) { return vec(_mm256_fmsub_ps(A.data(), B.data(), C.data())); }
+		inline friend vec mul_sub(vec&& A, vec& B, vec&& C) { return vec(_mm256_fmsub_ps(A.data(), B.data(), C.data())); }
+		inline friend vec mul_sub(vec& A, vec&& B, vec&& C) { return vec(_mm256_fmsub_ps(A.data(), B.data(), C.data())); }
+		inline friend vec mul_sub(vec&& A, vec&& B, vec&& C) { return vec(_mm256_fmsub_ps(A.data(), B.data(), C.data())); }
 	};
 };
 #endif // ! Float_Class
