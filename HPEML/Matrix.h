@@ -25,7 +25,6 @@ public:
 	inline Matrix& operator = (vector<vector<scalar>>& vec_vecs);
 	inline Matrix& operator = (vector<vector<scalar>>&& vec_vecs);
 
-
 	// operator += with matrices
 	friend Matrix& operator += (Matrix& A, Matrix& B);
 	friend Matrix& operator += (Matrix& A, Matrix&& B);
@@ -293,11 +292,395 @@ public:
 	/* Sub Operator with Matrices - END */
 
 
-	// operator * with matrices
-	friend Matrix operator * (Matrix& A, Matrix& B);
-	friend Matrix operator * (Matrix& A, Matrix&& B);
-	friend Matrix operator * (Matrix&& A, Matrix& B);
-	friend Matrix operator * (Matrix&& A, Matrix&& B);
+	/* Multiplication Operator with Matrices - START */
+	friend Matrix operator * (Matrix& A, Matrix& B)
+	{
+		if (A.cols() != B.rows())
+			throw "Wrong Dimensions! Can't Multiply!";
+
+		size_t row = A.rows(), col = B.cols(), col_row = A.cols(); // for padding removal
+		A.padRowOrColumn();
+		B.padRowOrColumn();
+		size_t rowA = A.rows(), colA_rowB = A.cols(), colB = B.cols(); // dimensions after padding
+
+		Matrix<scalar> AA[4], BB[4];
+
+		// split A matrix
+		AA[0] = A.operator()(0, rowA / 2 - 1, 0, colA_rowB / 2 - 1);
+		AA[1] = A.operator()(0, rowA / 2 - 1, colA_rowB / 2, colA_rowB - 1);
+		AA[2] = A.operator()(rowA / 2, rowA - 1, 0, colA_rowB / 2 - 1);
+		AA[3] = A.operator()(rowA / 2, rowA - 1, colA_rowB / 2, colA_rowB - 1);
+		A.removePadding(row, col_row);
+
+		// split B matrix
+		BB[0] = B.operator()(0, colA_rowB / 2 - 1, 0, colB / 2 - 1);
+		BB[1] = B.operator()(0, colA_rowB / 2 - 1, colB / 2, colB - 1);
+		BB[2] = B.operator()(colA_rowB / 2, colA_rowB - 1, 0, colB / 2 - 1);
+		BB[3] = B.operator()(colA_rowB / 2, colA_rowB - 1, colB / 2, colB - 1);
+		B.removePadding(col_row, col);
+
+		Matrix<scalar> S[8];
+
+		// sums from A sub matrices
+		S[0] = AA[2] + AA[3];
+		S[1] = S[0] - AA[0];
+		S[2] = AA[0] - AA[2];
+		S[3] = AA[1] - S[1];
+
+		// sums from B sub matrices
+		S[4] = BB[1] - BB[0];
+		S[5] = BB[3] - S[4];
+		S[6] = BB[3] - BB[1];
+		S[7] = S[5] - BB[2];
+
+		// pad the matrices before multiplication
+		for (size_t i = 0; i < 4; ++i)
+		{
+			AA[i].padBlockSize();
+			BB[i].padBlockSize();
+		}
+		for (size_t i = 0; i < 8; ++i)
+			S[i].padBlockSize();
+
+		Matrix<scalar> P[7];
+		thread t[7];
+		t[0] = thread([&P, &AA, &BB, &S]() {P[0].naiveMult(S[1], S[5]); });
+		t[1] = thread([&P, &AA, &BB, &S]() {P[1].naiveMult(AA[0], BB[0]); });
+		t[2] = thread([&P, &AA, &BB, &S]() {P[2].naiveMult(AA[1], BB[2]); });
+		t[3] = thread([&P, &AA, &BB, &S]() {P[3].naiveMult(S[2], S[6]); });
+		t[4] = thread([&P, &AA, &BB, &S]() {P[4].naiveMult(S[0], S[4]); });
+		t[5] = thread([&P, &AA, &BB, &S]() {P[5].naiveMult(S[3], BB[3]); });
+		t[6] = thread([&P, &AA, &BB, &S]() {P[6].naiveMult(AA[3], S[7]); });
+
+		for (size_t i = 0; i < 7; ++i)
+			t[i].join();
+
+		for (size_t i = 0; i < 4; ++i)
+		{
+			AA[i].~Matrix();
+			BB[i].~Matrix();
+		}
+
+		for (size_t i = 0; i < 8; ++i)
+			S[i].~Matrix();
+
+		Matrix<scalar> T[2];
+		T[0] = P[0] + P[1];
+		T[1] = T[0] + P[3];
+
+		Matrix<scalar> CC[4];
+		CC[0] = P[1] + P[2];
+		CC[1] = T[0] + P[4] + P[5];
+		CC[2] = T[1] - P[6];
+		CC[3] = T[1] + P[4];
+
+		for (size_t i = 0; i < 7; ++i)
+			P[i].~Matrix();
+
+		T[0].~Matrix();
+		T[1].~Matrix();
+
+		// collect into result matrix
+		Matrix<scalar> C(CC);
+		C.removePadding(row, col);
+
+		for (size_t i = 0; i < 4; ++i)
+			CC[i].~Matrix();
+
+		return C;
+	}
+
+	friend Matrix operator * (Matrix& A, Matrix&& B)
+	{
+		if (A.cols() != B.rows())
+			throw "Wrong Dimensions! Can't Multiply!";
+
+		size_t row = A.rows(), col = B.cols(), col_row = A.cols(); // for padding removal
+		A.padRowOrColumn();
+		B.padRowOrColumn();
+		size_t rowA = A.rows(), colA_rowB = A.cols(), colB = B.cols(); // dimensions after padding
+
+		Matrix<scalar> AA[4], BB[4];
+
+		// split A matrix
+		AA[0] = A.operator()(0, rowA / 2 - 1, 0, colA_rowB / 2 - 1);
+		AA[1] = A.operator()(0, rowA / 2 - 1, colA_rowB / 2, colA_rowB - 1);
+		AA[2] = A.operator()(rowA / 2, rowA - 1, 0, colA_rowB / 2 - 1);
+		AA[3] = A.operator()(rowA / 2, rowA - 1, colA_rowB / 2, colA_rowB - 1);
+		A.removePadding(row, col_row);
+
+		// split B matrix
+		BB[0] = B.operator()(0, colA_rowB / 2 - 1, 0, colB / 2 - 1);
+		BB[1] = B.operator()(0, colA_rowB / 2 - 1, colB / 2, colB - 1);
+		BB[2] = B.operator()(colA_rowB / 2, colA_rowB - 1, 0, colB / 2 - 1);
+		BB[3] = B.operator()(colA_rowB / 2, colA_rowB - 1, colB / 2, colB - 1);
+		B.removePadding(col_row, col);
+
+		Matrix<scalar> S[8];
+
+		// sums from A sub matrices
+		S[0] = AA[2] + AA[3];
+		S[1] = S[0] - AA[0];
+		S[2] = AA[0] - AA[2];
+		S[3] = AA[1] - S[1];
+
+		// sums from B sub matrices
+		S[4] = BB[1] - BB[0];
+		S[5] = BB[3] - S[4];
+		S[6] = BB[3] - BB[1];
+		S[7] = S[5] - BB[2];
+
+		// pad the matrices before multiplication
+		for (size_t i = 0; i < 4; ++i)
+		{
+			AA[i].padBlockSize();
+			BB[i].padBlockSize();
+		}
+		for (size_t i = 0; i < 8; ++i)
+			S[i].padBlockSize();
+
+		Matrix<scalar> P[7];
+		thread t[7];
+		t[0] = thread([&P, &AA, &BB, &S]() {P[0].naiveMult(S[1], S[5]); });
+		t[1] = thread([&P, &AA, &BB, &S]() {P[1].naiveMult(AA[0], BB[0]); });
+		t[2] = thread([&P, &AA, &BB, &S]() {P[2].naiveMult(AA[1], BB[2]); });
+		t[3] = thread([&P, &AA, &BB, &S]() {P[3].naiveMult(S[2], S[6]); });
+		t[4] = thread([&P, &AA, &BB, &S]() {P[4].naiveMult(S[0], S[4]); });
+		t[5] = thread([&P, &AA, &BB, &S]() {P[5].naiveMult(S[3], BB[3]); });
+		t[6] = thread([&P, &AA, &BB, &S]() {P[6].naiveMult(AA[3], S[7]); });
+
+		for (size_t i = 0; i < 7; ++i)
+			t[i].join();
+
+		for (size_t i = 0; i < 4; ++i)
+		{
+			AA[i].~Matrix();
+			BB[i].~Matrix();
+		}
+
+		for (size_t i = 0; i < 8; ++i)
+			S[i].~Matrix();
+
+		Matrix<scalar> T[2];
+		T[0] = P[0] + P[1];
+		T[1] = T[0] + P[3];
+
+		Matrix<scalar> CC[4];
+		CC[0] = P[1] + P[2];
+		CC[1] = T[0] + P[4] + P[5];
+		CC[2] = T[1] - P[6];
+		CC[3] = T[1] + P[4];
+
+		for (size_t i = 0; i < 7; ++i)
+			P[i].~Matrix();
+
+		T[0].~Matrix();
+		T[1].~Matrix();
+
+		// collect into result matrix
+		Matrix<scalar> C(CC);
+		C.removePadding(row, col);
+
+		for (size_t i = 0; i < 4; ++i)
+			CC[i].~Matrix();
+
+		return C;
+	}
+
+	friend Matrix operator * (Matrix&& A, Matrix& B)
+	{
+		if (A.cols() != B.rows())
+			throw "Wrong Dimensions! Can't Multiply!";
+
+		size_t row = A.rows(), col = B.cols(), col_row = A.cols(); // for padding removal
+		A.padRowOrColumn();
+		B.padRowOrColumn();
+		size_t rowA = A.rows(), colA_rowB = A.cols(), colB = B.cols(); // dimensions after padding
+
+		Matrix<scalar> AA[4], BB[4];
+
+		// split A matrix
+		AA[0] = A.operator()(0, rowA / 2 - 1, 0, colA_rowB / 2 - 1);
+		AA[1] = A.operator()(0, rowA / 2 - 1, colA_rowB / 2, colA_rowB - 1);
+		AA[2] = A.operator()(rowA / 2, rowA - 1, 0, colA_rowB / 2 - 1);
+		AA[3] = A.operator()(rowA / 2, rowA - 1, colA_rowB / 2, colA_rowB - 1);
+		A.removePadding(row, col_row);
+
+		// split B matrix
+		BB[0] = B.operator()(0, colA_rowB / 2 - 1, 0, colB / 2 - 1);
+		BB[1] = B.operator()(0, colA_rowB / 2 - 1, colB / 2, colB - 1);
+		BB[2] = B.operator()(colA_rowB / 2, colA_rowB - 1, 0, colB / 2 - 1);
+		BB[3] = B.operator()(colA_rowB / 2, colA_rowB - 1, colB / 2, colB - 1);
+		B.removePadding(col_row, col);
+
+		Matrix<scalar> S[8];
+
+		// sums from A sub matrices
+		S[0] = AA[2] + AA[3];
+		S[1] = S[0] - AA[0];
+		S[2] = AA[0] - AA[2];
+		S[3] = AA[1] - S[1];
+
+		// sums from B sub matrices
+		S[4] = BB[1] - BB[0];
+		S[5] = BB[3] - S[4];
+		S[6] = BB[3] - BB[1];
+		S[7] = S[5] - BB[2];
+
+		// pad the matrices before multiplication
+		for (size_t i = 0; i < 4; ++i)
+		{
+			AA[i].padBlockSize();
+			BB[i].padBlockSize();
+		}
+		for (size_t i = 0; i < 8; ++i)
+			S[i].padBlockSize();
+
+		Matrix<scalar> P[7];
+		thread t[7];
+		t[0] = thread([&P, &AA, &BB, &S]() {P[0].naiveMult(S[1], S[5]); });
+		t[1] = thread([&P, &AA, &BB, &S]() {P[1].naiveMult(AA[0], BB[0]); });
+		t[2] = thread([&P, &AA, &BB, &S]() {P[2].naiveMult(AA[1], BB[2]); });
+		t[3] = thread([&P, &AA, &BB, &S]() {P[3].naiveMult(S[2], S[6]); });
+		t[4] = thread([&P, &AA, &BB, &S]() {P[4].naiveMult(S[0], S[4]); });
+		t[5] = thread([&P, &AA, &BB, &S]() {P[5].naiveMult(S[3], BB[3]); });
+		t[6] = thread([&P, &AA, &BB, &S]() {P[6].naiveMult(AA[3], S[7]); });
+
+		for (size_t i = 0; i < 7; ++i)
+			t[i].join();
+
+		for (size_t i = 0; i < 4; ++i)
+		{
+			AA[i].~Matrix();
+			BB[i].~Matrix();
+		}
+
+		for (size_t i = 0; i < 8; ++i)
+			S[i].~Matrix();
+
+		Matrix<scalar> T[2];
+		T[0] = P[0] + P[1];
+		T[1] = T[0] + P[3];
+
+		Matrix<scalar> CC[4];
+		CC[0] = P[1] + P[2];
+		CC[1] = T[0] + P[4] + P[5];
+		CC[2] = T[1] - P[6];
+		CC[3] = T[1] + P[4];
+
+		for (size_t i = 0; i < 7; ++i)
+			P[i].~Matrix();
+
+		T[0].~Matrix();
+		T[1].~Matrix();
+
+		// collect into result matrix
+		Matrix<scalar> C(CC);
+		C.removePadding(row, col);
+
+		for (size_t i = 0; i < 4; ++i)
+			CC[i].~Matrix();
+
+		return C;
+	}
+
+	friend Matrix operator * (Matrix&& A, Matrix&& B)
+	{
+		if (A.cols() != B.rows())
+			throw "Wrong Dimensions! Can't Multiply!";
+
+		size_t row = A.rows(), col = B.cols(), col_row = A.cols(); // for padding removal
+		A.padRowOrColumn();
+		B.padRowOrColumn();
+		size_t rowA = A.rows(), colA_rowB = A.cols(), colB = B.cols(); // dimensions after padding
+
+		Matrix<scalar> AA[4], BB[4];
+
+		// split A matrix
+		AA[0] = A.operator()(0, rowA / 2 - 1, 0, colA_rowB / 2 - 1);
+		AA[1] = A.operator()(0, rowA / 2 - 1, colA_rowB / 2, colA_rowB - 1);
+		AA[2] = A.operator()(rowA / 2, rowA - 1, 0, colA_rowB / 2 - 1);
+		AA[3] = A.operator()(rowA / 2, rowA - 1, colA_rowB / 2, colA_rowB - 1);
+		A.removePadding(row, col_row);
+
+		// split B matrix
+		BB[0] = B.operator()(0, colA_rowB / 2 - 1, 0, colB / 2 - 1);
+		BB[1] = B.operator()(0, colA_rowB / 2 - 1, colB / 2, colB - 1);
+		BB[2] = B.operator()(colA_rowB / 2, colA_rowB - 1, 0, colB / 2 - 1);
+		BB[3] = B.operator()(colA_rowB / 2, colA_rowB - 1, colB / 2, colB - 1);
+		B.removePadding(col_row, col);
+
+		Matrix<scalar> S[8];
+
+		// sums from A sub matrices
+		S[0] = AA[2] + AA[3];
+		S[1] = S[0] - AA[0];
+		S[2] = AA[0] - AA[2];
+		S[3] = AA[1] - S[1];
+
+		// sums from B sub matrices
+		S[4] = BB[1] - BB[0];
+		S[5] = BB[3] - S[4];
+		S[6] = BB[3] - BB[1];
+		S[7] = S[5] - BB[2];
+
+		// pad the matrices before multiplication
+		for (size_t i = 0; i < 4; ++i)
+		{
+			AA[i].padBlockSize();
+			BB[i].padBlockSize();
+		}
+		for (size_t i = 0; i < 8; ++i)
+			S[i].padBlockSize();
+
+		Matrix<scalar> P[7];
+		thread t[7];
+		t[0] = thread([&P, &AA, &BB, &S]() {P[0].naiveMult(S[1], S[5]); });
+		t[1] = thread([&P, &AA, &BB, &S]() {P[1].naiveMult(AA[0], BB[0]); });
+		t[2] = thread([&P, &AA, &BB, &S]() {P[2].naiveMult(AA[1], BB[2]); });
+		t[3] = thread([&P, &AA, &BB, &S]() {P[3].naiveMult(S[2], S[6]); });
+		t[4] = thread([&P, &AA, &BB, &S]() {P[4].naiveMult(S[0], S[4]); });
+		t[5] = thread([&P, &AA, &BB, &S]() {P[5].naiveMult(S[3], BB[3]); });
+		t[6] = thread([&P, &AA, &BB, &S]() {P[6].naiveMult(AA[3], S[7]); });
+
+		for (size_t i = 0; i < 7; ++i)
+			t[i].join();
+
+		for (size_t i = 0; i < 4; ++i)
+		{
+			AA[i].~Matrix();
+			BB[i].~Matrix();
+		}
+
+		for (size_t i = 0; i < 8; ++i)
+			delete S[i];
+
+		Matrix<scalar> T[2];
+		T[0] = P[0] + P[1];
+		T[1] = T[0] + P[3];
+
+		Matrix<scalar> CC[4];
+		CC[0] = P[1] + P[2];
+		CC[1] = T[0] + P[4] + P[5];
+		CC[2] = T[1] - P[6];
+		CC[3] = T[1] + P[4];
+
+		for (size_t i = 0; i < 7; ++i)
+			P[i].~Matrix();
+
+		T[0].~Matrix();
+		T[1].~Matrix();
+
+		// collect into result matrix
+		Matrix<scalar> C(CC);
+		C.removePadding(row, col);
+
+		for (size_t i = 0; i < 4; ++i)
+			CC[i].~Matrix();
+
+		return C;
+	}
+	/* Multiplication Operator with Matrices - END */
 
 	friend Matrix operator + (Matrix& A, scalar c); //4 times
 	friend Matrix operator - (Matrix& A, scalar c); //4 times
@@ -397,7 +780,7 @@ public:
 		this->_mat = matrix;
 	}
 
-	void removePadding(size_t row, size_t col) // resize the matrix into rowXcol
+	void removePadding(size_t row, size_t col) // resize the matrix into row X col
 	{
 		if (row == this->_row && col == this->_col) // no need to unpadd
 			return;
@@ -408,11 +791,14 @@ public:
 		if (col >= vecsize)
 		{
 			for (i = 0; i < row; ++i)
+			{
 				for (j = 0; j < col - vecsize; j += vecsize)
 					matrix[i * col + j] = scalar::vec(originalMatrix + i * originalCol + j);
 
-			for (; j < col; ++j)
-				matrix[i * col + j] = originalMatrix[i * originalCol + j];
+				for (; j < col; ++j)
+					matrix[i * col + j] = originalMatrix[i * originalCol + j];
+			}
+
 		}
 		else
 		{
@@ -430,7 +816,7 @@ public:
 
 
 	/* Naive Multiplication - START */
-	Matrix naiveMult(Matrix& A, Matrix& B)
+	void naiveMult(Matrix& A, Matrix& B)
 	{
 		size_t rowA = A.rows(), colA_rowB = A.cols(), colB = B.cols();
 		scalar* result = new scalar[rowA * colB];
@@ -469,7 +855,7 @@ public:
 							if (kk == 0)
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec();
+										sum[y][x] = scalar::vec();
 							else
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
@@ -484,21 +870,23 @@ public:
 								{
 									vecA[x] = originalA[(i + x) * colA_rowB + k];
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec::mul_add(vecA[x], vecB[y], sum[y][x]);
+										sum[y][x] = vecA[x] * vecB[y] + sum[y][x]; // ask Dan about mul_add
 								}
 								index += unroll_2 * vecsize;
 							}
 
-							for (size_t x = 0; x < unroll_1; x++)
-								for (size_t y = 0; y < unroll_2; y++)
+							for (size_t x = 0; x < unroll_1; ++x)
+								for (size_t y = 0; y < unroll_2; ++y)
 									result[(i + x) * colB + j + y * vecsize] = sum[y][x];
 						}
 
 		delete[] tempB;
-		return Matrix(rowA, colB, result);
+		this->_row = rowA;
+		this->_col = colB;
+		this->_mat = result;
 	}
 
-	Matrix naiveMult(Matrix& A, Matrix&& B)
+	void naiveMult(Matrix& A, Matrix&& B)
 	{
 		size_t rowA = A.rows(), colA_rowB = A.cols(), colB = B.cols();
 		scalar* result = new scalar[rowA * colB];
@@ -537,7 +925,7 @@ public:
 							if (kk == 0)
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec();
+										sum[y][x] = scalar::vec();
 							else
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
@@ -552,21 +940,23 @@ public:
 								{
 									vecA[x] = originalA[(i + x) * colA_rowB + k];
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec.mul_add(vecA[x], vecB[y], sum[y][x]);
+										sum[y][x] = vecA[x] * vecB[y] + sum[y][x]; // ask Dan about mul_add
 								}
 								index += unroll_2 * vecsize;
 							}
 
-							for (size_t x = 0; x < unroll_1; x++)
-								for (size_t y = 0; y < unroll_2; y++)
+							for (size_t x = 0; x < unroll_1; ++x)
+								for (size_t y = 0; y < unroll_2; ++y)
 									result[(i + x) * colB + j + y * vecsize] = sum[y][x];
 						}
 
 		delete[] tempB;
-		return Matrix(rowA, colB, result);
+		this->_row = rowA;
+		this->_col = colB;
+		this->_mat = result;
 	}
 
-	Matrix naiveMult(Matrix&& A, Matrix& B)
+	void naiveMult(Matrix&& A, Matrix& B)
 	{
 		size_t rowA = A.rows(), colA_rowB = A.cols(), colB = B.cols();
 		scalar* result = new scalar[rowA * colB];
@@ -605,7 +995,7 @@ public:
 							if (kk == 0)
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec();
+										sum[y][x] = scalar::vec();
 							else
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
@@ -620,21 +1010,23 @@ public:
 								{
 									vecA[x] = originalA[(i + x) * colA_rowB + k];
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec.mul_add(vecA[x], vecB[y], sum[y][x]);
+										sum[y][x] = vecA[x] * vecB[y] + sum[y][x]; // ask Dan about mul_add
 								}
 								index += unroll_2 * vecsize;
 							}
 
-							for (size_t x = 0; x < unroll_1; x++)
-								for (size_t y = 0; y < unroll_2; y++)
+							for (size_t x = 0; x < unroll_1; ++x)
+								for (size_t y = 0; y < unroll_2; ++y)
 									result[(i + x) * colB + j + y * vecsize] = sum[y][x];
 						}
 
 		delete[] tempB;
-		return Matrix(rowA, colB, result);
+		this->_row = rowA;
+		this->_col = colB;
+		this->_mat = result;
 	}
 
-	Matrix naiveMult(Matrix&& A, Matrix&& B)
+	void naiveMult(Matrix&& A, Matrix&& B)
 	{
 		size_t rowA = A.rows(), colA_rowB = A.cols(), colB = B.cols();
 		scalar* result = new scalar[rowA * colB];
@@ -673,7 +1065,7 @@ public:
 							if (kk == 0)
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec();
+										sum[y][x] = scalar::vec();
 							else
 								for (size_t x = 0; x < unroll_1; ++x)
 									for (size_t y = 0; y < unroll_2; ++y)
@@ -688,20 +1080,25 @@ public:
 								{
 									vecA[x] = originalA[(i + x) * colA_rowB + k];
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = typename scalar::vec.mul_add(vecA[x], vecB[y], sum[y][x]);
+										sum[y][x] = vecA[x] * vecB[y] + sum[y][x]; // ask Dan about mul_add
 								}
 								index += unroll_2 * vecsize;
 							}
 
-							for (size_t x = 0; x < unroll_1; x++)
-								for (size_t y = 0; y < unroll_2; y++)
+							for (size_t x = 0; x < unroll_1; ++x)
+								for (size_t y = 0; y < unroll_2; ++y)
 									result[(i + x) * colB + j + y * vecsize] = sum[y][x];
 						}
 
 		delete[] tempB;
-		return Matrix(rowA, colB, result);
+		this->_row = rowA;
+		this->_col = colB;
+		this->_mat = result;
 	}
 	/* Naive Multiplication - END */
+
+	//destructor
+	~Matrix() { Memory_Block<scalar, Matrix<scalar>>::~Memory_Block(); }
 };
 
 #endif // !Matrix_Class
