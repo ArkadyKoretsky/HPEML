@@ -18,7 +18,7 @@ public:
 	Matrix(Matrix M[4]) : Memory_Block<scalar, Matrix<scalar>>::Memory_Block(M) {} // collect 4 blocks into 1 big matrix
 
 
-	// assignment operators
+	/* Assignment Operators - START */
 	inline Matrix& operator = (const Matrix& M)
 	{
 		if (this != &M)
@@ -111,6 +111,8 @@ public:
 
 	inline Matrix& operator = (vector<vector<scalar>>& vec_vecs);
 	inline Matrix& operator = (vector<vector<scalar>>&& vec_vecs);
+	/* Assignment Operators - END */
+
 
 	// operator += with matrices
 	friend Matrix& operator += (Matrix& A, Matrix& B);
@@ -788,7 +790,24 @@ public:
 
 	Matrix trans(bool inplace);
 	Matrix conj(bool inplace);
-	Matrix diag();
+
+
+	/* Diagonal of Matrix - START */
+	Matrix diag() // the diagonal returned as column vector
+	{
+		size_t row = this->_row, col = this->_col;
+		if (row != col)
+			throw "Not Square Matrix!";
+
+		scalar* diagonal = new scalar[row], * matrix = this->_mat;
+
+		for (size_t i = 0, j = 0; i < row * col; i += col + 1, ++j)
+			diagonal[j] = matrix[i];
+
+		return Matrix<scalar>(row, 1, diagonal);
+	}
+	/* Diagonal of Matrix - END */
+
 
 	/* Padding Functions - START */
 	void padRowOrColumn() // pad single row\column with zeros if the dimensions are not even
@@ -967,7 +986,7 @@ public:
 								{
 									vecA[x] = originalA[(i + x) * colA_rowB + k];
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = vecA[x] * vecB[y] + sum[y][x]; // ask Dan about mul_add
+										sum[y][x] = sum[y][x].mul_add(vecA[x], vecB[y], sum[y][x]);
 								}
 								index += unroll_2 * vecsize;
 							}
@@ -1042,7 +1061,7 @@ public:
 								{
 									vecA[x] = originalA[(i + x) * colA_rowB + k];
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = vecA[x] * vecB[y] + sum[y][x]; // ask Dan about mul_add
+										sum[y][x] = sum[y][x].mul_add(vecA[x], vecB[y], sum[y][x]);
 								}
 								index += unroll_2 * vecsize;
 							}
@@ -1117,7 +1136,7 @@ public:
 								{
 									vecA[x] = originalA[(i + x) * colA_rowB + k];
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = vecA[x] * vecB[y] + sum[y][x]; // ask Dan about mul_add
+										sum[y][x] = sum[y][x].mul_add(vecA[x], vecB[y], sum[y][x]);
 								}
 								index += unroll_2 * vecsize;
 							}
@@ -1192,7 +1211,7 @@ public:
 								{
 									vecA[x] = originalA[(i + x) * colA_rowB + k];
 									for (size_t y = 0; y < unroll_2; ++y)
-										sum[y][x] = vecA[x] * vecB[y] + sum[y][x]; // ask Dan about mul_add
+										sum[y][x] = sum[y][x].mul_add(vecA[x], vecB[y], sum[y][x]);
 								}
 								index += unroll_2 * vecsize;
 							}

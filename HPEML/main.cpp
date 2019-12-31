@@ -23,7 +23,7 @@ public:
 
 int main()
 {
-	size_t row1 = 5, col = 7, row2 = 11;
+	size_t row1 = 5, col = 5, row2 = 11;
 	Float F1(1), F2(1);
 	Float::vec V1(F1), V2(F2);
 	Matrix<Float> A(row1, col, F1), B(col, row2, F2);
@@ -32,6 +32,8 @@ int main()
 	Float F3(3);
 	Matrix<Float> C(row1, col, F3), D(row1, col, F3);
 	cout << C.dot_product(C, D);
+	cout << endl;
+	cout << C.diag();
 
 	return 0;
 }

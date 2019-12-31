@@ -250,6 +250,8 @@ public:
 			_col = M.cols();
 			size_t i, sizeOfMatrix = _row * _col, vecsize = VECSIZE;
 			scalar* matrix = M.data();
+			if (_mat == nullptr)
+				_mat = new scalar[sizeOfMatrix];
 
 			if (sizeOfMatrix >= vecsize)
 			{
@@ -278,6 +280,8 @@ public:
 			_col = M.cols();
 			size_t i, sizeOfMatrix = _row * _col, vecsize = VECSIZE;
 			scalar* matrix = M.data();
+			if (_mat == nullptr)
+				_mat = new scalar[sizeOfMatrix];
 
 			if (sizeOfMatrix >= vecsize)
 			{
@@ -306,6 +310,8 @@ public:
 			_col = M.cols();
 			size_t i, sizeOfMatrix = _row * _col, vecsize = VECSIZE;
 			scalar* matrix = M.data();
+			if (_mat == nullptr)
+				_mat = new scalar[sizeOfMatrix];
 
 			if (sizeOfMatrix >= vecsize)
 			{
@@ -366,5 +372,4 @@ public:
 			delete[] _mat;
 	}
 };
-
 #endif // !Memory_Block_Class
