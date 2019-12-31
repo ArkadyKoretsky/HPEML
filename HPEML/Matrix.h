@@ -14,14 +14,101 @@ public:
 	// constructors
 	Matrix(const Matrix& M) : Memory_Block<scalar, Matrix<scalar>>::Memory_Block(M) {}
 	Matrix(Matrix& M) : Memory_Block<scalar, Matrix<scalar>>::Memory_Block(M) {}
-	Matrix(Matrix&& M) : Memory_Block<scalar, Matrix<scalar>>::Memory_Block(M) {}
+	Matrix(Matrix&& M) noexcept : Memory_Block<scalar, Matrix<scalar>>::Memory_Block(M) {}
 	Matrix(Matrix M[4]) : Memory_Block<scalar, Matrix<scalar>>::Memory_Block(M) {} // collect 4 blocks into 1 big matrix
 
 
 	// assignment operators
-	inline Matrix& operator = (const Matrix& M) { return Memory_Block<scalar, Matrix<scalar>>::operator = (M); }
-	inline Matrix& operator = (Matrix& M) { return Memory_Block<scalar, Matrix<scalar>>::operator = (M); }
-	inline Matrix& operator = (Matrix&& M) { return Memory_Block<scalar, Matrix<scalar>>::operator = (M); }
+	inline Matrix& operator = (const Matrix& M)
+	{
+		if (this != &M)
+		{
+			this->_row = M.rows();
+			this->_col = M.cols();
+			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = VECSIZE;
+			scalar* matrix = M.data();
+			if (this->_mat == nullptr)
+				this->_mat = new scalar[sizeOfMatrix];
+
+			if (sizeOfMatrix >= vecsize)
+			{
+				for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
+					this->_mat[i] = scalar::vec(matrix + i);
+
+				for (; i < sizeOfMatrix; ++i)
+					this->_mat[i] = matrix[i];
+			}
+
+			else
+			{
+				for (i = 0; i < sizeOfMatrix; ++i)
+					this->_mat[i] = matrix[i];
+			}
+		}
+
+		return *this;
+	}
+
+	inline Matrix& operator = (Matrix& M)
+	{
+		if (this != &M)
+		{
+			this->_row = M.rows();
+			this->_col = M.cols();
+			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = VECSIZE;
+			scalar* matrix = M.data();
+			if (this->_mat == nullptr)
+				this->_mat = new scalar[sizeOfMatrix];
+
+			if (sizeOfMatrix >= vecsize)
+			{
+				for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
+					this->_mat[i] = scalar::vec(matrix + i);
+
+				for (; i < sizeOfMatrix; ++i)
+					this->_mat[i] = matrix[i];
+			}
+
+			else
+			{
+				for (i = 0; i < sizeOfMatrix; ++i)
+					this->_mat[i] = matrix[i];
+			}
+		}
+
+		return *this;
+	}
+
+	inline Matrix& operator = (Matrix&& M) noexcept
+	{
+		if (this != &M)
+		{
+			this->_row = M.rows();
+			this->_col = M.cols();
+			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = VECSIZE;
+			scalar* matrix = M.data();
+			if (this->_mat == nullptr)
+				this->_mat = new scalar[sizeOfMatrix];
+
+			if (sizeOfMatrix >= vecsize)
+			{
+				for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
+					this->_mat[i] = scalar::vec(matrix + i);
+
+				for (; i < sizeOfMatrix; ++i)
+					this->_mat[i] = matrix[i];
+			}
+
+			else
+			{
+				for (i = 0; i < sizeOfMatrix; ++i)
+					this->_mat[i] = matrix[i];
+			}
+		}
+
+		return *this;
+	}
+
 	inline Matrix& operator = (vector<vector<scalar>>& vec_vecs);
 	inline Matrix& operator = (vector<vector<scalar>>&& vec_vecs);
 
@@ -333,15 +420,6 @@ public:
 		S[6] = BB[3] - BB[1];
 		S[7] = S[5] - BB[2];
 
-		// pad the matrices before multiplication
-		for (size_t i = 0; i < 4; ++i)
-		{
-			AA[i].padBlockSize();
-			BB[i].padBlockSize();
-		}
-		for (size_t i = 0; i < 8; ++i)
-			S[i].padBlockSize();
-
 		Matrix<scalar> P[7];
 		thread t[7];
 		t[0] = thread([&P, &AA, &BB, &S]() {P[0].naiveMult(S[1], S[5]); });
@@ -355,15 +433,6 @@ public:
 		for (size_t i = 0; i < 7; ++i)
 			t[i].join();
 
-		for (size_t i = 0; i < 4; ++i)
-		{
-			AA[i].~Matrix();
-			BB[i].~Matrix();
-		}
-
-		for (size_t i = 0; i < 8; ++i)
-			S[i].~Matrix();
-
 		Matrix<scalar> T[2];
 		T[0] = P[0] + P[1];
 		T[1] = T[0] + P[3];
@@ -374,18 +443,9 @@ public:
 		CC[2] = T[1] - P[6];
 		CC[3] = T[1] + P[4];
 
-		for (size_t i = 0; i < 7; ++i)
-			P[i].~Matrix();
-
-		T[0].~Matrix();
-		T[1].~Matrix();
-
 		// collect into result matrix
 		Matrix<scalar> C(CC);
 		C.removePadding(row, col);
-
-		for (size_t i = 0; i < 4; ++i)
-			CC[i].~Matrix();
 
 		return C;
 	}
@@ -430,15 +490,6 @@ public:
 		S[6] = BB[3] - BB[1];
 		S[7] = S[5] - BB[2];
 
-		// pad the matrices before multiplication
-		for (size_t i = 0; i < 4; ++i)
-		{
-			AA[i].padBlockSize();
-			BB[i].padBlockSize();
-		}
-		for (size_t i = 0; i < 8; ++i)
-			S[i].padBlockSize();
-
 		Matrix<scalar> P[7];
 		thread t[7];
 		t[0] = thread([&P, &AA, &BB, &S]() {P[0].naiveMult(S[1], S[5]); });
@@ -452,15 +503,6 @@ public:
 		for (size_t i = 0; i < 7; ++i)
 			t[i].join();
 
-		for (size_t i = 0; i < 4; ++i)
-		{
-			AA[i].~Matrix();
-			BB[i].~Matrix();
-		}
-
-		for (size_t i = 0; i < 8; ++i)
-			S[i].~Matrix();
-
 		Matrix<scalar> T[2];
 		T[0] = P[0] + P[1];
 		T[1] = T[0] + P[3];
@@ -471,18 +513,9 @@ public:
 		CC[2] = T[1] - P[6];
 		CC[3] = T[1] + P[4];
 
-		for (size_t i = 0; i < 7; ++i)
-			P[i].~Matrix();
-
-		T[0].~Matrix();
-		T[1].~Matrix();
-
 		// collect into result matrix
 		Matrix<scalar> C(CC);
 		C.removePadding(row, col);
-
-		for (size_t i = 0; i < 4; ++i)
-			CC[i].~Matrix();
 
 		return C;
 	}
@@ -527,15 +560,6 @@ public:
 		S[6] = BB[3] - BB[1];
 		S[7] = S[5] - BB[2];
 
-		// pad the matrices before multiplication
-		for (size_t i = 0; i < 4; ++i)
-		{
-			AA[i].padBlockSize();
-			BB[i].padBlockSize();
-		}
-		for (size_t i = 0; i < 8; ++i)
-			S[i].padBlockSize();
-
 		Matrix<scalar> P[7];
 		thread t[7];
 		t[0] = thread([&P, &AA, &BB, &S]() {P[0].naiveMult(S[1], S[5]); });
@@ -549,15 +573,6 @@ public:
 		for (size_t i = 0; i < 7; ++i)
 			t[i].join();
 
-		for (size_t i = 0; i < 4; ++i)
-		{
-			AA[i].~Matrix();
-			BB[i].~Matrix();
-		}
-
-		for (size_t i = 0; i < 8; ++i)
-			S[i].~Matrix();
-
 		Matrix<scalar> T[2];
 		T[0] = P[0] + P[1];
 		T[1] = T[0] + P[3];
@@ -568,18 +583,9 @@ public:
 		CC[2] = T[1] - P[6];
 		CC[3] = T[1] + P[4];
 
-		for (size_t i = 0; i < 7; ++i)
-			P[i].~Matrix();
-
-		T[0].~Matrix();
-		T[1].~Matrix();
-
 		// collect into result matrix
 		Matrix<scalar> C(CC);
 		C.removePadding(row, col);
-
-		for (size_t i = 0; i < 4; ++i)
-			CC[i].~Matrix();
 
 		return C;
 	}
@@ -624,15 +630,6 @@ public:
 		S[6] = BB[3] - BB[1];
 		S[7] = S[5] - BB[2];
 
-		// pad the matrices before multiplication
-		for (size_t i = 0; i < 4; ++i)
-		{
-			AA[i].padBlockSize();
-			BB[i].padBlockSize();
-		}
-		for (size_t i = 0; i < 8; ++i)
-			S[i].padBlockSize();
-
 		Matrix<scalar> P[7];
 		thread t[7];
 		t[0] = thread([&P, &AA, &BB, &S]() {P[0].naiveMult(S[1], S[5]); });
@@ -646,15 +643,6 @@ public:
 		for (size_t i = 0; i < 7; ++i)
 			t[i].join();
 
-		for (size_t i = 0; i < 4; ++i)
-		{
-			AA[i].~Matrix();
-			BB[i].~Matrix();
-		}
-
-		for (size_t i = 0; i < 8; ++i)
-			delete S[i];
-
 		Matrix<scalar> T[2];
 		T[0] = P[0] + P[1];
 		T[1] = T[0] + P[3];
@@ -665,22 +653,14 @@ public:
 		CC[2] = T[1] - P[6];
 		CC[3] = T[1] + P[4];
 
-		for (size_t i = 0; i < 7; ++i)
-			P[i].~Matrix();
-
-		T[0].~Matrix();
-		T[1].~Matrix();
-
 		// collect into result matrix
 		Matrix<scalar> C(CC);
 		C.removePadding(row, col);
 
-		for (size_t i = 0; i < 4; ++i)
-			CC[i].~Matrix();
-
 		return C;
 	}
 	/* Multiplication Operator with Matrices - END */
+
 
 	friend Matrix operator + (Matrix& A, scalar c); //4 times
 	friend Matrix operator - (Matrix& A, scalar c); //4 times
@@ -690,8 +670,121 @@ public:
 	// product with transpose
 	friend Matrix product(Matrix&& A, char mode_a, Matrix&& B, char mode_b); // 4 times
 
-	// Element-wise product
-	friend Matrix dot_product(Matrix&& a, Matrix&& b); //4 times
+
+	/* Element-Wise Product - START */
+	Matrix dot_product(Matrix& A, Matrix& B)
+	{
+		size_t row = A.rows(), col = A.cols();
+		if (row != B.rows() || col != B.cols())
+			throw "Can't Multiply Element-Wise! Wrong Dimensions!";
+
+		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
+		if (sizeOfMatrix >= vecsize)
+		{
+			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
+				result[i] = scalar::vec(dataOfA + i) * scalar::vec(dataOfB + i);
+
+			for (; i < sizeOfMatrix; ++i)
+				result[i] = dataOfA[i] * dataOfB[i];
+		}
+
+		else
+		{
+			for (i = 0; i < sizeOfMatrix; ++i)
+				result[i] = dataOfA[i] * dataOfB[i];
+		}
+
+		Matrix<scalar> matrix(row, col, result);
+		delete[] result;
+		return matrix;
+	}
+
+	Matrix dot_product(Matrix& A, Matrix&& B)
+	{
+		size_t row = A.rows(), col = A.cols();
+		if (row != B.rows() || col != B.cols())
+			throw "Can't Multiply Element-Wise! Wrong Dimensions!";
+
+		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
+		if (sizeOfMatrix >= vecsize)
+		{
+			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
+				result[i] = scalar::vec(dataOfA + i) * scalar::vec(dataOfB + i);
+
+			for (; i < sizeOfMatrix; ++i)
+				result[i] = dataOfA[i] * dataOfB[i];
+		}
+
+		else
+		{
+			for (i = 0; i < sizeOfMatrix; ++i)
+				result[i] = dataOfA[i] * dataOfB[i];
+		}
+
+		Matrix<scalar> matrix(row, col, result);
+		delete[] result;
+		return matrix;
+	}
+
+	Matrix dot_product(Matrix&& A, Matrix& B)
+	{
+		size_t row = A.rows(), col = A.cols();
+		if (row != B.rows() || col != B.cols())
+			throw "Can't Multiply Element-Wise! Wrong Dimensions!";
+
+		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
+		if (sizeOfMatrix >= vecsize)
+		{
+			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
+				result[i] = scalar::vec(dataOfA + i) * scalar::vec(dataOfB + i);
+
+			for (; i < sizeOfMatrix; ++i)
+				result[i] = dataOfA[i] * dataOfB[i];
+		}
+
+		else
+		{
+			for (i = 0; i < sizeOfMatrix; ++i)
+				result[i] = dataOfA[i] * dataOfB[i];
+		}
+
+		Matrix<scalar> matrix(row, col, result);
+		delete[] result;
+		return matrix;
+	}
+
+	Matrix dot_product(Matrix&& A, Matrix&& B)
+	{
+		size_t row = A.rows(), col = A.cols();
+		if (row != B.rows() || col != B.cols())
+			throw "Can't Multiply Element-Wise! Wrong Dimensions!";
+
+		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
+		if (sizeOfMatrix >= vecsize)
+		{
+			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
+				result[i] = scalar::vec(dataOfA + i) * scalar::vec(dataOfB + i);
+
+			for (; i < sizeOfMatrix; ++i)
+				result[i] = dataOfA[i] * dataOfB[i];
+		}
+
+		else
+		{
+			for (i = 0; i < sizeOfMatrix; ++i)
+				result[i] = dataOfA[i] * dataOfB[i];
+		}
+
+		Matrix<scalar> matrix(row, col, result);
+		delete[] result;
+		return matrix;
+	}
+	/* Element-Wise Product - END */
+
 
 	Matrix trans(bool inplace);
 	Matrix conj(bool inplace);
@@ -818,13 +911,17 @@ public:
 	/* Naive Multiplication - START */
 	void naiveMult(Matrix& A, Matrix& B)
 	{
+		size_t original_rowA = A.rows(), original_colA_rowB = A.cols(), original_colB = B.cols(); // for padding removal
+
+		// pad the matrices before multiplying
+		A.padBlockSize();
+		B.padBlockSize();
 		size_t rowA = A.rows(), colA_rowB = A.cols(), colB = B.cols();
-		scalar* result = new scalar[rowA * colB];
 		size_t iBlock = min(I_BLOCKSIZE, (int)rowA);
 		size_t jBlock = min(J_BLOCKSIZE, (int)colA_rowB);
 		size_t kBlock = min(K_BLOCKSIZE, (int)colB);
 
-		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data();
+		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data(), * result = new scalar[rowA * colB];
 		size_t index = 0, vecsize = VECSIZE;
 		const size_t unroll_1 = UNROLL_1, unroll_2 = UNROLL_2;
 		typename scalar::vec sum[unroll_2][unroll_1], vecA[unroll_1], vecB[unroll_2];
@@ -881,20 +978,25 @@ public:
 						}
 
 		delete[] tempB;
-		this->_row = rowA;
-		this->_col = colB;
+		A.removePadding(original_rowA, original_colA_rowB);
+		B.removePadding(original_colA_rowB, original_colB);
 		this->_mat = result;
+		this->removePadding(original_rowA, original_colB);
 	}
 
 	void naiveMult(Matrix& A, Matrix&& B)
 	{
+		size_t original_rowA = A.rows(), original_colA_rowB = A.cols(), original_colB = B.cols(); // for padding removal
+
+		// pad the matrices before multiplying
+		A.padBlockSize();
+		B.padBlockSize();
 		size_t rowA = A.rows(), colA_rowB = A.cols(), colB = B.cols();
-		scalar* result = new scalar[rowA * colB];
 		size_t iBlock = min(I_BLOCKSIZE, (int)rowA);
 		size_t jBlock = min(J_BLOCKSIZE, (int)colA_rowB);
 		size_t kBlock = min(K_BLOCKSIZE, (int)colB);
 
-		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data();
+		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data(), * result = new scalar[rowA * colB];
 		size_t index = 0, vecsize = VECSIZE;
 		const size_t unroll_1 = UNROLL_1, unroll_2 = UNROLL_2;
 		typename scalar::vec sum[unroll_2][unroll_1], vecA[unroll_1], vecB[unroll_2];
@@ -951,20 +1053,25 @@ public:
 						}
 
 		delete[] tempB;
-		this->_row = rowA;
-		this->_col = colB;
+		A.removePadding(original_rowA, original_colA_rowB);
+		B.removePadding(original_colA_rowB, original_colB);
 		this->_mat = result;
+		this->removePadding(original_rowA, original_colB);
 	}
 
 	void naiveMult(Matrix&& A, Matrix& B)
 	{
+		size_t original_rowA = A.rows(), original_colA_rowB = A.cols(), original_colB = B.cols(); // for padding removal
+
+		// pad the matrices before multiplying
+		A.padBlockSize();
+		B.padBlockSize();
 		size_t rowA = A.rows(), colA_rowB = A.cols(), colB = B.cols();
-		scalar* result = new scalar[rowA * colB];
 		size_t iBlock = min(I_BLOCKSIZE, (int)rowA);
 		size_t jBlock = min(J_BLOCKSIZE, (int)colA_rowB);
 		size_t kBlock = min(K_BLOCKSIZE, (int)colB);
 
-		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data();
+		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data(), * result = new scalar[rowA * colB];
 		size_t index = 0, vecsize = VECSIZE;
 		const size_t unroll_1 = UNROLL_1, unroll_2 = UNROLL_2;
 		typename scalar::vec sum[unroll_2][unroll_1], vecA[unroll_1], vecB[unroll_2];
@@ -1021,20 +1128,25 @@ public:
 						}
 
 		delete[] tempB;
-		this->_row = rowA;
-		this->_col = colB;
+		A.removePadding(original_rowA, original_colA_rowB);
+		B.removePadding(original_colA_rowB, original_colB);
 		this->_mat = result;
+		this->removePadding(original_rowA, original_colB);
 	}
 
 	void naiveMult(Matrix&& A, Matrix&& B)
 	{
+		size_t original_rowA = A.rows(), original_colA_rowB = A.cols(), original_colB = B.cols(); // for padding removal
+
+		// pad the matrices before multiplying
+		A.padBlockSize();
+		B.padBlockSize();
 		size_t rowA = A.rows(), colA_rowB = A.cols(), colB = B.cols();
-		scalar* result = new scalar[rowA * colB];
 		size_t iBlock = min(I_BLOCKSIZE, (int)rowA);
 		size_t jBlock = min(J_BLOCKSIZE, (int)colA_rowB);
 		size_t kBlock = min(K_BLOCKSIZE, (int)colB);
 
-		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data();
+		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data(), * result = new scalar[rowA * colB];
 		size_t index = 0, vecsize = VECSIZE;
 		const size_t unroll_1 = UNROLL_1, unroll_2 = UNROLL_2;
 		typename scalar::vec sum[unroll_2][unroll_1], vecA[unroll_1], vecB[unroll_2];
@@ -1091,14 +1203,12 @@ public:
 						}
 
 		delete[] tempB;
-		this->_row = rowA;
-		this->_col = colB;
+		A.removePadding(original_rowA, original_colA_rowB);
+		B.removePadding(original_colA_rowB, original_colB);
 		this->_mat = result;
+		this->removePadding(original_rowA, original_colB);
 	}
 	/* Naive Multiplication - END */
-
-	//destructor
-	~Matrix() { Memory_Block<scalar, Matrix<scalar>>::~Memory_Block(); }
 };
 
 #endif // !Matrix_Class
