@@ -1,11 +1,15 @@
 #include "Header.h"
 
+/* Double class - START */
+
+// constructors
 inline Double::Double() :_num(0) {}
 inline Double::Double(double& num) : _num(num) {}
 inline Double::Double(double&& num) : _num(num) {}
 inline Double::Double(Double& F) : _num(F._num) {}
 inline Double::Double(Double&& F) : _num(std::move(F._num)) {}
 
+/* Assignment Operators - START */
 inline Double& Double::operator=(Double& F)
 {
 	if (this != &F)
@@ -34,13 +38,59 @@ inline Double& Double::operator=(double&& num)
 	return *this;
 }
 
-inline double Double::get_data() { return _num; }
-inline double* Double::get_adress() { return &_num; }
+inline Double& operator = (vec& V)
+{
+	_mm256_storeu_pd(&_num, V.data());
+	return *this;
+}
+
+inline Double& operator = (vec&& V)
+{
+	_mm256_storeu_pd(&_num, V.data());
+	return *this;
+}
+/* Assignment Operators - END */
+
+// Naive Sum
+inline Double operator + (Double& A, Double& B) { return Double(A.data() + B.data()); }
+inline Double operator + (Double& A, Double&& B) { return Double(A.data() + B.data()); }
+inline Double operator + (Double&& A, Double& B) { return Double(A.data() + B.data()); }
+inline Double operator + (Double&& A, Double&& B) { return Double(A.data() + B.data()); }
+
+// Naive Sub
+inline Double operator - (Double& A, Double& B) { return Double(A.data() - B.data()); }
+inline Double operator - (Double& A, Double&& B) { return Double(A.data() - B.data()); }
+inline Double operator - (Double&& A, Double& B) { return Double(A.data() - B.data()); }
+inline Double operator - (Double&& A, Double&& B) { return Double(A.data() - B.data()); }
+
+// Naive Multiplication
+inline Double operator * (Double& A, Double& B) { return Double(A.data() * B.data()); }
+inline Double operator * (Double& A, Double&& B) { return Double(A.data() * B.data()); }
+inline Double operator * (Double&& A, Double& B) { return Double(A.data() * B.data()); }
+inline Double operator * (Double&& A, Double&& B) { return Double(A.data() * B.data()); }
+
+// Naive Division
+inline Double operator / (Double& A, Double& B) { return Double(A.data() / B.data()); }
+inline Double operator / (Double& A, Double&& B) { return Double(A.data() / B.data()); }
+inline Double operator / (Double&& A, Double& B) { return Double(A.data() / B.data()); }
+inline Double operator / (Double&& A, Double&& B) { return Double(A.data() / B.data()); }
+
+// Getters
+inline double Double::data() { return _num; }
+inline double* Double::adress() { return &_num; }
+
+/* Double class - END */
+
+/* vec class - START */
+
+// constructors
 inline Double::vec::vec() :_v(_mm256_setzero_pd()) {}
 inline Double::vec::vec(vectypedouble& v) : _v(v) {}
 inline Double::vec::vec(vectypedouble&& v) : _v(std::move(v)) {}
-inline Double::vec::vec(vec& V) : _v(V._v) {}
-inline Double::vec::vec(vec&& V) : _v(std::move(V._v)) {}
+inline Double::vec::vec(double* p) : _v(_mm256_loadu_pd(p)) {}
+inline Double::vec::vec(Double* p) : _v(_mm256_loadu_pd(p->adress())) {}
+inline Double::vec::vec(Double& F) : _v(_mm256_broadcast_sd(F.adress())) {}
+inline Double::vec::vec(Double&& F) : _v(_mm256_broadcast_sd(F.adress())) {}
 
 //how to know the legnth of p
 inline Double::vec::vec(double* p)

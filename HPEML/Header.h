@@ -317,8 +317,8 @@ public:
 	//inline Double& operator = (vec&& V); //_mm256_storeu_pd
 
 	// accessors
-	inline double get_data();
-	inline double* get_adress();
+	inline double data();
+	inline double* adress();
 
 	//...
 

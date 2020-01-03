@@ -330,3 +330,4 @@ ASALocalRun/
 .mfractor/
 /HPEML/paddSingleRowAndColumn.cpp
 /HPEML/Vector.cpp
+/HPEML/Bool.cpp
