@@ -23,6 +23,8 @@
     <ClInclude Include="Header.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Int32.h" />
+    <ClInclude Include="Int64.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Double.cpp">

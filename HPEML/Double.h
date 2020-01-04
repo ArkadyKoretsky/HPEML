@@ -190,25 +190,25 @@ public:
 
 
 		// A * B + C
-		inline friend vec mul_add(Double::vec& A, Double::vec& B, Double::vec& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
-		inline friend vec mul_add(Double::vec& A, Double::vec& B, Double::vec&& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
-		inline friend vec mul_add(Double::vec& A, Double::vec&& B, Double::vec& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
-		inline friend vec mul_add(Double::vec& A, Double::vec&& B, Double::vec&& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
-		inline friend vec mul_add(Double::vec&& A, Double::vec& B, Double::vec& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
-		inline friend vec mul_add(Double::vec&& A, Double::vec& B, Double::vec&& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
-		inline friend vec mul_add(Double::vec&& A, Double::vec&& B, Double::vec& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
-		inline friend vec mul_add(Double::vec&& A, Double::vec&& B, Double::vec&& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_add(Double::vec& A, Double::vec& B, Double::vec& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_add(Double::vec& A, Double::vec& B, Double::vec&& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_add(Double::vec& A, Double::vec&& B, Double::vec& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_add(Double::vec& A, Double::vec&& B, Double::vec&& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_add(Double::vec&& A, Double::vec& B, Double::vec& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_add(Double::vec&& A, Double::vec& B, Double::vec&& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_add(Double::vec&& A, Double::vec&& B, Double::vec& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_add(Double::vec&& A, Double::vec&& B, Double::vec&& C) { return _mm256_fmadd_pd((A.data()), (B.data()), (C.data())); }
 
 
 		// A * B - C
-		inline friend vec mul_sub(Double::vec& A, Double::vec& B, Double::vec& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
-		inline friend vec mul_sub(Double::vec& A, Double::vec& B, Double::vec&& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
-		inline friend vec mul_sub(Double::vec& A, Double::vec&& B, Double::vec& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
-		inline friend vec mul_sub(Double::vec& A, Double::vec&& B, Double::vec&& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
-		inline friend vec mul_sub(Double::vec&& A, Double::vec& B, Double::vec& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
-		inline friend vec mul_sub(Double::vec&& A, Double::vec& B, Double::vec&& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
-		inline friend vec mul_sub(Double::vec&& A, Double::vec&& B, Double::vec& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
-		inline friend vec mul_sub(Double::vec&& A, Double::vec&& B, Double::vec&& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_sub(Double::vec& A, Double::vec& B, Double::vec& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_sub(Double::vec& A, Double::vec& B, Double::vec&& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_sub(Double::vec& A, Double::vec&& B, Double::vec& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_sub(Double::vec& A, Double::vec&& B, Double::vec&& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_sub(Double::vec&& A, Double::vec& B, Double::vec& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_sub(Double::vec&& A, Double::vec& B, Double::vec&& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_sub(Double::vec&& A, Double::vec&& B, Double::vec& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
+		inline vec mul_sub(Double::vec&& A, Double::vec&& B, Double::vec&& C) { return _mm256_fmsub_pd((A.data()), (B.data()), (C.data())); }
 	};
 };
 #endif // ! Double_Class
