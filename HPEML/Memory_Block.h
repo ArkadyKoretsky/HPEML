@@ -72,7 +72,7 @@ public:
 
 	Memory_Block(const Memory_Block& M) : _row(M.rows()), _col(M.cols()), _mat(new scalar[M.cols() * M.cols()])
 	{
-		size_t vecsize = VECSIZE, i, j, sizeOfMatrix = _row * _col;
+		size_t vecsize = VECSIZE, i, sizeOfMatrix = _row * _col;
 		scalar* matrix = M.data();
 		
 		if (sizeOfMatrix >= vecsize)
@@ -94,7 +94,7 @@ public:
 
 	Memory_Block(Memory_Block& M) : _row(M.rows()), _col(M.cols()), _mat(new scalar[M.rows() * M.cols()])
 	{
-		size_t vecsize = VECSIZE, i, j, sizeOfMatrix = _row * _col;
+		size_t vecsize = VECSIZE, i, sizeOfMatrix = _row * _col;
 		scalar* matrix = M.data();
 
 		if (sizeOfMatrix >= vecsize)
@@ -115,7 +115,7 @@ public:
 
 	Memory_Block(Memory_Block&& M) : _row(M.rows()), _col(M.cols()), _mat(new scalar[M.cols() * M.cols()])
 	{
-		size_t vecsize = VECSIZE, i, j, sizeOfMatrix = _row * _col;
+		size_t vecsize = VECSIZE, i, sizeOfMatrix = _row * _col;
 		scalar* matrix = M.data();
 
 		if (sizeOfMatrix >= vecsize)
@@ -250,8 +250,10 @@ public:
 			_col = M.cols();
 			size_t i, sizeOfMatrix = _row * _col, vecsize = VECSIZE;
 			scalar* matrix = M.data();
-			if (_mat == nullptr)
-				_mat = new scalar[sizeOfMatrix];
+			if (_mat != nullptr)
+				delete[] _mat;
+
+			_mat = new scalar[sizeOfMatrix];
 
 			if (sizeOfMatrix >= vecsize)
 			{
@@ -280,8 +282,10 @@ public:
 			_col = M.cols();
 			size_t i, sizeOfMatrix = _row * _col, vecsize = VECSIZE;
 			scalar* matrix = M.data();
-			if (_mat == nullptr)
-				_mat = new scalar[sizeOfMatrix];
+			if (_mat != nullptr)
+				delete[] _mat;
+
+			_mat = new scalar[sizeOfMatrix];
 
 			if (sizeOfMatrix >= vecsize)
 			{
@@ -310,8 +314,10 @@ public:
 			_col = M.cols();
 			size_t i, sizeOfMatrix = _row * _col, vecsize = VECSIZE;
 			scalar* matrix = M.data();
-			if (_mat == nullptr)
-				_mat = new scalar[sizeOfMatrix];
+			if (_mat != nullptr)
+				delete[] _mat;
+
+			_mat = new scalar[sizeOfMatrix];
 
 			if (sizeOfMatrix >= vecsize)
 			{
@@ -331,6 +337,59 @@ public:
 
 		return *this;
 	}
+
+	inline Memory_Block& operator = (Memory_Block subBlocks[4]) // mostly for the *= operator with matrices, to avoid unnecessary object creations
+	{
+		_row = subBlocks[0].rows() + subBlocks[2].rows();
+		_col = subBlocks[0].cols() + subBlocks[1].cols();
+		size_t vecsize = VECSIZE, i, j;
+		scalar* subMatrices[4];
+		if (_mat != nullptr)
+			delete[] _mat;
+
+		_mat = new scalar[_row * _col];
+
+		for (i = 0; i < 4; ++i)
+			subMatrices[i] = subBlocks[i].data();
+
+		if (_col / 2 >= vecsize)
+		{
+			for (i = 0; i < _row / 2; ++i)
+			{
+				for (j = 0; j < _col / 2 - vecsize; j += vecsize)
+				{
+					_mat[i * _col + j] = scalar::vec(subMatrices[0] + i * _col / 2 + j);
+					_mat[i * _col + _col / 2 + j] = scalar::vec(subMatrices[1] + i * _col / 2 + j);
+					_mat[(i + _row / 2) * _col + j] = scalar::vec(subMatrices[2] + i * _col / 2 + j);
+					_mat[(i + _row / 2) * _col + _col / 2 + j] = scalar::vec(subMatrices[3] + i * _col / 2 + j);
+				}
+
+				for (; j < _col / 2; ++j)
+				{
+					_mat[i * _col + j] = subMatrices[0][i * _col / 2 + j];
+					_mat[i * _col + _col / 2 + j] = subMatrices[1][i * _col / 2 + j];
+					_mat[(i + _row / 2) * _col + j] = subMatrices[2][i * _col / 2 + j];
+					_mat[(i + _row / 2) * _col + _col / 2 + j] = subMatrices[3][i * _col / 2 + j];
+				}
+			}
+		}
+		else
+		{
+			for (i = 0; i < _row / 2; ++i)
+			{
+				for (j = 0; j < _col / 2; ++j)
+				{
+					_mat[i * _col + j] = subMatrices[0][i * _col / 2 + j];
+					_mat[i * _col + _col / 2 + j] = subMatrices[1][i * _col / 2 + j];
+					_mat[(i + _row / 2) * _col + j] = subMatrices[2][i * _col / 2 + j];
+					_mat[(i + _row / 2) * _col + _col / 2 + j] = subMatrices[3][i * _col / 2 + j];
+				}
+			}
+		}
+
+		return *this;
+	}
+
 	inline Memory_Block& operator = (vector<vector<scalar>>& vec_vecs);
 	inline Memory_Block& operator = (vector<vector<scalar>>&& vec_vecs);
 	/* Assignment Operators - END */
@@ -360,6 +419,7 @@ public:
 		}
 		return out;
 	}
+
 	friend Memory_Block& operator << (Memory_Block& M, T x);
 	friend Memory_Block& operator , (Memory_Block& M, T x);
 	/* Input\Output Operators - END */
