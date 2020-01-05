@@ -15,9 +15,9 @@ public:
 	// constructors
 	inline Double() :_num(0) {}
 	inline Double(double& num) : _num(num) {}
-	inline Double(double&& num) : _num(num) {}
+	inline Double(double&& num) : _num(std::move(num)) {}
 	inline Double(Double& F) : _num(F.data()) {}
-	inline Double(Double&& F) : _num(std::move(F._num)) {}
+	inline Double(Double&& F) : _num(std::move(F.data())) {}
 
 	/* Assignment Operators - START */
 	inline Double& operator=(Double& F)
@@ -118,7 +118,7 @@ public:
 		inline vec(double* p) : _v(_mm256_loadu_pd(p)) {}
 		inline vec(Double* p) : _v(_mm256_loadu_pd(p->adress())) {}
 		inline vec(Double& F) : _v(_mm256_broadcast_sd(F.adress())) {}
-		inline vec(Double&& F) : _v(_mm256_broadcast_sd(F.adress())) {}
+		inline vec(Double&& F) : _v(move(_mm256_broadcast_sd(F.adress()))) {}
 		inline vec(vec& V) : _v(V.data()) {}
 		inline vec(vec&& V) noexcept : _v(std::move(V.data())) {}
 
