@@ -139,7 +139,7 @@ public:
 		}
 		inline vec& operator = (int* p)
 		{
-			_v = _mm256_loadu_pd(p);
+			_v = _mm256_loadu_si256(p);
 			return *this;
 		}
 
@@ -151,13 +151,13 @@ public:
 
 		inline vec& operator = (Int64& F)
 		{
-			_v = _mm256_loadu_si256(F.adress());
+			_v = _mm256_broadcastq_epi64(F.adress());
 			return *this;
 		}
 
 		inline vec& operator = (Int64&& F)
 		{
-			_v = _mm256_loadu_si256(F.adress());
+			_v = _mm256_broadcastq_epi64(F.adress());
 			return *this;
 		}
 
