@@ -116,8 +116,8 @@ public:
 		inline vec() :_v(_mm256_setzero_si256()) {}
 		inline vec(__m256i& v) : _v(v) {}
 		inline vec(__m256i&& v) : _v(std::move(v)) {}
-		inline vec(int* p) : _v(_mm256_storeu_si256(p)) {}
-		inline vec(Int64* p) : _v(_mm256_storeu_si256(p->adress())) {}
+		inline vec(int* p) : _v(_mm256_loadu_si256(p)) {}
+		inline vec(Int64* p) : _v(_mm256_loadu_si256(p->adress())) {}
 		inline vec(Int64& F) : _v(_mm256_broadcastq_epi64(F.adress())) {}
 		inline vec(Int64&& F) : _v(_mm256_broadcastq_epi64(F.adress())) {}
 		inline vec(vec& V) : _v(V.data()) {}
