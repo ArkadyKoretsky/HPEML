@@ -25,7 +25,7 @@ public:
 		{
 			this->_row = M.rows();
 			this->_col = M.cols();
-			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = VECSIZE;
+			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 			scalar* matrix = M.data();
 			if (this->_mat != nullptr)
 				delete[] this->_mat;
@@ -57,7 +57,7 @@ public:
 		{
 			this->_row = M.rows();
 			this->_col = M.cols();
-			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = VECSIZE;
+			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 			scalar* matrix = M.data();
 			if (this->_mat != nullptr)
 				delete[] this->_mat;
@@ -89,7 +89,7 @@ public:
 		{
 			this->_row = M.rows();
 			this->_col = M.cols();
-			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = VECSIZE;
+			size_t i, sizeOfMatrix = this->_row * this->_col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 			scalar* matrix = M.data();
 			if (this->_mat != nullptr)
 				delete[] this->_mat;
@@ -119,7 +119,7 @@ public:
 	{
 		this->_row = subBlocks[0].rows() + subBlocks[2].rows();
 		this->_col = subBlocks[0].cols() + subBlocks[1].cols();
-		size_t vecsize = VECSIZE, i, j;
+		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, j;
 		scalar* subMatrices[4];
 		if (this->_mat != nullptr)
 			delete[] this->_mat;
@@ -179,7 +179,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sum! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -205,7 +205,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sum! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -231,7 +231,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sum! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -257,7 +257,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sum! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -286,7 +286,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sub! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -312,7 +312,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sub! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -338,7 +338,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sub! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -364,7 +364,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sub! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -664,7 +664,7 @@ public:
 	/* Operator += Sith Scalar - START */
 	friend Matrix& operator += (Matrix& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -686,7 +686,7 @@ public:
 
 	friend Matrix& operator += (Matrix& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -708,7 +708,7 @@ public:
 
 	friend Matrix& operator += (Matrix&& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -730,7 +730,7 @@ public:
 
 	friend Matrix& operator += (Matrix&& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -755,7 +755,7 @@ public:
 	/* Operator -= Sith Scalar - START */
 	friend Matrix& operator -= (Matrix& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -777,7 +777,7 @@ public:
 
 	friend Matrix& operator -= (Matrix& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -799,7 +799,7 @@ public:
 
 	friend Matrix& operator -= (Matrix&& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -821,7 +821,7 @@ public:
 
 	friend Matrix& operator -= (Matrix&& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -846,7 +846,7 @@ public:
 	/* Operator *= Sith Scalar - START */
 	friend Matrix& operator *= (Matrix& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -868,7 +868,7 @@ public:
 
 	friend Matrix& operator *= (Matrix& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -890,7 +890,7 @@ public:
 
 	friend Matrix& operator *= (Matrix&& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -912,7 +912,7 @@ public:
 
 	friend Matrix& operator *= (Matrix&& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -937,7 +937,7 @@ public:
 	/* Operator /= Sith Scalar - START */
 	friend Matrix& operator /= (Matrix& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -959,7 +959,7 @@ public:
 
 	friend Matrix& operator /= (Matrix& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -981,7 +981,7 @@ public:
 
 	friend Matrix& operator /= (Matrix&& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1003,7 +1003,7 @@ public:
 
 	friend Matrix& operator /= (Matrix&& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data();
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1032,7 +1032,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sum! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1060,7 +1060,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sum! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1088,7 +1088,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sum! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1116,7 +1116,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sum! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1147,7 +1147,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sub! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
 
 		if (sizeOfMatrix >= vecsize)
@@ -1176,7 +1176,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sub! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
 
 		if (sizeOfMatrix >= vecsize)
@@ -1205,7 +1205,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sub! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
 
 		if (sizeOfMatrix >= vecsize)
@@ -1234,7 +1234,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Sub! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
 
 		if (sizeOfMatrix >= vecsize)
@@ -1545,7 +1545,7 @@ public:
 	/* Sum Operator With Scalar - START */
 	friend Matrix operator + (Matrix& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1569,7 +1569,7 @@ public:
 
 	friend Matrix operator + (Matrix& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1593,7 +1593,7 @@ public:
 
 	friend Matrix operator + (Matrix&& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1617,7 +1617,7 @@ public:
 
 	friend Matrix operator + (Matrix&& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1644,7 +1644,7 @@ public:
 	/* Sub Operator With Scalar - START */
 	friend Matrix operator - (Matrix& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1668,7 +1668,7 @@ public:
 
 	friend Matrix operator - (Matrix& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1692,7 +1692,7 @@ public:
 
 	friend Matrix operator - (Matrix&& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1716,7 +1716,7 @@ public:
 
 	friend Matrix operator - (Matrix&& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1743,7 +1743,7 @@ public:
 	/* Multiplication Operator With Scalar - START */
 	friend Matrix operator * (Matrix& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1767,7 +1767,7 @@ public:
 
 	friend Matrix operator * (Matrix& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1791,7 +1791,7 @@ public:
 
 	friend Matrix operator * (Matrix&& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1815,7 +1815,7 @@ public:
 
 	friend Matrix operator * (Matrix&& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1842,7 +1842,7 @@ public:
 	/* Division Operator With Scalar - START */
 	friend Matrix operator / (Matrix& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1866,7 +1866,7 @@ public:
 
 	friend Matrix operator / (Matrix& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1890,7 +1890,7 @@ public:
 
 	friend Matrix operator / (Matrix&& A, scalar& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1914,7 +1914,7 @@ public:
 
 	friend Matrix operator / (Matrix&& A, scalar&& c)
 	{
-		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t row = A.rows(), col = A.cols(), i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * result = new scalar[sizeOfMatrix];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1949,7 +1949,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Multiply Element-Wise! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -1977,7 +1977,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Multiply Element-Wise! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -2005,7 +2005,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Multiply Element-Wise! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -2033,7 +2033,7 @@ public:
 		if (row != B.rows() || col != B.cols())
 			throw "Can't Multiply Element-Wise! Wrong Dimensions!";
 
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		scalar* dataOfA = A.data(), * dataOfB = B.data(), * result = new scalar[row * col];
 		if (sizeOfMatrix >= vecsize)
 		{
@@ -2060,7 +2060,7 @@ public:
 	/* Transpose - START */
 	Matrix trans(bool inplace) // inplace?
 	{
-		size_t row = this->_col, col = this->_row, vecsize = VECSIZE, i, j, k = 0;
+		size_t row = this->_col, col = this->_row, vecsize = sizeof(scalar::vec) / sizeof(scalar), i, j, k = 0;
 		Matrix<scalar> transposedMatrix(row, col);
 		scalar* transposedData = transposedMatrix.data();
 
@@ -2118,7 +2118,7 @@ public:
 		if (row == originalRow && col == originalCol) // no need for even padding
 			return;
 
-		size_t i, j, vecsize = VECSIZE, sizeOfMatrix = row * col;
+		size_t i, j, vecsize = sizeof(scalar::vec) / sizeof(scalar), sizeOfMatrix = row * col;
 		scalar* matrix = new scalar[sizeOfMatrix]; // activates the empty constructor scalar() which automatically sets the whole matrix to 0
 		scalar* originalMatrix = this->_mat;
 
@@ -2149,7 +2149,7 @@ public:
 
 	void padBlockSize()
 	{
-		size_t blockSize = I_BLOCKSIZE, vecsize = VECSIZE, i, j;
+		size_t blockSize = I_BLOCKSIZE, vecsize = sizeof(scalar::vec) / sizeof(scalar), i, j;
 		size_t row = this->_row, originalRow = this->_row;
 		size_t col = this->_col, originalCol = this->_col;
 
@@ -2196,7 +2196,7 @@ public:
 		if (row == this->_row && col == this->_col) // no need to unpadd
 			return;
 
-		size_t i, j, vecsize = VECSIZE, originalRow = this->_row, originalCol = this->_col;
+		size_t i, j, vecsize = sizeof(scalar::vec) / sizeof(scalar), originalRow = this->_row, originalCol = this->_col;
 		scalar* matrix = new scalar[row * col], * originalMatrix = this->_mat;
 
 		if (col >= vecsize)
@@ -2240,7 +2240,7 @@ public:
 		size_t kBlock = min(K_BLOCKSIZE, (int)colB);
 
 		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data(), * result = new scalar[rowA * colB];
-		size_t index = 0, vecsize = VECSIZE;
+		size_t index = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		const size_t unroll_1 = UNROLL_1, unroll_2 = UNROLL_2;
 		typename scalar::vec sum[unroll_2][unroll_1], vecA[unroll_1], vecB[unroll_2];
 
@@ -2315,7 +2315,7 @@ public:
 		size_t kBlock = min(K_BLOCKSIZE, (int)colB);
 
 		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data(), * result = new scalar[rowA * colB];
-		size_t index = 0, vecsize = VECSIZE;
+		size_t index = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		const size_t unroll_1 = UNROLL_1, unroll_2 = UNROLL_2;
 		typename scalar::vec sum[unroll_2][unroll_1], vecA[unroll_1], vecB[unroll_2];
 
@@ -2390,7 +2390,7 @@ public:
 		size_t kBlock = min(K_BLOCKSIZE, (int)colB);
 
 		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data(), * result = new scalar[rowA * colB];
-		size_t index = 0, vecsize = VECSIZE;
+		size_t index = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		const size_t unroll_1 = UNROLL_1, unroll_2 = UNROLL_2;
 		typename scalar::vec sum[unroll_2][unroll_1], vecA[unroll_1], vecB[unroll_2];
 
@@ -2465,7 +2465,7 @@ public:
 		size_t kBlock = min(K_BLOCKSIZE, (int)colB);
 
 		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data(), * result = new scalar[rowA * colB];
-		size_t index = 0, vecsize = VECSIZE;
+		size_t index = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		const size_t unroll_1 = UNROLL_1, unroll_2 = UNROLL_2;
 		typename scalar::vec sum[unroll_2][unroll_1], vecA[unroll_1], vecB[unroll_2];
 

@@ -29,7 +29,7 @@ public:
 	Memory_Block(size_t row, size_t col) : _row(row), _col(col), _mat(new scalar[row * col]) {}
 	Memory_Block(size_t row, size_t col, scalar val) : _row(row), _col(col), _mat(new scalar[row * col])
 	{
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		if (sizeOfMatrix >= vecsize)
 		{
 			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
@@ -48,7 +48,7 @@ public:
 
 	Memory_Block(size_t row, size_t col, scalar* mat) : _row(row), _col(col), _mat(new scalar[row * col])
 	{
-		size_t i, sizeOfMatrix = row * col, vecsize = VECSIZE;
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 		if (sizeOfMatrix >= vecsize)
 		{
 			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
@@ -72,7 +72,7 @@ public:
 
 	Memory_Block(const Memory_Block& M) : _row(M.rows()), _col(M.cols()), _mat(new scalar[M.cols() * M.cols()])
 	{
-		size_t vecsize = VECSIZE, i, sizeOfMatrix = _row * _col;
+		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, sizeOfMatrix = _row * _col;
 		scalar* matrix = M.data();
 		
 		if (sizeOfMatrix >= vecsize)
@@ -94,7 +94,7 @@ public:
 
 	Memory_Block(Memory_Block& M) : _row(M.rows()), _col(M.cols()), _mat(new scalar[M.rows() * M.cols()])
 	{
-		size_t vecsize = VECSIZE, i, sizeOfMatrix = _row * _col;
+		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, sizeOfMatrix = _row * _col;
 		scalar* matrix = M.data();
 
 		if (sizeOfMatrix >= vecsize)
@@ -115,7 +115,7 @@ public:
 
 	Memory_Block(Memory_Block&& M) : _row(M.rows()), _col(M.cols()), _mat(new scalar[M.cols() * M.cols()])
 	{
-		size_t vecsize = VECSIZE, i, sizeOfMatrix = _row * _col;
+		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, sizeOfMatrix = _row * _col;
 		scalar* matrix = M.data();
 
 		if (sizeOfMatrix >= vecsize)
@@ -146,7 +146,7 @@ public:
 		_col(subBlocks[0].cols() + subBlocks[1].cols()),
 		_mat(new scalar[(subBlocks[0].rows() + subBlocks[2].rows()) * (subBlocks[0].cols() + subBlocks[1].cols())])
 	{
-		size_t vecsize = VECSIZE, i, j;
+		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, j;
 		scalar* subMatrices[4];
 
 		for (i = 0; i < 4; ++i)
@@ -198,7 +198,7 @@ public:
 	/* Extractors - START */
 	T operator () (size_t upperRow, size_t lowerRow, size_t leftCol, size_t rightCol)  // sub-matrix: (upperRow : lowerRow(inclusive), leftCol : rightCol(inclusive))
 	{
-		size_t vecsize = VECSIZE, i, j, k;
+		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, j, k;
 		size_t row = lowerRow - upperRow + 1, col = rightCol - leftCol + 1;
 		scalar* data = new scalar[row * col];
 
@@ -248,7 +248,7 @@ public:
 		{
 			_row = M.rows();
 			_col = M.cols();
-			size_t i, sizeOfMatrix = _row * _col, vecsize = VECSIZE;
+			size_t i, sizeOfMatrix = _row * _col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 			scalar* matrix = M.data();
 			if (_mat != nullptr)
 				delete[] _mat;
@@ -280,7 +280,7 @@ public:
 		{
 			_row = M.rows();
 			_col = M.cols();
-			size_t i, sizeOfMatrix = _row * _col, vecsize = VECSIZE;
+			size_t i, sizeOfMatrix = _row * _col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 			scalar* matrix = M.data();
 			if (_mat != nullptr)
 				delete[] _mat;
@@ -312,7 +312,7 @@ public:
 		{
 			_row = M.rows();
 			_col = M.cols();
-			size_t i, sizeOfMatrix = _row * _col, vecsize = VECSIZE;
+			size_t i, sizeOfMatrix = _row * _col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
 			scalar* matrix = M.data();
 			if (_mat != nullptr)
 				delete[] _mat;
@@ -342,7 +342,7 @@ public:
 	{
 		_row = subBlocks[0].rows() + subBlocks[2].rows();
 		_col = subBlocks[0].cols() + subBlocks[1].cols();
-		size_t vecsize = VECSIZE, i, j;
+		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, j;
 		scalar* subMatrices[4];
 		if (_mat != nullptr)
 			delete[] _mat;
