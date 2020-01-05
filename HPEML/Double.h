@@ -16,34 +16,34 @@ public:
 	inline Double() :_num(0) {}
 	inline Double(double& num) : _num(num) {}
 	inline Double(double&& num) : _num(num) {}
-	inline Double(Double& F) : _num(F._num) {}
+	inline Double(Double& F) : _num(F.data()) {}
 	inline Double(Double&& F) : _num(std::move(F._num)) {}
 
 	/* Assignment Operators - START */
 	inline Double& operator=(Double& F)
 	{
 		if (this != &F)
-			_num = F._num;
+			_num = F.data();
 		return *this;
 	}
 
 	inline Double& operator=(Double&& F)
 	{
 		if (this != &F)
-			_num = std::move(F._num);
+			_num = std::move(F.data());
 		return *this;
 	}
 
 	inline Double& operator=(double& num)
 	{
-		if (_num != num)
+		if (&_num != &num)
 			_num = num;
 		return *this;
 	}
 
 	inline Double& operator=(double&& num)
 	{
-		if (_num != num)
+		if (&_num != &num)
 			_num = std::move(num);
 		return *this;
 	}
