@@ -389,7 +389,7 @@ public:
 	/* Operator *= With Matrices - START */
 	friend Matrix& operator *= (Matrix& A, Matrix& B)
 	{
-		if(A.cols() != B.rows())
+		if (A.cols() != B.rows())
 			throw "Wrong Dimensions! Can't Multiply!";
 
 		size_t row = A.rows(), col = B.cols(), col_row = A.cols(); // for padding removal
@@ -2057,7 +2057,37 @@ public:
 	/* Element-Wise Product - END */
 
 
-	Matrix trans(bool inplace);
+	/* Transpose - START */
+	Matrix trans(bool inplace) // inplace?
+	{
+		size_t row = this->_col, col = this->_row, vecsize = VECSIZE, i, j, k = 0;
+		Matrix<scalar> transposedMatrix(row, col);
+		scalar* transposedData = transposedMatrix.data();
+
+		if (this->_col >= vecsize)
+		{
+			for (i = 0; i < this->_row; ++i)
+			{
+				for (j = 0; j < this->_col - vecsize; j += vecsize, k += vecsize)
+					transposedData[k] = scalar::vec(this->_mat + j * this->_row + i);
+
+				for (; j < this->_col; ++j, ++k)
+					transposedData[k] = this->_mat[j * this->_row + i];
+			}
+		}
+
+		else
+		{
+			for (i = 0; i < this->_row; ++i)
+				for (j = 0; j < this->_col - vecsize; ++j, ++k)
+					transposedData[k] = this->_mat[j * this->_row + i];
+		}
+
+		return transposedMatrix;
+	}
+	/* Transpose - END */
+
+
 	Matrix conj(bool inplace);
 
 
