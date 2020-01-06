@@ -2061,8 +2061,7 @@ public:
 	Matrix trans(bool inplace) // inplace?
 	{
 		size_t row = this->_col, col = this->_row, vecsize = VECSIZE, i, j, k = 0;
-		Matrix<scalar> transposedMatrix(row, col);
-		scalar* transposedData = transposedMatrix.data();
+		scalar* transposedData = new scalar[row * col];
 
 		if (this->_col >= vecsize)
 		{
@@ -2079,16 +2078,30 @@ public:
 		else
 		{
 			for (i = 0; i < this->_row; ++i)
-				for (j = 0; j < this->_col - vecsize; ++j, ++k)
+				for (j = 0; j < this->_col; ++j, ++k)
 					transposedData[k] = this->_mat[j * this->_row + i];
 		}
 
-		return transposedMatrix;
+		if (inplace)
+		{
+			this->_row = row;
+			this->_col = col;
+			delete[] this->_mat;
+			this->_mat = transposedData;
+			return *this;
+		}
+
+		return Matrix<scalar>(row, col, transposedData);
 	}
 	/* Transpose - END */
 
 
-	Matrix conj(bool inplace);
+	Matrix conj(bool inplace)
+	{
+		// need to add the complex type as well
+
+		return this->trans(inplace);
+	}
 
 
 	/* Diagonal of Matrix - START */

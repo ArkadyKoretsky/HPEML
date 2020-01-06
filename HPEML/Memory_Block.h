@@ -12,6 +12,8 @@
 #include<vector>
 #include<algorithm>
 #include<thread>
+#include<initializer_list>
+#include<random>
 using namespace std;
 
 
@@ -65,16 +67,79 @@ public:
 		}
 	}
 
-	Memory_Block(size_t row, size_t col, string type); // rand or one matrix ...
+	Memory_Block(size_t row, size_t col, string type) : _row(row), _col(col), _mat(new scalar[row * col]) // "zero" also work because the empty constructor of scalar intilize it into 0
+	{
+		if (type == "Identity" || type == "identity" || type == "IDENTITY")
+		{
+			if (row != col)
+				throw "Not A Square Matrix! Can't Initilize Into Identity Matrix!";
+
+			for (size_t i = 0; i < row * col; i += row + 1)
+				_mat[i] = 1;
+		}
+
+		else if (type == "Rand" || type == "rand" || type == "RAND")
+			for (size_t i = 0; i < row * col; ++i)
+				_mat[i] = (scalar)rand();
+
+		else if (type == "One" || type == "one" || type == "ONE")
+			for (size_t i = 0; i < row * col; ++i)
+				_mat[i] = 1;
+	}
+
 	Memory_Block(initializer_list<initializer_list<scalar>> list_lists);
-	Memory_Block(vector<vector<scalar>>& vec_vecs);
-	Memory_Block(vector<vector<scalar>>&& vec_vecs);
+
+	Memory_Block(vector<vector<scalar>>& vec_vecs) : _row(vec_vecs.size()), _col(vec_vecs.at(0).size())
+	{
+		size_t i, j, k = 0, vecsize = VECSIZE;
+		_mat = new scalar[_row * _col];
+		if (_row * _col >= vecsize)
+		{
+			for (i = 0; i < _row; ++i)
+			{
+				for (j = 0; j < _col - vecsize; j += vecsize, k += vecsize)
+					_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+
+				for (; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+			}
+		}
+		else
+		{
+			for (i = 0; i < _row; ++i)
+				for (j = 0; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+		}
+	}
+
+	Memory_Block(vector<vector<scalar>>&& vec_vecs) : _row(vec_vecs.size()), _col(vec_vecs.at(0).size())
+	{
+		size_t i, j, k = 0, vecsize = VECSIZE;
+		_mat = new scalar[_row * _col];
+		if (_row * _col >= vecsize)
+		{
+			for (i = 0; i < _row; ++i)
+			{
+				for (j = 0; j < _col - vecsize; j += vecsize, k += vecsize)
+					_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+
+				for (; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+			}
+		}
+		else
+		{
+			for (i = 0; i < _row; ++i)
+				for (j = 0; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+		}
+	}
 
 	Memory_Block(const Memory_Block& M) : _row(M.rows()), _col(M.cols()), _mat(new scalar[M.cols() * M.cols()])
 	{
 		size_t vecsize = VECSIZE, i, sizeOfMatrix = _row * _col;
 		scalar* matrix = M.data();
-		
+
 		if (sizeOfMatrix >= vecsize)
 		{
 			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
@@ -226,7 +291,20 @@ public:
 		return subBlock;
 	}
 
-	T sub(vector<size_t> row_list, vector<size_t> col_list);
+
+	T sub(vector<size_t> row_list, vector<size_t> col_list)
+	{
+		size_t i = 0;
+		scalar* data = new scalar[row_list.size() * col_list.size()];
+
+		for (size_t row : row_list)
+			for (size_t col : col_list)
+				data[i++] = this->operator()(row, col);
+
+		T subBlock(row_list.size(), col_list.size(), data);
+		delete[] data;
+		return subBlock;
+	}
 
 	// sub-matrix: row_list - is a list of row nambers, col_list - is a list of column nambers
 	// if (row_list.size() == 0) then - all rows
