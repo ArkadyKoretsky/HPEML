@@ -93,7 +93,7 @@ public:
 	{
 		size_t i, j, k = 0, vecsize = VECSIZE;
 		_mat = new scalar[_row * _col];
-		if (_row * _col >= vecsize)
+		if (_col >= vecsize)
 		{
 			for (i = 0; i < _row; ++i)
 			{
@@ -116,7 +116,7 @@ public:
 	{
 		size_t i, j, k = 0, vecsize = VECSIZE;
 		_mat = new scalar[_row * _col];
-		if (_row * _col >= vecsize)
+		if (_col >= vecsize)
 		{
 			for (i = 0; i < _row; ++i)
 			{
@@ -468,8 +468,65 @@ public:
 		return *this;
 	}
 
-	inline Memory_Block& operator = (vector<vector<scalar>>& vec_vecs);
-	inline Memory_Block& operator = (vector<vector<scalar>>&& vec_vecs);
+	inline Memory_Block& operator = (vector<vector<scalar>>& vec_vecs)
+	{
+		size_t i, j, k = 0, vecsize = VECSIZE;
+		_row = vec_vecs.size();
+		_col = vec_vecs.at(0).size();
+		if (_mat != nullptr)
+			delete[] _mat;
+		_mat = new scalar[_row * _col];
+		
+		if (_col >= vecsize)
+		{
+			for (i = 0; i < _row; ++i)
+			{
+				for (j = 0; j < _col - vecsize; j += vecsize, k += vecsize)
+					_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+
+				for (; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+			}
+		}
+		else
+		{
+			for (i = 0; i < _row; ++i)
+				for (j = 0; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+		}
+		
+		return *this;
+	}
+
+	inline Memory_Block& operator = (vector<vector<scalar>>&& vec_vecs)
+	{
+		size_t i, j, k = 0, vecsize = VECSIZE;
+		_row = vec_vecs.size();
+		_col = vec_vecs.at(0).size();
+		if (_mat != nullptr)
+			delete[] _mat;
+		_mat = new scalar[_row * _col];
+
+		if (_col >= vecsize)
+		{
+			for (i = 0; i < _row; ++i)
+			{
+				for (j = 0; j < _col - vecsize; j += vecsize, k += vecsize)
+					_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+
+				for (; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+			}
+		}
+		else
+		{
+			for (i = 0; i < _row; ++i)
+				for (j = 0; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+		}
+
+		return *this;
+	}
 	/* Assignment Operators - END */
 
 

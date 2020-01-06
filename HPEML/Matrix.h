@@ -167,8 +167,65 @@ public:
 		return *this;
 	}
 
-	inline Matrix& operator = (vector<vector<scalar>>& vec_vecs);
-	inline Matrix& operator = (vector<vector<scalar>>&& vec_vecs);
+	inline Matrix& operator = (vector<vector<scalar>>& vec_vecs)
+	{
+		size_t i, j, k = 0, vecsize = VECSIZE;
+		this->_row = vec_vecs.size();
+		this->_col = vec_vecs.at(0).size();
+		if (this->_mat != nullptr)
+			delete[] this->_mat;
+		this->_mat = new scalar[this->_row * this->_col];
+
+		if (this->_col >= vecsize)
+		{
+			for (i = 0; i < this->_row; ++i)
+			{
+				for (j = 0; j < this->_col - vecsize; j += vecsize, k += vecsize)
+					this->_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+
+				for (; j < this->_col; ++j, ++k)
+					this->_mat[k] = vec_vecs.at(i).at(j);
+			}
+		}
+		else
+		{
+			for (i = 0; i < this->_row; ++i)
+				for (j = 0; j < this->_col; ++j, ++k)
+					this->_mat[k] = vec_vecs.at(i).at(j);
+		}
+
+		return *this;
+	}
+
+	inline Matrix& operator = (vector<vector<scalar>>&& vec_vecs)
+	{
+		size_t i, j, k = 0, vecsize = VECSIZE;
+		this->_row = vec_vecs.size();
+		this->_col = vec_vecs.at(0).size();
+		if (this->_mat != nullptr)
+			delete[] this->_mat;
+		this->_mat = new scalar[this->_row * this->_col];
+
+		if (this->_col >= vecsize)
+		{
+			for (i = 0; i < this->_row; ++i)
+			{
+				for (j = 0; j < this->_col - vecsize; j += vecsize, k += vecsize)
+					this->_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+
+				for (; j < this->_col; ++j, ++k)
+					this->_mat[k] = vec_vecs.at(i).at(j);
+			}
+		}
+		else
+		{
+			for (i = 0; i < this->_row; ++i)
+				for (j = 0; j < this->_col; ++j, ++k)
+					this->_mat[k] = vec_vecs.at(i).at(j);
+		}
+
+		return *this;
+	}
 	/* Assignment Operators - END */
 
 
@@ -2058,7 +2115,7 @@ public:
 
 
 	/* Transpose - START */
-	Matrix trans(bool inplace) // inplace?
+	Matrix trans(bool inplace)
 	{
 		size_t row = this->_col, col = this->_row, vecsize = VECSIZE, i, j, k = 0;
 		scalar* transposedData = new scalar[row * col];

@@ -37,21 +37,27 @@ int main()
 	};
 	Matrix<Float> A(row1, col, "one"), B(col, row2, F2);
 	vector<Float> vec(5);
-	for (size_t i = 0; i < 5; ++i)
-		cout << vec.at(i) << " ";
-	vector<vector<Float>> vecs(5);
-	for (size_t i = 0; i < 5; ++i)
+	//for (size_t i = 0; i < 5; ++i)
+	//	cout << vec.at(i) << " ";
+	vector<vector<Float>> vecs;
+	for (size_t i = 0; i < 14; ++i)
 		vecs.push_back(vec);
-	Matrix<Float> C(vecs);
+	//for (vector<Float> V : vecs)
+	//{
+	//	for (Float F : V)
+	//		cout << F << " ";
+	//	cout << endl;
+	//}
+	Matrix<Float> C = vecs;
 	//Matrix<Float> C = A.conj(true);
 	cout << C;
 
-	for (size_t i = 0; i < 5; ++i)
-	{
-		for (size_t j = 0; j < 5; ++j)
-			cout << vecs.at(i).at(j) << " ";
-		cout << endl;
-	}
+	//for (size_t i = 0; i < 5; ++i)
+	//{
+	//	for (size_t j = 0; j < 5; ++j)
+	//		cout << vecs.at(i).at(j) << " ";
+	//	cout << endl;
+	//}
 
 	//clock_t t = clock();
 	//for (size_t i = 0; i < 10; ++i)
