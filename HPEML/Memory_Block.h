@@ -1,13 +1,14 @@
 #ifndef Memory_Block_Class
 #define Memory_Block_Class
 
+/*
 #define VECSIZE 8
 #define I_BLOCKSIZE 32
 #define J_BLOCKSIZE 32
 #define K_BLOCKSIZE 32
 #define UNROLL_1 4 // UNROLL_1 * VECSIZE <= min{I_BLOCKSIZE, J_BLOCKSIZE, K_BLOCKSIZE}
 #define UNROLL_2 2 //UNROLL_2 * VECSIZE <= min{I_BLOCKSIZE, J_BLOCKSIZE, K_BLOCKSIZE}
-
+*/
 #include<iostream>
 #include<vector>
 #include<algorithm>
@@ -74,7 +75,7 @@ public:
 	{
 		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, sizeOfMatrix = _row * _col;
 		scalar* matrix = M.data();
-		
+
 		if (sizeOfMatrix >= vecsize)
 		{
 			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)

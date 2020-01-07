@@ -27,6 +27,8 @@
     <ClInclude Include="HPEML.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Memory_Block.h" />
+    <ClInclude Include="System.h" />
+    <ClInclude Include="t_timer.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
@@ -34,6 +36,7 @@
     <ClCompile Include="main_for_linux.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="t_timer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
