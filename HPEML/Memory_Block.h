@@ -65,16 +65,79 @@ public:
 		}
 	}
 
-	Memory_Block(size_t row, size_t col, string type); // rand or one matrix ...
+	Memory_Block(size_t row, size_t col, string type) : _row(row), _col(col), _mat(new scalar[row * col]) // "zero" also work because the empty constructor of scalar intilize it into 0
+	{
+		if (type == "Identity" || type == "identity" || type == "IDENTITY")
+		{
+			if (row != col)
+				throw "Not A Square Matrix! Can't Initilize Into Identity Matrix!";
+
+			for (size_t i = 0; i < row * col; i += row + 1)
+				_mat[i] = 1;
+		}
+
+		else if (type == "Rand" || type == "rand" || type == "RAND")
+			for (size_t i = 0; i < row * col; ++i)
+				_mat[i] = (scalar)rand();
+
+		else if (type == "One" || type == "one" || type == "ONE")
+			for (size_t i = 0; i < row * col; ++i)
+				_mat[i] = 1;
+	}
+
 	Memory_Block(initializer_list<initializer_list<scalar>> list_lists);
-	Memory_Block(vector<vector<scalar>>& vec_vecs);
-	Memory_Block(vector<vector<scalar>>&& vec_vecs);
+
+	Memory_Block(vector<vector<scalar>>& vec_vecs) : _row(vec_vecs.size()), _col(vec_vecs.at(0).size())
+	{
+		size_t i, j, k = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+		_mat = new scalar[_row * _col];
+		if (_col >= vecsize)
+		{
+			for (i = 0; i < _row; ++i)
+			{
+				for (j = 0; j < _col - vecsize; j += vecsize, k += vecsize)
+					_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+
+				for (; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+			}
+		}
+		else
+		{
+			for (i = 0; i < _row; ++i)
+				for (j = 0; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+		}
+	}
+
+	Memory_Block(vector<vector<scalar>>&& vec_vecs) : _row(vec_vecs.size()), _col(vec_vecs.at(0).size())
+	{
+		size_t i, j, k = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+		_mat = new scalar[_row * _col];
+		if (_col >= vecsize)
+		{
+			for (i = 0; i < _row; ++i)
+			{
+				for (j = 0; j < _col - vecsize; j += vecsize, k += vecsize)
+					_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+
+				for (; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+			}
+		}
+		else
+		{
+			for (i = 0; i < _row; ++i)
+				for (j = 0; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+		}
+	}
 
 	Memory_Block(const Memory_Block& M) : _row(M.rows()), _col(M.cols()), _mat(new scalar[M.cols() * M.cols()])
 	{
 		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, sizeOfMatrix = _row * _col;
 		scalar* matrix = M.data();
-		
+
 		if (sizeOfMatrix >= vecsize)
 		{
 			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
@@ -226,12 +289,37 @@ public:
 		return subBlock;
 	}
 
-	T sub(vector<size_t> row_list, vector<size_t> col_list);
 
 	// sub-matrix: row_list - is a list of row nambers, col_list - is a list of column nambers
 	// if (row_list.size() == 0) then - all rows
 	// if (col_list.size() == 0) then - all columns
+	T sub(vector<size_t> row_list, vector<size_t> col_list)
+	{
+		if (row_list.size() == 0 && col_list.size() == 0)
+			return T(_row, _col, _mat);
 
+		size_t i = 0;
+		size_t rows = row_list.size() == 0 ? _row : row_list.size();
+		size_t cols = col_list.size() == 0 ? _col : col_list.size();
+		scalar* data = new scalar[rows * cols];
+
+		if (row_list.size() == 0)
+			for (size_t row = 0; row < _row; ++row)
+				for (size_t col : col_list)
+					data[i++] = this->operator()(row, col);
+
+		else if (col_list.size() == 0)
+			for (size_t row : row_list)
+				for (size_t col = 0; col < _col; ++col)
+					data[i++] = this->operator()(row, col);
+
+		else
+			for (size_t row : row_list)
+				for (size_t col : col_list)
+					data[i++] = this->operator()(row, col);
+
+		return T(rows, cols, data);
+	}
 	/* Extractors - END */
 
 
@@ -390,8 +478,65 @@ public:
 		return *this;
 	}
 
-	inline Memory_Block& operator = (vector<vector<scalar>>& vec_vecs);
-	inline Memory_Block& operator = (vector<vector<scalar>>&& vec_vecs);
+	inline Memory_Block& operator = (vector<vector<scalar>>& vec_vecs)
+	{
+		size_t i, j, k = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+		_row = vec_vecs.size();
+		_col = vec_vecs.at(0).size();
+		if (_mat != nullptr)
+			delete[] _mat;
+		_mat = new scalar[_row * _col];
+
+		if (_col >= vecsize)
+		{
+			for (i = 0; i < _row; ++i)
+			{
+				for (j = 0; j < _col - vecsize; j += vecsize, k += vecsize)
+					_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+
+				for (; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+			}
+		}
+		else
+		{
+			for (i = 0; i < _row; ++i)
+				for (j = 0; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+		}
+
+		return *this;
+	}
+
+	inline Memory_Block& operator = (vector<vector<scalar>>&& vec_vecs)
+	{
+		size_t i, j, k = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+		_row = vec_vecs.size();
+		_col = vec_vecs.at(0).size();
+		if (_mat != nullptr)
+			delete[] _mat;
+		_mat = new scalar[_row * _col];
+
+		if (_col >= vecsize)
+		{
+			for (i = 0; i < _row; ++i)
+			{
+				for (j = 0; j < _col - vecsize; j += vecsize, k += vecsize)
+					_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+
+				for (; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+			}
+		}
+		else
+		{
+			for (i = 0; i < _row; ++i)
+				for (j = 0; j < _col; ++j, ++k)
+					_mat[k] = vec_vecs.at(i).at(j);
+		}
+
+		return *this;
+	}
 	/* Assignment Operators - END */
 
 

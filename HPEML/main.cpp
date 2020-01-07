@@ -28,8 +28,9 @@ int main()
 	Double F1(1), F2(1);
 	Double::vec V1(F1), V2(F2);
 	Matrix<Double> A(row1, col, F1), B(col, row2, F2);
-	Matrix<Double> C = A.trans(true);
-	cout << A*B;
+	Matrix<Double> C(row1, col, "rand");
+	vector<size_t> rows, cols = { 1,3,5 };
+	cout << C << endl << C.sub(rows, cols);
 	//cout << A << endl << B;
 	//clock_t t = clock();
 	//for (size_t i = 0; i < 10; ++i)

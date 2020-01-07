@@ -167,8 +167,65 @@ public:
 		return *this;
 	}
 
-	inline Matrix& operator = (vector<vector<scalar>>& vec_vecs);
-	inline Matrix& operator = (vector<vector<scalar>>&& vec_vecs);
+	inline Matrix& operator = (vector<vector<scalar>>& vec_vecs)
+	{
+		size_t i, j, k = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+		this->_row = vec_vecs.size();
+		this->_col = vec_vecs.at(0).size();
+		if (this->_mat != nullptr)
+			delete[] this->_mat;
+		this->_mat = new scalar[this->_row * this->_col];
+
+		if (this->_col >= vecsize)
+		{
+			for (i = 0; i < this->_row; ++i)
+			{
+				for (j = 0; j < this->_col - vecsize; j += vecsize, k += vecsize)
+					this->_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+
+				for (; j < this->_col; ++j, ++k)
+					this->_mat[k] = vec_vecs.at(i).at(j);
+			}
+		}
+		else
+		{
+			for (i = 0; i < this->_row; ++i)
+				for (j = 0; j < this->_col; ++j, ++k)
+					this->_mat[k] = vec_vecs.at(i).at(j);
+		}
+
+		return *this;
+	}
+
+	inline Matrix& operator = (vector<vector<scalar>>&& vec_vecs)
+	{
+		size_t i, j, k = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+		this->_row = vec_vecs.size();
+		this->_col = vec_vecs.at(0).size();
+		if (this->_mat != nullptr)
+			delete[] this->_mat;
+		this->_mat = new scalar[this->_row * this->_col];
+
+		if (this->_col >= vecsize)
+		{
+			for (i = 0; i < this->_row; ++i)
+			{
+				for (j = 0; j < this->_col - vecsize; j += vecsize, k += vecsize)
+					this->_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+
+				for (; j < this->_col; ++j, ++k)
+					this->_mat[k] = vec_vecs.at(i).at(j);
+			}
+		}
+		else
+		{
+			for (i = 0; i < this->_row; ++i)
+				for (j = 0; j < this->_col; ++j, ++k)
+					this->_mat[k] = vec_vecs.at(i).at(j);
+		}
+
+		return *this;
+	}
 	/* Assignment Operators - END */
 
 
@@ -2057,12 +2114,11 @@ public:
 	/* Element-Wise Product - END */
 
 
-	/* Transpose - START */
-	Matrix trans(bool inplace) // inplace?
+		/* Transpose - START */
+	Matrix trans(bool inplace)
 	{
 		size_t row = this->_col, col = this->_row, vecsize = sizeof(scalar::vec) / sizeof(scalar), i, j, k = 0;
-		Matrix<scalar> transposedMatrix(row, col);
-		scalar* transposedData = transposedMatrix.data();
+		scalar* transposedData = new scalar[row * col];
 
 		if (this->_col >= vecsize)
 		{
@@ -2079,16 +2135,30 @@ public:
 		else
 		{
 			for (i = 0; i < this->_row; ++i)
-				for (j = 0; j < this->_col - vecsize; ++j, ++k)
+				for (j = 0; j < this->_col; ++j, ++k)
 					transposedData[k] = this->_mat[j * this->_row + i];
 		}
 
-		return transposedMatrix;
+		if (inplace)
+		{
+			this->_row = row;
+			this->_col = col;
+			delete[] this->_mat;
+			this->_mat = transposedData;
+			return *this;
+		}
+
+		return Matrix<scalar>(row, col, transposedData);
 	}
 	/* Transpose - END */
 
 
-	Matrix conj(bool inplace);
+	Matrix conj(bool inplace)
+	{
+		// need to add the complex type as well
+
+		return this->trans(inplace);
+	}
 
 
 	/* Diagonal of Matrix - START */
