@@ -1,8 +1,8 @@
 #ifndef Matrix_Class
 #define Matrix_Class
 
-#include "System.h"
 #include "Memory_Block.h"
+#include "System.h"
 using namespace std;
 
 template <typename scalar>
@@ -2220,7 +2220,7 @@ public:
 
 	void padBlockSize()
 	{
-		size_t blockSize = System::getI_BLOCKSIZE, vecsize = sizeof(scalar::vec) / sizeof(scalar), i, j;
+		size_t blockSize = (size_t)System::getI_BLOCKSIZE(), vecsize = sizeof(scalar::vec) / sizeof(scalar), i, j;
 		size_t row = this->_row, originalRow = this->_row;
 		size_t col = this->_col, originalCol = this->_col;
 
@@ -2312,7 +2312,7 @@ public:
 
 		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data(), * result = new scalar[rowA * colB];
 		size_t index = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
-		const size_t unroll_1 = System::getUNROLL_1(), unroll_2 = System::getUNROLL_2();
+		const size_t unroll_1 = UNROLL_1, unroll_2 = UNROLL_2;
 		typename scalar::vec sum[unroll_2][unroll_1], vecA[unroll_1], vecB[unroll_2];
 
 		// Storing matrix B in tempB (in other order)
@@ -2387,7 +2387,7 @@ public:
 
 		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data(), * result = new scalar[rowA * colB];
 		size_t index = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
-		const size_t unroll_1 = System::getUNROLL_1(), unroll_2 = System::getUNROLL_2();
+		const size_t unroll_1 = UNROLL_1, unroll_2 = UNROLL_2;
 		typename scalar::vec sum[unroll_2][unroll_1], vecA[unroll_1], vecB[unroll_2];
 
 		// Storing matrix B in tempB (in other order)
@@ -2462,7 +2462,7 @@ public:
 
 		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data(), * result = new scalar[rowA * colB];
 		size_t index = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
-		const size_t unroll_1 = System::getUNROLL_1(), unroll_2 = System::getUNROLL_2();
+		const size_t unroll_1 = UNROLL_1, unroll_2 = UNROLL_2;
 		typename scalar::vec sum[unroll_2][unroll_1], vecA[unroll_1], vecB[unroll_2];
 
 		// Storing matrix B in tempB (in other order)
@@ -2537,7 +2537,7 @@ public:
 
 		scalar* tempB = new scalar[colA_rowB * colB], * originalB = B.data(), * originalA = A.data(), * result = new scalar[rowA * colB];
 		size_t index = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
-		const size_t unroll_1 = System::getUNROLL_1(), unroll_2 = System::getUNROLL_2();
+		const size_t unroll_1 = UNROLL_1, unroll_2 = UNROLL_2;
 		typename scalar::vec sum[unroll_2][unroll_1], vecA[unroll_1], vecB[unroll_2];
 
 		// Storing matrix B in tempB (in other order)

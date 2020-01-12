@@ -1,5 +1,7 @@
 #include "HPEML.h"
-#include <ctime>
+#include "Initialization.h"
+
+//#include <ctime>
 
 using namespace std;
 
@@ -22,6 +24,7 @@ public:
 
 
 
+
 int main()
 {
 
@@ -39,7 +42,7 @@ int main()
 	//t = clock() - t;
 	//t /= 10;
 	//cout << (float)t / CLOCKS_PER_SEC;
-	System::Init();
+	Initialization::Init();
 
 	return 0;
 }

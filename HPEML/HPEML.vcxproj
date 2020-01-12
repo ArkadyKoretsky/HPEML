@@ -25,9 +25,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="HPEML.h" />
+    <ClInclude Include="Initialization.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Memory_Block.h" />
-    <ClInclude Include="System.h" />
+    <ClInclude Include="System.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="t_timer.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
