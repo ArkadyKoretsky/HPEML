@@ -25,11 +25,11 @@ public:
 
 int main()
 {
-	size_t row1 = 515, col = 517, row2 = 515;
+	size_t row1 = 4091, col = 4079, row2 = 4091;
 	Matrix<Float> A(row1, col, "rand"), B(col, row2, "rand");
 	double timer = 0;
 	t_timer t;
-	for (size_t i = 0; i < 10; i++)
+	for (size_t i = 0; i < 10; ++i)
 	{
 		t.start();
 		A * B;
