@@ -25,8 +25,8 @@ public:
 
 int main()
 {
-	size_t row1 = 4091, col = 4079, row2 = 4091;
-	Matrix<Float> A(row1, col, "rand"), B(col, row2, "rand");
+	size_t rowA = 4099, colA_rowB = 4101, rowB = 4099;
+	Matrix<Float> A(rowA, colA_rowB, "rand"), B(colA_rowB, rowB, "rand");
 	double timer = 0;
 	t_timer t;
 	for (size_t i = 0; i < 10; ++i)
