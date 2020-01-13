@@ -1,5 +1,6 @@
 #include "HPEML.h"
 #include <ctime>
+#include "t_timer.h"
 
 using namespace std;
 
@@ -24,48 +25,19 @@ public:
 
 int main()
 {
-	size_t row1 = 4, col = 4, row2 = 11;
-	Float F1(1), F2(1);
-	Float::vec V1(F1), V2(F2);
-	vector<size_t> row_list;
-	row_list.push_back(1);
-	row_list.push_back(2);
-	Float matrix[16] = { Float(1), Float(2), Float(3), Float(4),
-						 Float(5), Float(6), Float(7), Float(8),
-						 Float(9), Float(10), Float(11), Float(12),
-						 Float(13), Float(14), Float(15), Float(16)
-	};
-	Matrix<Float> A(row1, col, "one"), B(col, row2, F2);
-	vector<Float> vec(5);
-	//for (size_t i = 0; i < 5; ++i)
-	//	cout << vec.at(i) << " ";
-	vector<vector<Float>> vecs;
-	for (size_t i = 0; i < 14; ++i)
-		vecs.push_back(vec);
-	//for (vector<Float> V : vecs)
-	//{
-	//	for (Float F : V)
-	//		cout << F << " ";
-	//	cout << endl;
-	//}
-	Matrix<Float> C = vecs;
-	//Matrix<Float> C = A.conj(true);
-	cout << C;
+	size_t row1 = 515, col = 517, row2 = 515;
+	Matrix<Float> A(row1, col, "rand"), B(col, row2, "rand");
+	double timer = 0;
+	t_timer t;
+	for (size_t i = 0; i < 10; i++)
+	{
+		t.start();
+		A * B;
+		t.stop();
+		timer += t.get_time();
+	}
 
-	//for (size_t i = 0; i < 5; ++i)
-	//{
-	//	for (size_t j = 0; j < 5; ++j)
-	//		cout << vecs.at(i).at(j) << " ";
-	//	cout << endl;
-	//}
-
-	//clock_t t = clock();
-	//for (size_t i = 0; i < 10; ++i)
-	//A *= B;
-	//cout << A;
-	//t = clock() - t;
-	//t /= 10;
-	//cout << (float)t / CLOCKS_PER_SEC;
+	cout << timer / 10;
 
 	return 0;
 }

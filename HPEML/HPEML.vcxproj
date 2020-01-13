@@ -26,6 +26,7 @@
     <ClInclude Include="HPEML.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Memory_Block.h" />
+    <ClInclude Include="t_timer.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
@@ -44,6 +45,7 @@
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="t_timer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -116,6 +118,11 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <Optimization>Full</Optimization>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
