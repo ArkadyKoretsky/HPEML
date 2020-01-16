@@ -30,11 +30,11 @@ public:
 	Memory_Block(size_t row, size_t col) : _row(row), _col(col), _mat(new scalar[row * col]) {}
 	Memory_Block(size_t row, size_t col, scalar val) : _row(row), _col(col), _mat(new scalar[row * col])
 	{
-		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(typename scalar::vec) / sizeof(scalar);
 		if (sizeOfMatrix >= vecsize)
 		{
 			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-				_mat[i] = scalar::vec(val);
+				_mat[i] = typename scalar::vec(val);
 
 			for (; i < sizeOfMatrix; ++i)
 				_mat[i] = val;
@@ -49,11 +49,11 @@ public:
 
 	Memory_Block(size_t row, size_t col, scalar* mat) : _row(row), _col(col), _mat(new scalar[row * col])
 	{
-		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+		size_t i, sizeOfMatrix = row * col, vecsize = sizeof(typename scalar::vec) / sizeof(scalar);
 		if (sizeOfMatrix >= vecsize)
 		{
 			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-				_mat[i] = scalar::vec(mat + i);
+				_mat[i] = typename scalar::vec(mat + i);
 
 			for (; i < sizeOfMatrix; ++i)
 				_mat[i] = mat[i];
@@ -90,14 +90,14 @@ public:
 
 	Memory_Block(vector<vector<scalar>>& vec_vecs) : _row(vec_vecs.size()), _col(vec_vecs.at(0).size())
 	{
-		size_t i, j, k = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+		size_t i, j, k = 0, vecsize = sizeof(typename scalar::vec) / sizeof(scalar);
 		_mat = new scalar[_row * _col];
 		if (_col >= vecsize)
 		{
 			for (i = 0; i < _row; ++i)
 			{
 				for (j = 0; j < _col - vecsize; j += vecsize, k += vecsize)
-					_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+					_mat[k] = typename scalar::vec(&vec_vecs.at(i).at(j));
 
 				for (; j < _col; ++j, ++k)
 					_mat[k] = vec_vecs.at(i).at(j);
@@ -113,14 +113,14 @@ public:
 
 	Memory_Block(vector<vector<scalar>>&& vec_vecs) : _row(vec_vecs.size()), _col(vec_vecs.at(0).size())
 	{
-		size_t i, j, k = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+		size_t i, j, k = 0, vecsize = sizeof(typename scalar::vec) / sizeof(scalar);
 		_mat = new scalar[_row * _col];
 		if (_col >= vecsize)
 		{
 			for (i = 0; i < _row; ++i)
 			{
 				for (j = 0; j < _col - vecsize; j += vecsize, k += vecsize)
-					_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+					_mat[k] = typename scalar::vec(&vec_vecs.at(i).at(j));
 
 				for (; j < _col; ++j, ++k)
 					_mat[k] = vec_vecs.at(i).at(j);
@@ -136,13 +136,13 @@ public:
 
 	Memory_Block(const Memory_Block& M) : _row(M.rows()), _col(M.cols()), _mat(new scalar[M.cols() * M.cols()])
 	{
-		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, sizeOfMatrix = _row * _col;
+		size_t vecsize = sizeof(typename scalar::vec) / sizeof(scalar), i, sizeOfMatrix = _row * _col;
 		scalar* matrix = M.data();
 
 		if (sizeOfMatrix >= vecsize)
 		{
 			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-				_mat[i] = scalar::vec(matrix + i);
+				_mat[i] = typename scalar::vec(matrix + i);
 
 			for (; i < sizeOfMatrix; ++i)
 				_mat[i] = matrix[i];
@@ -158,13 +158,13 @@ public:
 
 	Memory_Block(Memory_Block& M) : _row(M.rows()), _col(M.cols()), _mat(new scalar[M.rows() * M.cols()])
 	{
-		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, sizeOfMatrix = _row * _col;
+		size_t vecsize = sizeof(typename scalar::vec) / sizeof(scalar), i, sizeOfMatrix = _row * _col;
 		scalar* matrix = M.data();
 
 		if (sizeOfMatrix >= vecsize)
 		{
 			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-				_mat[i] = scalar::vec(matrix + i);
+				_mat[i] = typename scalar::vec(matrix + i);
 
 			for (; i < sizeOfMatrix; ++i)
 				_mat[i] = matrix[i];
@@ -179,13 +179,13 @@ public:
 
 	Memory_Block(Memory_Block&& M) : _row(M.rows()), _col(M.cols()), _mat(new scalar[M.cols() * M.cols()])
 	{
-		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, sizeOfMatrix = _row * _col;
+		size_t vecsize = sizeof(typename scalar::vec) / sizeof(scalar), i, sizeOfMatrix = _row * _col;
 		scalar* matrix = M.data();
 
 		if (sizeOfMatrix >= vecsize)
 		{
 			for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-				_mat[i] = scalar::vec(matrix + i);
+				_mat[i] = typename scalar::vec(matrix + i);
 
 			for (; i < sizeOfMatrix; ++i)
 				_mat[i] = matrix[i];
@@ -210,7 +210,7 @@ public:
 		_col(subBlocks[0].cols() + subBlocks[1].cols()),
 		_mat(new scalar[(subBlocks[0].rows() + subBlocks[2].rows()) * (subBlocks[0].cols() + subBlocks[1].cols())])
 	{
-		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, j;
+		size_t vecsize = sizeof(typename scalar::vec) / sizeof(scalar), i, j;
 		scalar* subMatrices[4];
 
 		for (i = 0; i < 4; ++i)
@@ -222,10 +222,10 @@ public:
 			{
 				for (j = 0; j < _col / 2 - vecsize; j += vecsize)
 				{
-					_mat[i * _col + j] = scalar::vec(subMatrices[0] + i * _col / 2 + j);
-					_mat[i * _col + _col / 2 + j] = scalar::vec(subMatrices[1] + i * _col / 2 + j);
-					_mat[(i + _row / 2) * _col + j] = scalar::vec(subMatrices[2] + i * _col / 2 + j);
-					_mat[(i + _row / 2) * _col + _col / 2 + j] = scalar::vec(subMatrices[3] + i * _col / 2 + j);
+					_mat[i * _col + j] = typename scalar::vec(subMatrices[0] + i * _col / 2 + j);
+					_mat[i * _col + _col / 2 + j] = typename scalar::vec(subMatrices[1] + i * _col / 2 + j);
+					_mat[(i + _row / 2) * _col + j] = typename scalar::vec(subMatrices[2] + i * _col / 2 + j);
+					_mat[(i + _row / 2) * _col + _col / 2 + j] = typename scalar::vec(subMatrices[3] + i * _col / 2 + j);
 				}
 
 				for (; j < _col / 2; ++j)
@@ -262,7 +262,7 @@ public:
 	/* Extractors - START */
 	T operator () (size_t upperRow, size_t lowerRow, size_t leftCol, size_t rightCol)  // sub-matrix: (upperRow : lowerRow(inclusive), leftCol : rightCol(inclusive))
 	{
-		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, j, k;
+		size_t vecsize = sizeof(typename scalar::vec) / sizeof(scalar), i, j, k;
 		size_t row = lowerRow - upperRow + 1, col = rightCol - leftCol + 1;
 		scalar* data = new scalar[row * col];
 
@@ -271,7 +271,7 @@ public:
 			for (i = upperRow, k = 0; i <= lowerRow; ++i)
 			{
 				for (j = leftCol; j < rightCol - vecsize; j += vecsize, k += vecsize)
-					data[k] = scalar::vec(this->operator[](i) + j);
+					data[k] = typename scalar::vec(this->operator[](i) + j);
 
 				for (; j <= rightCol; ++j, ++k)
 					data[k] = this->operator()(i, j);
@@ -337,7 +337,7 @@ public:
 		{
 			_row = M.rows();
 			_col = M.cols();
-			size_t i, sizeOfMatrix = _row * _col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+			size_t i, sizeOfMatrix = _row * _col, vecsize = sizeof(typename scalar::vec) / sizeof(scalar);
 			scalar* matrix = M.data();
 			if (_mat != nullptr)
 				delete[] _mat;
@@ -347,7 +347,7 @@ public:
 			if (sizeOfMatrix >= vecsize)
 			{
 				for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-					_mat[i] = scalar::vec(matrix + i);
+					_mat[i] = typename scalar::vec(matrix + i);
 
 				for (; i < sizeOfMatrix; ++i)
 					_mat[i] = matrix[i];
@@ -369,7 +369,7 @@ public:
 		{
 			_row = M.rows();
 			_col = M.cols();
-			size_t i, sizeOfMatrix = _row * _col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+			size_t i, sizeOfMatrix = _row * _col, vecsize = sizeof(typename scalar::vec) / sizeof(scalar);
 			scalar* matrix = M.data();
 			if (_mat != nullptr)
 				delete[] _mat;
@@ -379,7 +379,7 @@ public:
 			if (sizeOfMatrix >= vecsize)
 			{
 				for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-					_mat[i] = scalar::vec(matrix + i);
+					_mat[i] = typename scalar::vec(matrix + i);
 
 				for (; i < sizeOfMatrix; ++i)
 					_mat[i] = matrix[i];
@@ -401,7 +401,7 @@ public:
 		{
 			_row = M.rows();
 			_col = M.cols();
-			size_t i, sizeOfMatrix = _row * _col, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+			size_t i, sizeOfMatrix = _row * _col, vecsize = sizeof(typename scalar::vec) / sizeof(scalar);
 			scalar* matrix = M.data();
 			if (_mat != nullptr)
 				delete[] _mat;
@@ -411,7 +411,7 @@ public:
 			if (sizeOfMatrix >= vecsize)
 			{
 				for (i = 0; i < sizeOfMatrix - vecsize; i += vecsize)
-					_mat[i] = scalar::vec(matrix + i);
+					_mat[i] = typename scalar::vec(matrix + i);
 
 				for (; i < sizeOfMatrix; ++i)
 					_mat[i] = matrix[i];
@@ -431,7 +431,7 @@ public:
 	{
 		_row = subBlocks[0].rows() + subBlocks[2].rows();
 		_col = subBlocks[0].cols() + subBlocks[1].cols();
-		size_t vecsize = sizeof(scalar::vec) / sizeof(scalar), i, j;
+		size_t vecsize = sizeof(typename scalar::vec) / sizeof(scalar), i, j;
 		scalar* subMatrices[4];
 		if (_mat != nullptr)
 			delete[] _mat;
@@ -447,10 +447,10 @@ public:
 			{
 				for (j = 0; j < _col / 2 - vecsize; j += vecsize)
 				{
-					_mat[i * _col + j] = scalar::vec(subMatrices[0] + i * _col / 2 + j);
-					_mat[i * _col + _col / 2 + j] = scalar::vec(subMatrices[1] + i * _col / 2 + j);
-					_mat[(i + _row / 2) * _col + j] = scalar::vec(subMatrices[2] + i * _col / 2 + j);
-					_mat[(i + _row / 2) * _col + _col / 2 + j] = scalar::vec(subMatrices[3] + i * _col / 2 + j);
+					_mat[i * _col + j] = typename scalar::vec(subMatrices[0] + i * _col / 2 + j);
+					_mat[i * _col + _col / 2 + j] = typename scalar::vec(subMatrices[1] + i * _col / 2 + j);
+					_mat[(i + _row / 2) * _col + j] = typename scalar::vec(subMatrices[2] + i * _col / 2 + j);
+					_mat[(i + _row / 2) * _col + _col / 2 + j] = typename scalar::vec(subMatrices[3] + i * _col / 2 + j);
 				}
 
 				for (; j < _col / 2; ++j)
@@ -481,7 +481,7 @@ public:
 
 	inline Memory_Block& operator = (vector<vector<scalar>>& vec_vecs)
 	{
-		size_t i, j, k = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+		size_t i, j, k = 0, vecsize = sizeof(typename scalar::vec) / sizeof(scalar);
 		_row = vec_vecs.size();
 		_col = vec_vecs.at(0).size();
 		if (_mat != nullptr)
@@ -493,7 +493,7 @@ public:
 			for (i = 0; i < _row; ++i)
 			{
 				for (j = 0; j < _col - vecsize; j += vecsize, k += vecsize)
-					_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+					_mat[k] = typename scalar::vec(&vec_vecs.at(i).at(j));
 
 				for (; j < _col; ++j, ++k)
 					_mat[k] = vec_vecs.at(i).at(j);
@@ -511,7 +511,7 @@ public:
 
 	inline Memory_Block& operator = (vector<vector<scalar>>&& vec_vecs)
 	{
-		size_t i, j, k = 0, vecsize = sizeof(scalar::vec) / sizeof(scalar);
+		size_t i, j, k = 0, vecsize = sizeof(typename scalar::vec) / sizeof(scalar);
 		_row = vec_vecs.size();
 		_col = vec_vecs.at(0).size();
 		if (_mat != nullptr)
@@ -523,7 +523,7 @@ public:
 			for (i = 0; i < _row; ++i)
 			{
 				for (j = 0; j < _col - vecsize; j += vecsize, k += vecsize)
-					_mat[k] = scalar::vec(&vec_vecs.at(i).at(j));
+					_mat[k] = typename scalar::vec(&vec_vecs.at(i).at(j));
 
 				for (; j < _col; ++j, ++k)
 					_mat[k] = vec_vecs.at(i).at(j);

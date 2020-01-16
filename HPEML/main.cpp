@@ -1,9 +1,8 @@
 #include "HPEML.h"
+#include "t_timer.h"
 #include "Initialization.h"
 
 //#include <ctime>
-
-using namespace std;
 
 class test
 {
@@ -23,26 +22,47 @@ public:
 };
 
 
-
+std::pair<int, double>  Initialization::times[5];
 
 int main()
 {
-
-	size_t row1 = 14, col = 10, row2 = 11;
-	Double F1(1), F2(1);
-	Double::vec V1(F1), V2(F2);
-	//Matrix<Double> A(), B();
-	//Matrix<Double> C = A.trans(true);
-	//cout << A * B;
-
-	//cout << A << endl << B;
-	//clock_t t = clock();
-	//for (size_t i = 0; i < 10; ++i)
-	//	A *= B;
-	//t = clock() - t;
-	//t /= 10;
-	//cout << (float)t / CLOCKS_PER_SEC;
-	Initialization::Init();
-
-	return 0;
+	try
+	{
+		cout << "start" << endl;
+		//size_t row1 = 8091, col = 8101, row2 = 8091;
+		//Float F1(1), F2(1);
+		//Float::vec V1(F1), V2(F2);
+		////	Matrix<Float> A(row1, col, F1), B(col, row2, F1);
+		//Matrix<Float> A(row1, col, F1), B(8012, row2, F1);
+		////Matrix<Float> C = A.trans(true);
+		//double t = 0;
+		//t_timer tt;
+		//for (size_t k = 0; k < 10; k++)
+		//{
+		//	tt.start();		//start timer
+		//	A *= B;
+		//	tt.stop();	//stop timer
+		//	t += tt.get_time();
+		//}
+		//double time = t / 10;
+		//cout << time << endl;
+		//cout << A << endl << B;
+		//clock_t t = clock();
+		//for (size_t i = 0; i < 10; ++i)
+		//	A *= B;
+		//t = clock() - t;
+		//t /= 10;
+		//cout << (float)t / CLOCKS_PER_SEC;
+		cout << "Init Start" << endl;
+		//Initialization::Init();
+		cout << "Init Done" << endl;
+		cout << "readData Start" << endl;
+		Initialization::readData();
+		cout << "readData Done" << endl;
+		return 0;
+	}
+	catch (const char* caught)
+	{
+		std::cout << "Got " << caught << std::endl;
+	}
 }
