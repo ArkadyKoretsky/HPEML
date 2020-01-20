@@ -28,7 +28,7 @@ int main()
 {
 	try
 	{
-		cout << "start" << endl;
+		//cout << "start" << endl;
 		//size_t row1 = 8091, col = 8101, row2 = 8091;
 		//Float F1(1), F2(1);
 		//Float::vec V1(F1), V2(F2);
@@ -53,12 +53,17 @@ int main()
 		//t = clock() - t;
 		//t /= 10;
 		//cout << (float)t / CLOCKS_PER_SEC;
-		cout << "Init Start" << endl;
+		//cout << "Init Start" << endl;
 		//Initialization::Init();
-		cout << "Init Done" << endl;
-		cout << "readData Start" << endl;
-		Initialization::readData();
-		cout << "readData Done" << endl;
+		//cout << "Init Done" << endl;
+		//cout << "readData Start" << endl;
+		//Initialization::readData();
+		//cout << "readData Done" << endl;
+		//Initialization::readCache();
+		Initialization::OS();
+		//initializer_list< initializer_list<int>> l = { {1, 2, 3}, {4, 5, 6} };
+		//cout << l.begin()->begin();
+
 		return 0;
 	}
 	catch (const char* caught)
