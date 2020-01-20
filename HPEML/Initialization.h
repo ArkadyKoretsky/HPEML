@@ -28,7 +28,7 @@ public:
 			System::setI_BLOCKSIZE(i);
 			std::ofstream o("size" + std::to_string(i) + ".csv");
 			cout << "size" + std::to_string(i) + ".csv is open" << endl;
-			for (int j = i; j <= 4096; j *= 2)
+			for (int j = 16; j <= 4096; j *= 2)
 			{
 				Matrix<Double> A(j, j, "rand"), B(j, j, "rand");
 				for (size_t k = 0; k < CTIMES; k++)
@@ -66,7 +66,7 @@ public:
 		{
 			std::fstream o("size" + std::to_string(i) + ".csv", ios::in);
 			int  size = 0;
-			for (int j = i; j <= 4096; j *= 2)
+			for (int j = 16; j <= 4096; j *= 2)
 			{
 				std::getline(o, line);
 				vector<std::string> split = splitLine(line);
