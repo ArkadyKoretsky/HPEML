@@ -47,13 +47,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main_for_linux.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="t_timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main_for_testing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

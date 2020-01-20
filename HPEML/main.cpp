@@ -60,8 +60,11 @@ int main()
 		//Initialization::readData();
 		//cout << "readData Done" << endl;
 
-		initializer_list< initializer_list<int>> l = { {1, 2, 3}, {4, 5, 6} };
-		cout << *((l.begin() + 1)->begin() + 1);
+		//initializer_list< initializer_list<int>> l = { {1, 2, 3}, {4, 5, 6} };
+		//cout << *((l.begin() + 1)->begin() + 1);
+
+
+		Initialization::readCache();
 
 		return 0;
 	}
