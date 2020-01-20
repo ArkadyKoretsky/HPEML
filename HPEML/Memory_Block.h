@@ -86,7 +86,28 @@ public:
 				_mat[i] = 1;
 	}
 
-	Memory_Block(initializer_list<initializer_list<scalar>> list_lists);
+	Memory_Block(initializer_list<initializer_list<scalar>> list_lists) : _row(list_lists.size()), _col(list_lists.begin().size())
+	{
+		size_t i, j, k = 0, vecsize = sizeof(typename scalar::vec) / sizeof(scalar);
+		_mat = new scalar[_row * _col];
+		if (_col >= vecsize)
+		{
+			for (i = 0; i < _row; ++i)
+			{
+				for (j = 0; j < _col - vecsize; j += vecsize, k += vecsize)
+					_mat[k] = typename scalar::vec((list_lists.begin() + i)->begin() + j);
+
+				for (; j < _col; ++j, ++k)
+					_mat[k] = *((list_lists.begin() + i)->begin() + j);
+			}
+		}
+		else
+		{
+			for (i = 0; i < _row; ++i)
+				for (j = 0; j < _col; ++j, ++k)
+					_mat[k] = *((list_lists.begin() + i)->begin() + j);
+		}
+	}
 
 	Memory_Block(vector<vector<scalar>>& vec_vecs) : _row(vec_vecs.size()), _col(vec_vecs.at(0).size())
 	{

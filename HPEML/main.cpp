@@ -61,7 +61,7 @@ int main()
 		//cout << "readData Done" << endl;
 
 		initializer_list< initializer_list<int>> l = { {1, 2, 3}, {4, 5, 6} };
-		cout << l.begin()->begin();
+		cout << *((l.begin() + 1)->begin() + 1);
 
 		return 0;
 	}

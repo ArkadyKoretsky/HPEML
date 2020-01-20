@@ -17,7 +17,7 @@ public:
 	inline Double(double& num) : _num(num) {}
 	inline Double(double&& num) : _num(num) {}
 	inline Double(Double& F) : _num(F.data()) {}
-	inline Double(Double&& F) : _num(std::move(F.data())) {}
+	inline Double(Double&& F) noexcept : _num(std::move(F.data())) {}
 
 	/* Assignment Operators - START */
 	inline Double& operator=(Double& F)
@@ -27,7 +27,7 @@ public:
 		return *this;
 	}
 
-	inline Double& operator=(Double&& F)
+	inline Double& operator=(Double&& F) noexcept
 	{
 		if (this != &F)
 			_num = std::move(F.data());
