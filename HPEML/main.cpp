@@ -64,7 +64,6 @@ int main()
 		//cout << *((l.begin() + 1)->begin() + 1);
 
 
-		Initialization::readCache();
 
 		return 0;
 	}

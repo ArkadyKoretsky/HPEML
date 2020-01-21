@@ -13,9 +13,10 @@
 #include "Float.h"
 
 // windows\linux libraries
-#ifdef _WIN32
+
+#ifdef _WIN32 
 //#include <windows.h> // the visual compiler doing problems with this library
-#else
+#elif __linux__
 #include <unistd.h> // linux library
 #endif
 
@@ -123,10 +124,21 @@ public:
 	void static getOS()
 	{
 #ifdef _WIN32
-		cout << "Windows" << endl;
+		cout << "Windows 32-bit" << endl;
+#elif _WIN64
+		cout << "Windows 64-bit" << endl;
+#elif __APPLE__ || __MACH__
+		cout << "Mac OSX" << endl;
+#elif __linux__
+		cout << "Linux" << endl;;
+#elif __FreeBSD__
+		cout << "FreeBSD" << endl;;
+#elif __unix || __unix__
+		cout << "Unix" << endl;;
 #else
-		cout << "Linux" << endl;
+		cout << "Other" << endl;;
 #endif
+
 	}
 };
 
