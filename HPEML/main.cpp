@@ -59,10 +59,12 @@ int main()
 		//cout << "readData Start" << endl;
 		//Initialization::readData();
 		//cout << "readData Done" << endl;
-		//Initialization::readCache();
-		Initialization::OS();
+
 		//initializer_list< initializer_list<int>> l = { {1, 2, 3}, {4, 5, 6} };
-		//cout << l.begin()->begin();
+		//cout << *((l.begin() + 1)->begin() + 1);
+
+
+		Initialization::readCache();
 
 		return 0;
 	}

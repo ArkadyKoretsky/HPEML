@@ -9,9 +9,16 @@
 #include <string>
 #include <regex>
 #include <array>
-#include "Double.h"
-//#include <unistd.h>
-#include <math.h>
+#include <cmath>
+#include "Float.h"
+
+// windows\linux libraries
+#ifdef _WIN32
+//#include <windows.h> // the visual compiler doing problems with this library
+#else
+#include <unistd.h> // linux library
+#endif
+
 
 #define CTIMES 10
 #define MinBlockSize 16
@@ -101,27 +108,26 @@ public:
 		cout << index << endl;
 	}
 
-	//void static readCache()
-	//{
-	//	cout << "L1 Instructions Cache Size = " << sysconf(_SC_LEVEL1_ICACHE_SIZE) / pow(2, 10) << "KB" << endl;
-	//	cout << "L1 Data Cache Size = " << sysconf(_SC_LEVEL1_DCACHE_SIZE) / pow(2, 10) << "KB" << endl;
-	//	cout << "L2 Cache Size = " << sysconf(_SC_LEVEL2_CACHE_SIZE) / pow(2, 10) << "KB" << endl;
-	//	cout << "L3 Cache Size = " << sysconf(_SC_LEVEL3_CACHE_SIZE) / pow(2, 10) << "KB" << endl;
-	//}
-
-	void static OS()
+	void static readCache()
 	{
 #ifdef _WIN32
-		printf("Windows\n");
-#elif __linux__
-		printf("Linux\n");
-#elif __unix__
-		printf("Other unix OS\n");
+		cout << "Sorry! This functionality is not suported on Windows." << endl;
 #else
-		printf("Unidentified OS\n");
+		cout << "L1 Instructions Cache Size = " << sysconf(_SC_LEVEL1_ICACHE_SIZE) / pow(2, 10) << " KB" << endl;
+		cout << "L1 Data Cache Size = " << sysconf(_SC_LEVEL1_DCACHE_SIZE) / pow(2, 10) << " KB" << endl;
+		cout << "L2 Cache Size = " << sysconf(_SC_LEVEL2_CACHE_SIZE) / pow(2, 10) << " KB" << endl;
+		cout << "L3 Cache Size = " << sysconf(_SC_LEVEL3_CACHE_SIZE) / pow(2, 10) << " KB" << endl;
 #endif
 	}
 
+	void static getOS()
+	{
+#ifdef _WIN32
+		cout << "Windows" << endl;
+#else
+		cout << "Linux" << endl;
+#endif
+	}
 };
 
 #endif
