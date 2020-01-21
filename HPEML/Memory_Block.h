@@ -13,6 +13,7 @@
 #include<vector>
 #include<algorithm>
 #include<thread>
+#include<initializer_list>
 using namespace std;
 
 

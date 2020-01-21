@@ -9,8 +9,11 @@
 #include "Memory_Block.h"
 #include "Matrix.h"
 #include "Vector.h"
-#include "t_timer.h"
+
+// System Interface
+#include "Initialization.h"
 
 using namespace std;
+using namespace System;
 
 #endif // !HPEML

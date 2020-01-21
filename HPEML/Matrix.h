@@ -4,6 +4,7 @@
 #include "Memory_Block.h"
 #include "System.h"
 using namespace std;
+using namespace System;
 
 template <typename scalar>
 class Matrix : public Memory_Block<scalar, Matrix<scalar>> // Type of Matrix

@@ -1,22 +1,28 @@
 #pragma once
 #ifndef Initialization_Class
 #define Initialization_Class
+
 #include "t_timer.h"
 #include "System.h"
 #include "Matrix.h"
+#include "Float.h"
+
 #include <iostream>
 #include <fstream> 
 #include <string>
 #include <regex>
 #include <array>
 #include <cmath>
-#include "Float.h"
+
+using namespace System;
+using namespace std;
+
 
 // windows\linux libraries
 
-#ifdef _WIN32 
+#ifdef _WIN32 || _WIN64 
 //#include <windows.h> // the visual compiler doing problems with this library
-#elif __linux__
+#elif __linux__ || __unix || __unix__
 #include <unistd.h> // linux library
 #endif
 
@@ -111,9 +117,9 @@ public:
 
 	void static readCache()
 	{
-#ifdef _WIN32
+#ifdef _WIN32 || _WIN64
 		cout << "Sorry! This functionality is not suported on Windows." << endl;
-#else
+#elif __linux__ || __unix || __unix__
 		cout << "L1 Instructions Cache Size = " << sysconf(_SC_LEVEL1_ICACHE_SIZE) / pow(2, 10) << " KB" << endl;
 		cout << "L1 Data Cache Size = " << sysconf(_SC_LEVEL1_DCACHE_SIZE) / pow(2, 10) << " KB" << endl;
 		cout << "L2 Cache Size = " << sysconf(_SC_LEVEL2_CACHE_SIZE) / pow(2, 10) << " KB" << endl;
@@ -138,7 +144,6 @@ public:
 #else
 		cout << "Other" << endl;;
 #endif
-
 	}
 };
 

@@ -45,7 +45,7 @@
     <ClInclude Include="Initialization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INT.h">
+    <ClInclude Include="Int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

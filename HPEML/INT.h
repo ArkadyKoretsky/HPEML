@@ -1,11 +1,11 @@
 #pragma once
-#ifndef INT_Class
-#define INT_Class
+#ifndef Int_Class
+#define Int_Class
 
 #include <immintrin.h>
 #include <iostream>
 
-class INT // Type of scalar field
+class Int // Type of scalar field
 {
 	int _num;
 
@@ -13,77 +13,77 @@ public:
 	class vec;
 
 	// constructors
-	inline INT() : _num(0) {}
-	inline INT(int& num) : _num(num) {}
-	inline INT(int&& num) : _num(num) {}
-	inline INT(INT& F) : _num(F._num) {}
-	inline INT(INT&& F) : _num(std::move(F._num)) {}
+	inline Int() : _num(0) {}
+	inline Int(int& num) : _num(num) {}
+	inline Int(int&& num) : _num(num) {}
+	inline Int(Int& F) : _num(F._num) {}
+	inline Int(Int&& F) noexcept : _num(std::move(F._num)) {}
 
 	/* Assignment Operators - START */
-	inline INT& operator=(INT& F)
+	inline Int& operator=(Int& F)
 	{
 		if (this != &F)
 			_num = F._num;
 		return *this;
 	}
 
-	inline INT& operator=(INT&& F)
+	inline Int& operator=(Int&& F) noexcept
 	{
 		if (this != &F)
 			_num = std::move(F._num);
 		return *this;
 	}
 
-	inline INT& operator=(int& num)
+	inline Int& operator=(int& num)
 	{
 		if (_num != num)
 			_num = num;
 		return *this;
 	}
 
-	inline INT& operator=(int&& num)
+	inline Int& operator=(int&& num)
 	{
 		if (_num != num)
 			_num = std::move(num);
 		return *this;
 	}
 
-	inline INT& operator = (vec& V)
+	inline Int& operator = (vec& V)
 	{
-		_mm256_storeu_si256(&_num, V.data());
+		_mm512_store_epi32(&_num, V.data());
 		return *this;
 	}
 
-	inline INT& operator = (vec&& V)
+	inline Int& operator = (vec&& V)
 	{
-		_mm256_storeu_si256(&_num, V.data());
+		_mm512_store_epi32(&_num, V.data());
 		return *this;
 	}
 	/* Assignment Operators - END */
 
 	// Naive Sum
-	inline friend INT operator + (INT& A, INT& B) { return INT(A.data() + B.data()); }
-	inline friend INT operator + (INT& A, INT&& B) { return INT(A.data() + B.data()); }
-	inline friend INT operator + (INT&& A, INT& B) { return INT(A.data() + B.data()); }
-	inline friend INT operator + (INT&& A, INT&& B) { return INT(A.data() + B.data()); }
+	inline friend Int operator + (Int& A, Int& B) { return Int(A.data() + B.data()); }
+	inline friend Int operator + (Int& A, Int&& B) { return Int(A.data() + B.data()); }
+	inline friend Int operator + (Int&& A, Int& B) { return Int(A.data() + B.data()); }
+	inline friend Int operator + (Int&& A, Int&& B) { return Int(A.data() + B.data()); }
 
 	// Naive Sub
-	inline friend INT operator - (INT& A, INT& B) { return INT(A.data() - B.data()); }
-	inline friend INT operator - (INT& A, INT&& B) { return INT(A.data() - B.data()); }
-	inline friend INT operator - (INT&& A, INT& B) { return INT(A.data() - B.data()); }
-	inline friend INT operator - (INT&& A, INT&& B) { return INT(A.data() - B.data()); }
+	inline friend Int operator - (Int& A, Int& B) { return Int(A.data() - B.data()); }
+	inline friend Int operator - (Int& A, Int&& B) { return Int(A.data() - B.data()); }
+	inline friend Int operator - (Int&& A, Int& B) { return Int(A.data() - B.data()); }
+	inline friend Int operator - (Int&& A, Int&& B) { return Int(A.data() - B.data()); }
 
 	// Naive Multiplication
-	inline friend INT operator * (INT& A, INT& B) { return INT(A.data() * B.data()); }
-	inline friend INT operator * (INT& A, INT&& B) { return INT(A.data() * B.data()); }
-	inline friend INT operator * (INT&& A, INT& B) { return INT(A.data() * B.data()); }
-	inline friend INT operator * (INT&& A, INT&& B) { return INT(A.data() * B.data()); }
+	inline friend Int operator * (Int& A, Int& B) { return Int(A.data() * B.data()); }
+	inline friend Int operator * (Int& A, Int&& B) { return Int(A.data() * B.data()); }
+	inline friend Int operator * (Int&& A, Int& B) { return Int(A.data() * B.data()); }
+	inline friend Int operator * (Int&& A, Int&& B) { return Int(A.data() * B.data()); }
 
 	// Naive Division
-	inline friend INT operator / (INT& A, INT& B) { return INT(A.data() / B.data()); }
-	inline friend INT operator / (INT& A, INT&& B) { return INT(A.data() / B.data()); }
-	inline friend INT operator / (INT&& A, INT& B) { return INT(A.data() / B.data()); }
-	inline friend INT operator / (INT&& A, INT&& B) { return INT(A.data() / B.data()); }
+	inline friend Int operator / (Int& A, Int& B) { return Int(A.data() / B.data()); }
+	inline friend Int operator / (Int& A, Int&& B) { return Int(A.data() / B.data()); }
+	inline friend Int operator / (Int&& A, Int& B) { return Int(A.data() / B.data()); }
+	inline friend Int operator / (Int&& A, Int&& B) { return Int(A.data() / B.data()); }
 
 	// Getters
 	inline int data() { return _num; }
@@ -94,13 +94,13 @@ public:
 	/* vec class - START */
 
 	// output operator (most for debug purpose)
-	inline friend std::ostream& operator << (std::ostream& out, INT& F)
+	inline friend std::ostream& operator << (std::ostream& out, Int& F)
 	{
 		out << F.data();
 		return out;
 	}
 
-	inline friend std::ostream& operator << (std::ostream& out, INT&& F)
+	inline friend std::ostream& operator << (std::ostream& out, Int&& F)
 	{
 		out << F.data();
 		return out;
@@ -108,17 +108,17 @@ public:
 
 	class vec // Type of AVX vector
 	{
-		__m256i _v;
+		__m512i _v;
 
 	public:
 		// constructors
-		inline vec() :_v(_mm256_setzero_si256()) {}
-		inline vec(__m256i& v) : _v(v) {}
-		inline vec(__m256i&& v) : _v(std::move(v)) {}
-		inline vec(int* p) : _v(_mm256_loadu_si256(p)) {}
-		inline vec(INT* p) : _v(_mm256_loadu_si256(p->adress())) {}
-		inline vec(INT& F) : _v(_mm256_broadcastd_epi32(F.adress())) {}
-		inline vec(INT&& F) : _v(_mm256_broadcastd_epi32(F.adress())) {}
+		inline vec() :_v(_mm512_setzero_epi32()) {}
+		inline vec(__m512i& v) : _v(v) {}
+		inline vec(__m512i&& v) : _v(std::move(v)) {}
+		inline vec(int* p) : _v(_mm512_loadu_epi32(p)) {}
+		inline vec(Int* p) : _v(_mm512_loadu_epi32(p->adress())) {}
+		//inline vec(Int& F) : _v(_mm512_broadcastd_epi32(F.data())) {} - no suitable broadcast functions to integers  
+		//inline vec(Int&& F) : _v(_mm512_broadcastd_epi32(F.data())) {} - no suitable broadcast functions to integers
 		inline vec(vec& V) : _v(V.data()) {}
 		inline vec(vec&& V) noexcept : _v(std::move(V.data())) {}
 
@@ -138,78 +138,78 @@ public:
 		}
 		inline vec& operator = (int* p)
 		{
-			_v = _mm256_loadu_si256(p);
+			_v = _mm512_loadu_epi32(p);
 			return *this;
 		}
 
-		inline vec& operator = (INT* p)
+		inline vec& operator = (Int* p)
 		{
-			_v = _mm256_loadu_si256(p->adress());
+			_v = _mm512_loadu_epi32(p->adress());
 			return *this;
 		}
 
-		inline vec& operator = (INT& F)
+		inline vec& operator = (Int& F)
 		{
-			_v = _mm256_broadcastd_epi32(F.adress());
+			_v = _mm512_loadu_epi32(F.adress());
 			return *this;
 		}
 
-		inline vec& operator = (INT&& F)
+		inline vec& operator = (Int&& F)
 		{
-			_v = _mm256_broadcastd_epi32(F.adress());
+			_v = _mm512_loadu_epi32(F.adress());
 			return *this;
 		}
 
 		// geters and seters
-		inline __m256i data() { return _v; }
-		inline __m256i* adress() { return &_v; }
+		inline __m512i data() { return _v; }
+		inline __m512i* adress() { return &_v; }
 
 		// sum operator
-		inline friend vec operator+(INT::vec& A, INT::vec& B) { return _mm256_add_epi32(A.data(), B.data()); }
-		inline friend vec operator+(INT::vec& A, INT::vec&& B) { return _mm256_add_epi32(A.data(), B.data()); }
-		inline friend vec operator+(INT::vec&& A, INT::vec& B) { return _mm256_add_epi32(A.data(), B.data()); }
-		inline friend vec operator+(INT::vec&& A, INT::vec&& B) { return _mm256_add_epi32(A.data(), B.data()); }
+		inline friend vec operator + (Int::vec& A, Int::vec& B) { return _mm512_add_epi32(A.data(), B.data()); }
+		inline friend vec operator + (Int::vec& A, Int::vec&& B) { return _mm512_add_epi32(A.data(), B.data()); }
+		inline friend vec operator + (Int::vec&& A, Int::vec& B) { return _mm512_add_epi32(A.data(), B.data()); }
+		inline friend vec operator + (Int::vec&& A, Int::vec&& B) { return _mm512_add_epi32(A.data(), B.data()); }
 
 		// sub operator
-		inline friend vec operator-(INT::vec& A, INT::vec& B) { return _mm256_sub_epi32(A.data(), B.data()); }
-		inline friend vec operator-(INT::vec& A, INT::vec&& B) { return _mm256_sub_epi32(A.data(), B.data()); }
-		inline friend vec operator-(INT::vec&& A, INT::vec& B) { return _mm256_sub_epi32(A.data(), B.data()); }
-		inline friend vec operator-(INT::vec&& A, INT::vec&& B) { return _mm256_sub_epi32(A.data(), B.data()); }
+		inline friend vec operator - (Int::vec& A, Int::vec& B) { return _mm512_sub_epi32(A.data(), B.data()); }
+		inline friend vec operator - (Int::vec& A, Int::vec&& B) { return _mm512_sub_epi32(A.data(), B.data()); }
+		inline friend vec operator - (Int::vec&& A, Int::vec& B) { return _mm512_sub_epi32(A.data(), B.data()); }
+		inline friend vec operator - (Int::vec&& A, Int::vec&& B) { return _mm512_sub_epi32(A.data(), B.data()); }
 
 		// multiplication operator
-		inline friend vec operator*(INT::vec& A, INT::vec& B) { return _mm256_mullo_epi32(A.data(), B.data()); }
-		inline friend vec operator*(INT::vec& A, INT::vec&& B) { return _mm256_mullo_epi32(A.data(), B.data()); }
-		inline friend vec operator*(INT::vec&& A, INT::vec& B) { return _mm256_mullo_epi32(A.data(), B.data()); }
-		inline friend vec operator*(INT::vec&& A, INT::vec&& B) { return _mm256_mullo_epi32(A.data(), B.data()); }
+		inline friend vec operator * (Int::vec& A, Int::vec& B) { return _mm512_mul_epi32(A.data(), B.data()); }
+		inline friend vec operator * (Int::vec& A, Int::vec&& B) { return _mm512_mul_epi32(A.data(), B.data()); }
+		inline friend vec operator * (Int::vec&& A, Int::vec& B) { return _mm512_mul_epi32(A.data(), B.data()); }
+		inline friend vec operator * (Int::vec&& A, Int::vec&& B) { return _mm512_mul_epi32(A.data(), B.data()); }
 
 
 		// division operator
-		inline friend vec operator/(INT::vec& A, INT::vec& B) { return _mm256_castps_si256(_mm256_div_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()))); }
-		inline friend vec operator/(INT::vec& A, INT::vec&& B) { return _mm256_castps_si256(_mm256_div_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()))); }
-		inline friend vec operator/(INT::vec&& A, INT::vec& B) { return _mm256_castps_si256(_mm256_div_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()))); }
-		inline friend vec operator/(INT::vec&& A, INT::vec&& B) { return _mm256_castps_si256(_mm256_div_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()))); }
+		inline friend vec operator / (Int::vec& A, Int::vec& B) { return _mm512_div_epi32(A.data(), B.data()); }
+		inline friend vec operator / (Int::vec& A, Int::vec&& B) { return _mm512_div_epi32(A.data(), B.data()); }
+		inline friend vec operator / (Int::vec&& A, Int::vec& B) { return _mm512_div_epi32(A.data(), B.data()); }
+		inline friend vec operator / (Int::vec&& A, Int::vec&& B) { return _mm512_div_epi32(A.data(), B.data()); }
 
 
 		// A * B + C
-		inline vec mul_add(INT::vec& A, INT::vec& B, INT::vec& C) { return  _mm256_castps_si256(_mm256_fmadd_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
-		inline vec mul_add(INT::vec& A, INT::vec& B, INT::vec&& C) { return  _mm256_castps_si256(_mm256_fmadd_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
-		inline vec mul_add(INT::vec& A, INT::vec&& B, INT::vec& C) { return  _mm256_castps_si256(_mm256_fmadd_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
-		inline vec mul_add(INT::vec& A, INT::vec&& B, INT::vec&& C) { return  _mm256_castps_si256(_mm256_fmadd_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
-		inline vec mul_add(INT::vec&& A, INT::vec& B, INT::vec& C) { return  _mm256_castps_si256(_mm256_fmadd_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
-		inline vec mul_add(INT::vec&& A, INT::vec& B, INT::vec&& C) { return  _mm256_castps_si256(_mm256_fmadd_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
-		inline vec mul_add(INT::vec&& A, INT::vec&& B, INT::vec& C) { return  _mm256_castps_si256(_mm256_fmadd_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
-		inline vec mul_add(INT::vec&& A, INT::vec&& B, INT::vec&& C) { return  _mm256_castps_si256(_mm256_fmadd_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
+		inline vec mul_add(Int::vec& A, Int::vec& B, Int::vec& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data()); }
+		inline vec mul_add(Int::vec& A, Int::vec& B, Int::vec&& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data());}
+		inline vec mul_add(Int::vec& A, Int::vec&& B, Int::vec& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data()); }
+		inline vec mul_add(Int::vec& A, Int::vec&& B, Int::vec&& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data());}
+		inline vec mul_add(Int::vec&& A, Int::vec& B, Int::vec& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data());}
+		inline vec mul_add(Int::vec&& A, Int::vec& B, Int::vec&& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data());}
+		inline vec mul_add(Int::vec&& A, Int::vec&& B, Int::vec& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data());}
+		inline vec mul_add(Int::vec&& A, Int::vec&& B, Int::vec&& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data());}
 
 
-		// A * B - C
-		inline vec mul_sub(INT::vec& A, INT::vec& B, INT::vec& C) { return  _mm256_castps_si256(_mm256_fmsub_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
-		inline vec mul_sub(INT::vec& A, INT::vec& B, INT::vec&& C) { return  _mm256_castps_si256(_mm256_fmsub_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
-		inline vec mul_sub(INT::vec& A, INT::vec&& B, INT::vec& C) { return  _mm256_castps_si256(_mm256_fmsub_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
-		inline vec mul_sub(INT::vec& A, INT::vec&& B, INT::vec&& C) { return  _mm256_castps_si256(_mm256_fmsub_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
-		inline vec mul_sub(INT::vec&& A, INT::vec& B, INT::vec& C) { return  _mm256_castps_si256(_mm256_fmsub_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
-		inline vec mul_sub(INT::vec&& A, INT::vec& B, INT::vec&& C) { return  _mm256_castps_si256(_mm256_fmsub_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
-		inline vec mul_sub(INT::vec&& A, INT::vec&& B, INT::vec& C) { return  _mm256_castps_si256(_mm256_fmsub_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
-		inline vec mul_sub(INT::vec&& A, INT::vec&& B, INT::vec&& C) { return  _mm256_castps_si256(_mm256_fmsub_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data()), _mm256_castsi256_ps(C.data()))); }
+		// A * B - C - No Such Operation with Integers
+		/*inline vec mul_add(Int::vec& A, Int::vec& B, Int::vec& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data()); }
+		inline vec mul_add(Int::vec& A, Int::vec& B, Int::vec&& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data()); }
+		inline vec mul_add(Int::vec& A, Int::vec&& B, Int::vec& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data()); }
+		inline vec mul_add(Int::vec& A, Int::vec&& B, Int::vec&& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data()); }
+		inline vec mul_add(Int::vec&& A, Int::vec& B, Int::vec& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data()); }
+		inline vec mul_add(Int::vec&& A, Int::vec& B, Int::vec&& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data()); }
+		inline vec mul_add(Int::vec&& A, Int::vec&& B, Int::vec& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data()); }
+		inline vec mul_add(Int::vec&& A, Int::vec&& B, Int::vec&& C) { return  _mm512_madd52lo_epu64(A.data(), B.data(), C.data()); }*/
 	};
 };
 #endif // ! INT_Class
