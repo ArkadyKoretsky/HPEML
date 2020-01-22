@@ -32,5 +32,4 @@ class Vector : public Matrix<scalar>
 	Vector(Vector& V) : Matrix<scalar>::Matrix(V) {} // lvalue copy constructor
 	Vector(Vector&& V) : Matrix<scalar>::Matrix(V) {} // rvalue copy constructor
 };
-
 #endif // !Vector_Class
