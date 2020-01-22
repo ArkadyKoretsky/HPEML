@@ -77,6 +77,12 @@ public:
 		return words;
 	}
 
+	void static setup()
+	{
+		Init();
+		readData();
+	}
+
 	void static readData()
 	{
 		int counter = 0;
@@ -115,7 +121,7 @@ public:
 		cout << index << endl;
 	}
 
-	void static readCache()
+	void static getCacheSize()
 	{
 #ifdef _WIN32 || _WIN64
 		cout << "Sorry! This functionality is not suported on Windows." << endl;

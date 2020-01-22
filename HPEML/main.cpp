@@ -47,9 +47,9 @@ int main()
 		//t = clock() - t;
 		//t /= 10;
 		//cout << (float)t / CLOCKS_PER_SEC;
-		cout << "Init Start" << endl;
-		Initialization::Init();
-		cout << "Init Done" << endl;
+		//cout << "Init Start" << endl;
+		//Initialization::Init();
+		//cout << "Init Done" << endl;
 		cout << "readData Start" << endl;
 		Initialization::readData();
 		cout << "readData Done" << endl;
