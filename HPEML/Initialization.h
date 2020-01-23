@@ -47,7 +47,7 @@ public:
 			System::setK_BLOCKSIZE(i);
 			System::setI_BLOCKSIZE(i);
 			std::ofstream o("size" + std::to_string(i) + ".csv");
-			cout << "size" + std::to_string(i) + ".csv is open" << endl;
+			cout << "Size" + std::to_string(i) + ".csv is open" << endl;
 			for (int j = MinMatrixSize; j <= MaxMatrixSize; j *= 2)
 			{
 				Matrix<Float> A(j, j, "rand"), B(j, j, "rand");
@@ -64,7 +64,7 @@ public:
 				t = 0;
 			}
 			o.close();
-			cout << "file closed" << endl;
+			cout << "File closed" << endl;
 		}
 	}
 
@@ -118,7 +118,7 @@ public:
 		System::setJ_BLOCKSIZE(index);
 		System::setK_BLOCKSIZE(index);
 		System::setI_BLOCKSIZE(index);
-		cout << index << endl;
+		cout << "The optimal block size is : " << index << endl;
 	}
 
 	void static getCacheSize()

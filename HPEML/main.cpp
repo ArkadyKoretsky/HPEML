@@ -48,16 +48,16 @@ int main()
 		//t /= 10;
 		//cout << (float)t / CLOCKS_PER_SEC;
 		//cout << "Init Start" << endl;
-		//Initialization::Init();
-		//cout << "Init Done" << endl;
-		cout << "readData Start" << endl;
-		Initialization::readData();
-		cout << "readData Done" << endl;
-
+		////Initialization::Init();
+		////cout << "Init Done" << endl;
+		//cout << "readData Start" << endl;
+		//Initialization::readData();
+		//cout << "readData Done" << endl;
+		Initialization::setup();
 		//initializer_list< initializer_list<int>> l = { {1, 2, 3}, {4, 5, 6} };
-		//cout << *((l.begin() + 1)->begin() + 1);
+//cout << *((l.begin() + 1)->begin() + 1);
 
-		//Initialization::readCache();
+//Initialization::readCache();
 
 		return 0;
 	}
