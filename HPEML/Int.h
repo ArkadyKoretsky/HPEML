@@ -183,10 +183,18 @@ public:
 		inline friend vec operator * (Int::vec&& A, Int::vec&& B) { return vec(_mm256_mullo_epi32(A.data(), B.data())); }
 
 		// division operator
+#ifdef _WIN32 || _WIN64 
 		inline friend vec operator / (Int::vec& A, Int::vec& B) { return vec(_mm256_div_epi32(A.data(), B.data())); }
 		inline friend vec operator / (Int::vec& A, Int::vec&& B) { return vec(_mm256_div_epi32(A.data(), B.data())); }
 		inline friend vec operator / (Int::vec&& A, Int::vec& B) { return vec(_mm256_div_epi32(A.data(), B.data())); }
 		inline friend vec operator / (Int::vec&& A, Int::vec&& B) { return vec(_mm256_div_epi32(A.data(), B.data())); }
+
+#elif __linux__ || __unix || __unix__
+		inline friend vec operator / (vec& A, vec& B) { return vec(_mm256_castps_si256(_mm256_div_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data())))); }
+		inline friend vec operator / (vec& A, vec&& B) { return vec(_mm256_castps_si256(_mm256_div_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data())))); }
+		inline friend vec operator / (vec&& A, vec& B) { return vec(_mm256_castps_si256(_mm256_div_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data())))); }
+		inline friend vec operator / (vec&& A, vec&& B) { return vec(_mm256_castps_si256(_mm256_div_ps(_mm256_castsi256_ps(A.data()), _mm256_castsi256_ps(B.data())))); }
+#endif
 
 		// A * B + C
 		inline vec mul_add(Int::vec& A, Int::vec& B, Int::vec& C)

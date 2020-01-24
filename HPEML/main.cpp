@@ -25,10 +25,10 @@ int main()
 	try
 	{
 		size_t row1 = 37, col = 31, row2 = 39;
-		Int F1(1);
+		Int F1(8), F2(2);
 		//out << "start" << endl;
 		Matrix<Int> A(row1, col, F1), B(col, row2, F1);
-		cout << A * B;
+		cout << A / F2;
 		////Matrix<Float> C = A.trans(true);
 		//double t = 0;
 		//t_timer tt;
