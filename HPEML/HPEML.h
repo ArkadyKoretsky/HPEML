@@ -4,6 +4,7 @@
 // Scalars
 #include "Float.h"
 #include "Double.h"
+#include "Int.h"
 
 // Math Operations
 #include "Memory_Block.h"

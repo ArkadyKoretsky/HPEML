@@ -25,9 +25,10 @@ int main()
 	try
 	{
 		size_t row1 = 37, col = 31, row2 = 39;
-		Float F1(1);
-		cout << "start" << endl;
-		Matrix<Float> A(row1, col, F1), B(8012, row2, F1);
+		Int F1(1);
+		//out << "start" << endl;
+		Matrix<Int> A(row1, col, F1), B(col, row2, F1);
+		cout << A * B;
 		////Matrix<Float> C = A.trans(true);
 		//double t = 0;
 		//t_timer tt;
@@ -53,7 +54,7 @@ int main()
 		//cout << "readData Start" << endl;
 		//Initialization::readData();
 		//cout << "readData Done" << endl;
-		Initialization::setup();
+		//Initialization::setup();
 		//initializer_list< initializer_list<int>> l = { {1, 2, 3}, {4, 5, 6} };
 //cout << *((l.begin() + 1)->begin() + 1);
 
