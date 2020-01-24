@@ -29,7 +29,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="Int.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Memory_Block.h" />
     <ClInclude Include="System.h">
